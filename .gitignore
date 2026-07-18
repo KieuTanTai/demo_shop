@@ -1,0 +1,72 @@
+# Build output
+[Bb]in/
+[Oo]bj/
+out/
+artifacts/
+
+# .NET user files
+*.user
+*.rsuser
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Test results and coverage
+TestResults/
+*.trx
+*.coverage
+*.coveragexml
+coverage/
+coverage-*/
+coverage.cobertura.xml
+
+# NuGet
+*.nupkg
+*.snupkg
+packages/
+!**/packages/build/
+project.lock.json
+project.assets.json
+*.nuget.props
+*.nuget.targets
+
+# ASP.NET / local configuration
+appsettings.Local.json
+appsettings.*.Local.json
+secrets.json
+
+# Visual Studio
+.vs/
+.vscode/
+# JetBrains Rider / IntelliJ
+.idea/
+*.sln.iml
+
+# VS Code local workspace settings
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/*.code-snippets
+
+# Docker local overrides
+docker-compose.override.yml
+compose.override.yaml
+compose.override.yml
+.env
+.env.*
+!.env.example
+
+# Logs and temp files
+*.log
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
