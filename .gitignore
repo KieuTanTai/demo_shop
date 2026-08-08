@@ -34,6 +34,8 @@ project.assets.json
 appsettings.Local.json
 appsettings.*.Local.json
 secrets.json
+appsettings.json
+appsettings.*.json
 
 # Visual Studio
 .vs/
@@ -70,3 +72,21 @@ compose.override.yml
 .DS_Store
 Thumbs.db
 desktop.ini
+
+# Frontend ASP.NET Core MVC / web assets
+Frontend/Properties/launchSettings.json
+Frontend/wwwroot/dist/
+Frontend/wwwroot/build/
+Frontend/wwwroot/assets/
+Frontend/wwwroot/lib/
+Frontend/wwwroot/**/*.map
+Frontend/wwwroot/**/*.gz
+Frontend/wwwroot/**/*.br
+Frontend/node_modules/
+Frontend/ClientApp/node_modules/
+Frontend/npm-debug.log*
+Frontend/yarn-debug.log*
+Frontend/yarn-error.log*
+Frontend/pnpm-debug.log*
+Frontend/.sass-cache/
+Frontend/.cache/
