@@ -1,47 +1,163 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>@ViewData["Title"] - Frontend</title>
     <script type="importmap"></script>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
-    <link rel="stylesheet" href="~/Frontend.styles.css" asp-append-version="true"/>
+    <link rel="stylesheet" href="~/css/main.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Frontend.styles.css" asp-append-version="true" />
+    @* <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/> *@
+    @* <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
+    <link rel="stylesheet" href="~/Frontend.styles.css" asp-append-version="true"/> *@
 </head>
 <body>
-<header>
-    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-        <div class="container-fluid">
-            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Frontend</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                <ul class="navbar-nav flex-grow-1">
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                    </li>
-                </ul>
-            </div>
+<header class="app-header">
+    <button class="icon-button sidebar-toggle" type="button" aria-label="An hien sidebar" aria-expanded="true" data-sidebar-toggle>
+        <svg aria-hidden="true" viewBox="0 0 24 24">
+            <path d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+    </button>
+
+    <a class="app-logo" asp-area="" asp-controller="Home" asp-action="Index">Frontend</a>
+
+    <form class="app-search" role="search">
+        <svg aria-hidden="true" viewBox="0 0 24 24">
+            <path d="m21 21-4.3-4.3M10.8 18a7.2 7.2 0 1 1 0-14.4 7.2 7.2 0 0 1 0 14.4Z"/>
+        </svg>
+        <input type="search" name="q" placeholder="Search" aria-label="Search"/>
+    </form>
+
+    <div class="account-menu">
+        <button class="icon-button account-button" type="button" aria-label="Tai khoan">
+            <svg aria-hidden="true" viewBox="0 0 24 24">
+                <path d="M20 21a8 8 0 0 0-16 0M12 13a5 5 0 1 0 0-10 5 5 0 0 0 0 10Z"/>
+            </svg>
+        </button>
+        <div class="account-dropdown" aria-label="Account actions">
+            <button class="account-action login" type="button" data-auth-open="login">Login</button>
+            <button class="account-action signup" type="button" data-auth-open="signup">Signup</button>
+            <button class="account-action logout" type="button">Logout</button>
         </div>
-    </nav>
+    </div>
 </header>
-<div class="container">
-    <main role="main" class="pb-3">
-        @RenderBody()
-    </main>
+
+<div class="app-shell" data-app-shell>
+    <aside class="app-sidebar" aria-label="Sidebar"></aside>
+
+    <div class="app-content">
+        <main role="main" class="app-main">
+            @RenderBody()
+        </main>
+
+        <footer class="app-footer">
+            <span>Footer placeholder</span>
+        </footer>
+    </div>
 </div>
 
-<footer class="border-top footer text-muted">
-    <div class="container">
-        &copy; 2026 - Frontend - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-    </div>
-</footer>
+<div class="auth-overlay" data-auth-overlay hidden>
+    <section class="auth-popup" role="dialog" aria-modal="true" aria-label="Account form">
+        <button class="auth-close" type="button" aria-label="Close popup" data-auth-close>X</button>
+
+        <form class="auth-form active" data-auth-form="login" novalidate>
+            <div class="auth-heading">
+                <h2>Login</h2>
+            </div>
+
+            <label class="auth-field">
+                <span>Email</span>
+                <input type="email" name="email" autocomplete="email" required/>
+            </label>
+
+            <label class="auth-field">
+                <span>Password</span>
+                <input type="password" name="password" autocomplete="current-password" required/>
+            </label>
+
+            <div class="auth-message" role="alert" data-auth-message hidden></div>
+
+            <div class="auth-links">
+                <button class="auth-switch-link" type="button" data-auth-switch="signup">Signup</button>
+                <button class="auth-switch-link" type="button" data-auth-switch="forgot">Forgot password</button>
+            </div>
+
+            <button class="auth-submit" type="submit">Login</button>
+        </form>
+
+        <form class="auth-form" data-auth-form="signup" novalidate>
+            <div class="auth-heading">
+                <h2>Signup</h2>
+            </div>
+
+            <label class="auth-field">
+                <span>Full name</span>
+                <input type="text" name="fullName" autocomplete="name" required/>
+            </label>
+
+            <label class="auth-field">
+                <span>Email</span>
+                <input type="email" name="email" autocomplete="email" required/>
+            </label>
+
+            <label class="auth-field">
+                <span>Password</span>
+                <input type="password" name="password" autocomplete="new-password" required/>
+            </label>
+
+            <label class="auth-field">
+                <span>Confirm</span>
+                <input type="password" name="confirmPassword" autocomplete="new-password" required/>
+            </label>
+
+            <div class="auth-message" role="alert" data-auth-message hidden></div>
+
+            <div class="auth-links">
+                <button class="auth-switch-link" type="button" data-auth-switch="login">Login</button>
+            </div>
+
+            <button class="auth-submit" type="submit">Signup</button>
+        </form>
+
+        <form class="auth-form" data-auth-form="forgot" data-forgot-form novalidate>
+            <div class="auth-heading">
+                <h2>Forgot password</h2>
+            </div>
+
+            <label class="auth-field" data-forgot-step="email">
+                <span>Email</span>
+                <input type="email" name="registeredEmail" autocomplete="email" required/>
+            </label>
+
+            <label class="auth-field" data-forgot-step="code" hidden>
+                <span>Passcode</span>
+                <input type="text" name="passcode" inputmode="numeric" autocomplete="one-time-code" required/>
+            </label>
+
+            <label class="auth-field" data-forgot-step="reset" hidden>
+                <span>New password</span>
+                <input type="password" name="newPassword" autocomplete="new-password" required/>
+            </label>
+
+            <label class="auth-field" data-forgot-step="reset" hidden>
+                <span>Confirm</span>
+                <input type="password" name="confirmNewPassword" autocomplete="new-password" required/>
+            </label>
+
+            <div class="auth-message" role="alert" data-auth-message hidden></div>
+
+            <div class="auth-links">
+                <button class="auth-switch-link" type="button" data-auth-switch="login">Login</button>
+                <button class="auth-switch-link" type="button" data-auth-switch="signup">Signup</button>
+            </div>
+
+            <button class="auth-submit" type="button" data-forgot-next="code">Send passcode</button>
+            <button class="auth-submit" type="button" data-forgot-next="reset" hidden>Verify passcode</button>
+            <button class="auth-submit" type="submit" data-forgot-submit hidden>Save new password</button>
+        </form>
+    </section>
+</div>
+
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 <script src="~/js/site.js" asp-append-version="true"></script>
