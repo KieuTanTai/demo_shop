@@ -6,9 +6,9 @@ public class Account
 
     public string AccountPassword { get; set; } = string.Empty;
 
-    public bool AccountLoginStatus { get; set; } = true;
+    public bool AccountLoginStatus { get; set; } = false;
 
-    public DateTime? AccountCreatedAt { get; set; }
+    public DateTime? AccountCreatedAt { get; set; } = DateTime.Now;
 
-    public DateTime? AccountUpdatedAt { get; set; }
+    public DateTime? AccountUpdatedAt { get; set; } = DateTime.Now;
 }

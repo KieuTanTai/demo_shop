@@ -4,7 +4,12 @@ public class Permission
 
     public string PermissionName { get; set; } = string.Empty;
 
-    public string? PermissionDescription { get; set; }
+    public string? PermissionDescription { get; set; } = string.Empty;
 
-    public DateTime? PermissionCreatedAt { get; set; }
+    public bool PermissionActive { get; set; } = true;
+
+
+    public DateTime? PermissionCreatedAt { get; set; } = DateTime.Now;
+
+    public DateTime? PermissionUpdatedAt { get; set; } = DateTime.Now;
 }

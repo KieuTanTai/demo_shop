@@ -4,11 +4,11 @@ public class Role
 
     public string RoleName { get; set; } = string.Empty;
 
-    public string? RoleDescription { get; set; }
+    public string? RoleDescription { get; set; } = string.Empty;
 
     public bool RoleActive { get; set; } = true;
 
-    public DateTime? RoleCreatedAt { get; set; }
+    public DateTime? RoleCreatedAt { get; set; } = DateTime.Now;
 
-    public DateTime? RoleUpdatedAt { get; set; }
+    public DateTime? RoleUpdatedAt { get; set; } = DateTime.Now;
 }
