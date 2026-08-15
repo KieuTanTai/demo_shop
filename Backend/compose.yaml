@@ -1,7 +1,9 @@
 ﻿services:
-  backend:
-    image: backend
+  auth:
+    image: auth
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Module/Auth/Dockerfile
+    environment:
+      - name=value
 
