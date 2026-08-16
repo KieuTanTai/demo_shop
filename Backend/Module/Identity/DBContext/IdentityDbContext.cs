@@ -1,4 +1,5 @@
-using Microsoft.EntityFrameworkCore;
+
+namespace Module.Identity.DBContext;
 
 public sealed class IdentityDbContext(DbContextOptions<IdentityDbContext> contextOptions) : DbContext(contextOptions)
 {

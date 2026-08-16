@@ -1,3 +1,5 @@
+namespace Module.Identity.Models;
+
 public class Account
 {
     public Guid AccountId { get; set; }

@@ -1,3 +1,5 @@
+namespace Module.Identity.Models;
+
 public class RolePermission
 {
     public Guid RoleId { get; set; }
