@@ -1,10 +1,11 @@
-namespace Module.Identity.Models;
-
-public class AccountPermission
+namespace Identity.Models.Account
 {
-    public Guid AccountId { get; set; }
+    public class AccountPermission
+    {
+        public Guid AccountId { get; init; }
 
-    public Guid PermissionId { get; set; }
+        public Guid PermissionId { get; init; }
 
-    public DateTime? AssignedAt { get; set; } = DateTime.Now;
+        public DateTime? AssignedAt { get; init; } = DateTime.Now;
+    }
 }

@@ -1,17 +1,22 @@
-namespace Module.Identity.Models;
+using System.ComponentModel.DataAnnotations;
 
-public class Permission
+namespace Identity.Models.Permission
 {
-    public Guid PermissionId { get; set; }
+    public class Permission
+    {
+        public Guid PermissionId { get; init; }
 
-    public string PermissionName { get; set; } = string.Empty;
+        [MaxLength(150)]
+        public string PermissionName { get; set; } = string.Empty;
 
-    public string? PermissionDescription { get; set; } = string.Empty;
+        [MaxLength(300)]
+        public string? PermissionDescription { get; set; } = string.Empty;
 
-    public bool PermissionActive { get; set; } = true;
+        public bool PermissionActive { get; init; } = true;
 
 
-    public DateTime? PermissionCreatedAt { get; set; } = DateTime.Now;
+        public DateTime? PermissionCreatedAt { get; init; } = DateTime.Now;
 
-    public DateTime? PermissionUpdatedAt { get; set; } = DateTime.Now;
+        public DateTime? PermissionUpdatedAt { get; init; } = DateTime.Now;
+    }
 }

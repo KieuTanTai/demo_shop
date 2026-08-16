@@ -1,6 +1,6 @@
+using Identity.DBContext;
+using Identity.Infrastructure.DIContainer;
 using Microsoft.EntityFrameworkCore;
-using Module.Identity.DBContext;
-using Module.Identity.Infrastructure.DIContainer;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");

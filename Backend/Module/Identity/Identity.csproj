@@ -7,13 +7,6 @@
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
         <AllowMissingPrunePackageData>true</AllowMissingPrunePackageData>
     </PropertyGroup>
-
-    <ItemGroup>
-      <Folder Include="Account\Interfaces\" />
-      <Folder Include="Account\Models\" />
-      <Folder Include="Account\Repository\" />
-      <Folder Include="Account\Services\" />
-    </ItemGroup>
     
     <ItemGroup>
         <ProjectReference Include="../../Shared/Shared.csproj" />

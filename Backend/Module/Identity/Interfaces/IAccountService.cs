@@ -1,7 +1,9 @@
-using Module.Identity.Models;
+using Identity.Models.Account;
 
-namespace Module.Identity.Interfaces;
-public interface IAccountService
+namespace Identity.Interfaces
 {
-    Account CreateAccount(string email, string password);
+    public interface IAccountService
+    {
+        Account CreateAccount(string email, string password);
+    }
 }

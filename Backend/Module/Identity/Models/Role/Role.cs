@@ -1,16 +1,21 @@
-namespace Module.Identity.Models;
+using System.ComponentModel.DataAnnotations;
 
-public class Role
+namespace Identity.Models.Role
 {
-    public Guid RoleId { get; set; }
+    public class Role
+    {
+        public Guid RoleId { get; init; }
 
-    public string RoleName { get; set; } = string.Empty;
+        [MaxLength(100)]
+        public string RoleName { get; set; } = string.Empty;
 
-    public string? RoleDescription { get; set; } = string.Empty;
+        [MaxLength(300)]
+        public string? RoleDescription { get; set; } = string.Empty;
 
-    public bool RoleActive { get; set; } = true;
+        public bool RoleActive { get; init; } = true;
 
-    public DateTime? RoleCreatedAt { get; set; } = DateTime.Now;
+        public DateTime? RoleCreatedAt { get; init; } = DateTime.Now;
 
-    public DateTime? RoleUpdatedAt { get; set; } = DateTime.Now;
+        public DateTime? RoleUpdatedAt { get; init; } = DateTime.Now;
+    }
 }

@@ -1,10 +1,11 @@
-namespace Module.Identity.Models;
-
-public class AccountRole
+namespace Identity.Models.Account
 {
-    public Guid AccountId { get; set; }
+    public class AccountRole
+    {
+        public Guid AccountId { get; init; }
 
-    public Guid RoleId { get; set; }
+        public Guid RoleId { get; init; }
 
-    public DateTime? AssignedAt { get; set; } = DateTime.Now;
+        public DateTime? AssignedAt { get; init; } = DateTime.Now;
+    }
 }

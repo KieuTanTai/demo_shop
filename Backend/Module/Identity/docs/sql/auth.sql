@@ -57,3 +57,14 @@ ALTER TABLE `role_permission` ADD FOREIGN KEY (`permission_id`) REFERENCES `perm
 ALTER TABLE `account_permission` ADD FOREIGN KEY (`account_id`) REFERENCES `account` (`account_id`);
 
 ALTER TABLE `account_permission` ADD FOREIGN KEY (`permission_id`) REFERENCES `permission` (`permission_id`);
+
+ALTER TABLE `account`
+    MODIFY COLUMN `account_password`
+        VARCHAR(255)
+        NOT NULL;
+
+ALTER TABLE `account`
+    DROP COLUMN `account_login_status`,
+    ADD COLUMN `account_is_active` BOOLEAN NOT NULL DEFAULT TRUE;
+
+SHOW COLUMNS FROM account;
