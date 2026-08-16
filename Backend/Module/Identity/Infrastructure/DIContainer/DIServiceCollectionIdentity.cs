@@ -1,3 +1,6 @@
+using Module.Identity.Infrastructure.Repository;
+using Module.Identity.Interfaces;
+
 namespace Module.Identity.Infrastructure.DIContainer;
 
 public static class DIServiceCollectionAccount

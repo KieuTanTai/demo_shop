@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+using Module.Identity.Models;
 
 namespace Module.Identity.DBContext;
 

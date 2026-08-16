@@ -1,3 +1,4 @@
+using Module.Identity.Models;
 
 namespace Module.Identity.Interfaces;
 public interface IAccountService
