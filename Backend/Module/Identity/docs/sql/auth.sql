@@ -10,7 +10,7 @@ CREATE TABLE `account` (
 CREATE TABLE `role` (
   `role_id` uuid PRIMARY KEY DEFAULT (uuid_v7()),
   `role_name` varchar(100) UNIQUE NOT NULL,
-  `role_description` tinytext NOT NULL DEFAULT "",
+  `role_description` tinytext NOT NULL DEFAULT '',
   `role_active` boolean DEFAULT true,
   `role_created_at` timestamp DEFAULT (now()),
   `role_updated_at` timestamp DEFAULT (now())
@@ -19,7 +19,7 @@ CREATE TABLE `role` (
 CREATE TABLE `permission` (
   `permission_id` uuid PRIMARY KEY DEFAULT (uuid_v7()),
   `permission_name` varchar(150) UNIQUE NOT NULL,
-  `permission_description` tinytext NOT NULL DEFAULT "",
+  `permission_description` tinytext NOT NULL DEFAULT '',
   `permission_active` boolean DEFAULT true,
   `permission_created_at` timestamp DEFAULT (now()),
   `permission_updated_at` timestamp DEFAULT (now())
@@ -67,4 +67,18 @@ ALTER TABLE `account`
     DROP COLUMN `account_login_status`,
     ADD COLUMN `account_is_active` BOOLEAN NOT NULL DEFAULT TRUE;
 
+ALTER TABLE `account`
+    MODIFY COLUMN `account_phone` varchar(10);
+
+ALTER TABLE `role`
+    MODIFY COLUMN `role_description` VARCHAR(300) NOT NULL DEFAULT '';
+
+ALTER TABLE `permission`
+    MODIFY COLUMN `permission_description` VARCHAR(300) NOT NULL DEFAULT '';
+
 SHOW COLUMNS FROM account;
+SHOW COLUMNS FROM role;
+SHOW COLUMNS FROM permission;
+
+SHOW VARIABLES LIKE 'character_set_server';
+SHOW VARIABLES LIKE 'collation_server';
