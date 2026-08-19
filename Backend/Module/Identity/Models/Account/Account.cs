@@ -19,9 +19,9 @@ namespace Identity.Models.Account
 
         public bool AccountIsActive { get; private set; } = true;
         
-        public DateTime? AccountCreatedAt { get; init; } = DateTime.UtcNow;
+        public DateTime AccountCreatedAt { get; init; } = DateTime.UtcNow;
 
-        public DateTime? AccountUpdatedAt { get; private set; } = DateTime.UtcNow;
+        public DateTime AccountUpdatedAt { get; private set; } = DateTime.UtcNow;
 
 
         #region Setter

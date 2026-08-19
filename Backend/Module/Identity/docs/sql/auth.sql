@@ -71,10 +71,21 @@ ALTER TABLE `account`
     MODIFY COLUMN `account_phone` varchar(10);
 
 ALTER TABLE `role`
-    MODIFY COLUMN `role_description` VARCHAR(300) NOT NULL DEFAULT '';
+    MODIFY COLUMN `role_description` VARCHAR(300);
 
 ALTER TABLE `permission`
-    MODIFY COLUMN `permission_description` VARCHAR(300) NOT NULL DEFAULT '';
+    MODIFY COLUMN `permission_description` VARCHAR(300);
+
+ALTER TABLE `role`
+    CHANGE COLUMN `role_active`
+        `role_is_active` BOOLEAN NOT NULL DEFAULT TRUE;
+
+ALTER TABLE `role`
+    MODIFY COLUMN `role_name` VARCHAR(150) UNIQUE NOT NULL;
+
+ALTER TABLE `permission`
+    CHANGE COLUMN `permission_active`
+        `permission_is_active` BOOLEAN NOT NULL DEFAULT TRUE;
 
 SHOW COLUMNS FROM account;
 SHOW COLUMNS FROM role;

@@ -1,6 +1,6 @@
 using Identity.Models.Account;
 
-namespace Identity.Interfaces
+namespace Identity.Interfaces.IApplication
 {
     public interface IAccountService
     {

@@ -7,17 +7,17 @@ namespace Identity.Models.Role
     {
         public Guid RoleId { get; init; }
 
-        [MaxLength(100)]
+        [MaxLength(150)]
         public string RoleName { get; private set; } = string.Empty;
 
         [MaxLength(300)]
-        public string? RoleDescription { get; private set; } = string.Empty;
+        public string? RoleDescription { get; private set; }
 
-        public bool RoleActive { get; private set; } = true;
+        public bool RoleIsActive { get; private set; } = true;
 
-        public DateTime? RoleCreatedAt { get; init; } = DateTime.UtcNow;
+        public DateTime RoleCreatedAt { get; init; } = DateTime.UtcNow;
 
-        public DateTime? RoleUpdatedAt { get; private set; } = DateTime.UtcNow;
+        public DateTime RoleUpdatedAt { get; private set; } = DateTime.UtcNow;
 
 
         #region Setter
@@ -28,12 +28,12 @@ namespace Identity.Models.Role
             RoleUpdatedAt = DateTime.UtcNow;
         }
         
-        public void SetRoleActive(bool isActive)
+        public void SetRoleIsActive(bool isActive)
         {
-            if (RoleActive == isActive)
+            if (RoleIsActive == isActive)
                 return;
 
-            RoleActive = isActive;
+            RoleIsActive = isActive;
             RoleUpdatedAt = DateTime.UtcNow;
         }
 

@@ -1,9 +1,8 @@
 using Identity.Models.Account;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Shared.Interfaces;
 using Shared.Persistence;
 
-namespace Identity.Interfaces
+namespace Identity.Interfaces.IRepository
 {
     public interface IAccountRepository : IBaseReadRepository<Account>
     {

@@ -11,14 +11,14 @@ namespace Identity.Models.Permission
         public string PermissionName { get; private set; } = string.Empty;
 
         [MaxLength(300)]
-        public string? PermissionDescription { get; private set; } = string.Empty;
+        public string? PermissionDescription { get; private set; }
 
-        public bool PermissionActive { get; private set; } = true;
+        public bool PermissionIsActive { get; private set; } = true;
 
 
-        public DateTime? PermissionCreatedAt { get; init; } = DateTime.UtcNow;
+        public DateTime PermissionCreatedAt { get; init; } = DateTime.UtcNow;
 
-        public DateTime? PermissionUpdatedAt { get; private set; } = DateTime.UtcNow;
+        public DateTime PermissionUpdatedAt { get; private set; } = DateTime.UtcNow;
 
         
         #region Setter
@@ -29,12 +29,12 @@ namespace Identity.Models.Permission
             PermissionUpdatedAt = DateTime.UtcNow;
         }
 
-        public void SetPermissionActive(bool isActive)
+        public void SetPermissionIsActive(bool isActive)
         {
-            if (PermissionActive == isActive)
+            if (PermissionIsActive == isActive)
                 return;
 
-            PermissionActive = isActive;
+            PermissionIsActive = isActive;
             PermissionUpdatedAt = DateTime.UtcNow;
         }
 

@@ -1,7 +1,7 @@
 namespace Shared.Interfaces
 {
-    public interface IUnitOfWork
+    public interface IUnitOfWork : IDisposable
     {
-        
+        Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     }
 }
