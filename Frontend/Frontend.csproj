@@ -9,8 +9,8 @@
     </PropertyGroup>
 
     <Target Name="TailwindBuild" BeforeTargets="Build">
-        <Exec Command="npm install" Condition="!Exists('node_modules')" />
-        <Exec Command="npm run css:build" />
+        <Exec Command="npm install" Condition="!Exists('node_modules')"/>
+        <Exec Command="npm run css:build"/>
     </Target>
 
 </Project>

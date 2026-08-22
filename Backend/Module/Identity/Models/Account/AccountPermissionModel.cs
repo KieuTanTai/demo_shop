@@ -1,8 +1,8 @@
-namespace Identity.Models.Role
+namespace Identity.Models.Account
 {
-    public class RolePermission
+    public class AccountPermissionModel
     {
-        public Guid RoleId { get; init; }
+        public Guid AccountId { get; init; }
 
         public Guid PermissionId { get; init; }
 

@@ -4,6 +4,6 @@ namespace Identity.Interfaces.IApplication
 {
     public interface IAccountService
     {
-        Account CreateAccount(string email, string password);
+        AccountModel CreateAccount(string email, string password);
     }
 }

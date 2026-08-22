@@ -1,5 +1,4 @@
 using Identity.Infrastructure.DIContainer;
-using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 

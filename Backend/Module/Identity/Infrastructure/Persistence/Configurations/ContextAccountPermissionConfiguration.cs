@@ -6,9 +6,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 namespace Identity.Infrastructure.Persistence.Configurations
 {
     public sealed class ContextAccountPermissionConfiguration
-        : IEntityTypeConfiguration<AccountPermission>
+        : IEntityTypeConfiguration<AccountPermissionModel>
     {
-        public void Configure(EntityTypeBuilder<AccountPermission> entity)
+        public void Configure(EntityTypeBuilder<AccountPermissionModel> entity)
         {
             entity.ToTable("account_permission");
 
@@ -31,12 +31,12 @@ namespace Identity.Infrastructure.Persistence.Configurations
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .ValueGeneratedOnAdd();
 
-            entity.HasOne<Account>()
+            entity.HasOne<AccountModel>()
                 .WithMany()
                 .HasForeignKey(accountPermission => accountPermission.AccountId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            entity.HasOne<Permission>()
+            entity.HasOne<PermissionModel>()
                 .WithMany()
                 .HasForeignKey(accountPermission => accountPermission.PermissionId)
                 .OnDelete(DeleteBehavior.Cascade);

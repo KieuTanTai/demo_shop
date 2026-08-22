@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Identity.Infrastructure.Persistence.Configurations
 {
-    public sealed class ContextRoleConfiguration : IEntityTypeConfiguration<Role>
+    public sealed class ContextRoleConfiguration : IEntityTypeConfiguration<RoleModel>
     {
-        public void Configure(EntityTypeBuilder<Role> entity)
+        public void Configure(EntityTypeBuilder<RoleModel> entity)
         {
             entity.ToTable("role");
 
@@ -44,12 +44,11 @@ namespace Identity.Infrastructure.Persistence.Configurations
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .ValueGeneratedOnAddOrUpdate();
 
-            entity.HasMany(role => role.Permissions).WithMany().UsingEntity<RolePermission>(
-                rolePermission => rolePermission.HasOne<Permission>().WithMany()
+            entity.HasMany(role => role.Permissions).WithMany().UsingEntity<RolePermissionModel>(
+                rolePermission => rolePermission.HasOne<PermissionModel>().WithMany()
                     .HasForeignKey(rolePerm => rolePerm.PermissionId),
-                rolePermission => rolePermission.HasOne<Role>().WithMany().HasForeignKey(rolePerm => rolePerm.RoleId),
-                rolePermission =>
-                {
+                rolePermission => rolePermission.HasOne<RoleModel>().WithMany().HasForeignKey(rolePerm => rolePerm.RoleId),
+                rolePermission => {
                     rolePermission.ToTable("role_permission");
                     rolePermission.HasKey(rolePerm => new
                     {

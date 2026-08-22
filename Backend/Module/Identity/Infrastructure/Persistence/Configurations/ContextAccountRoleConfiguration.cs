@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Identity.Infrastructure.Persistence.Configurations
 {
-    public sealed class ContextAccountRoleConfiguration : IEntityTypeConfiguration<AccountRole>
+    public sealed class ContextAccountRoleConfiguration : IEntityTypeConfiguration<AccountRoleModel>
     {
-        public void Configure(EntityTypeBuilder<AccountRole> entity)
+        public void Configure(EntityTypeBuilder<AccountRoleModel> entity)
         {
             entity.ToTable("account_role");
 
@@ -30,12 +30,12 @@ namespace Identity.Infrastructure.Persistence.Configurations
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .ValueGeneratedOnAdd();
 
-            entity.HasOne<Account>()
+            entity.HasOne<AccountModel>()
                 .WithMany()
                 .HasForeignKey(accountRole => accountRole.AccountId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            entity.HasOne<Role>()
+            entity.HasOne<RoleModel>()
                 .WithMany()
                 .HasForeignKey(accountRole => accountRole.RoleId)
                 .OnDelete(DeleteBehavior.Cascade);

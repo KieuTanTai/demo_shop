@@ -1,0 +1,86 @@
+using Identity.Infrastructure.Persistence.DBContext;
+using Identity.Interfaces.IRepository;
+using Identity.Models.Account;
+using Microsoft.EntityFrameworkCore;
+
+namespace Identity.Infrastructure.Repository.Account
+{
+    public class AccountPermissionRepository(IdentityDbContext context) : IBaseAssociativeRepository<AccountPermissionModel, Guid>
+    {
+        private readonly IdentityDbContext _db = context;
+
+        #region POST
+
+        public async Task<int> AddAsync(List<AccountPermissionModel> entities, CancellationToken cancellationToken = default)
+        {
+            if (entities is null || entities.Count == 0)
+            {
+                throw new ArgumentException("Entities is required.", nameof(entities));
+            }
+            await _db.AccountPermissions.AddRangeAsync(entities, cancellationToken);
+            return await _db.SaveChangesAsync(cancellationToken);
+        }
+
+        #endregion
+
+        #region GET
+
+        public async Task<IReadOnlyList<AccountPermissionModel>> GetAllAsync(CancellationToken cancellationToken = default)
+        {
+            return await _db.AccountPermissions.AsNoTracking().ToListAsync(cancellationToken);
+        }
+
+        public async Task<AccountPermissionModel?> GetByIdAsync(Guid firstForeignId, Guid secondForeignId, CancellationToken cancellationToken = default)
+        {
+            return await _db.AccountPermissions.AsNoTracking().FirstOrDefaultAsync(ap => ap.AccountId == firstForeignId && ap.PermissionId == secondForeignId, cancellationToken);
+        }
+
+        public async Task<bool> ExistsAsync(Guid firstForeignId, Guid secondForeignId, CancellationToken cancellationToken = default)
+        {
+            return await _db.AccountPermissions.AnyAsync(ap => ap.AccountId == firstForeignId && ap.PermissionId == secondForeignId, cancellationToken);
+        }
+
+        #endregion
+
+        #region DELETE
+
+        public async Task<int> DeleteByFirstForeignIdAsync(Guid firstForeignId, CancellationToken cancellationToken = default)
+        {
+            if (firstForeignId == Guid.Empty)
+            {
+                throw new ArgumentException("First foreign id is required.", nameof(firstForeignId));
+            }
+            var accountPermissionsToDelete = await _db.AccountPermissions.Where(ap => ap.AccountId == firstForeignId).ToListAsync(cancellationToken);
+            _db.AccountPermissions.RemoveRange(accountPermissionsToDelete);
+            return await _db.SaveChangesAsync(cancellationToken);
+        }
+
+        public async Task<int> DeleteBySecondForeignIdAsync(Guid secondForeignId, CancellationToken cancellationToken = default)
+        {
+            if (secondForeignId == Guid.Empty)
+            {
+                throw new ArgumentException("Second foreign id is required.", nameof(secondForeignId));
+            }
+            var accountPermissionsToDelete = await _db.AccountPermissions.Where(ap => ap.PermissionId == secondForeignId).ToListAsync(cancellationToken);
+            _db.AccountPermissions.RemoveRange(accountPermissionsToDelete);
+            return await _db.SaveChangesAsync(cancellationToken);
+        }
+
+        public async Task<int> DeleteAsync(Guid firstForeignId, Guid secondForeignId, CancellationToken cancellationToken = default)
+        {
+            if (firstForeignId == Guid.Empty || secondForeignId == Guid.Empty)
+            {
+                throw new ArgumentException("First foreign id and second foreign id is required.", nameof(firstForeignId));
+            }
+            var existedAccountPermission = await GetByIdAsync(firstForeignId, secondForeignId, cancellationToken);
+            if (existedAccountPermission is null)
+            {
+                throw new InvalidOperationException("AccountModel permission not found!");
+            }
+            _db.AccountPermissions.Remove(existedAccountPermission);
+            return await _db.SaveChangesAsync(cancellationToken);
+        }
+
+        #endregion
+    }
+}

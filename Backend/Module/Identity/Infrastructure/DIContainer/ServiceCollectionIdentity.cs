@@ -1,6 +1,12 @@
 using Identity.Infrastructure.Persistence.DBContext;
 using Identity.Infrastructure.Repository;
+using Identity.Infrastructure.Repository.Account;
+using Identity.Infrastructure.Repository.Permission;
+using Identity.Infrastructure.Repository.Role;
 using Identity.Interfaces.IRepository;
+using Identity.Models.Account;
+using Identity.Models.Permission;
+using Identity.Models.Role;
 using Microsoft.EntityFrameworkCore;
 using Shared.Interfaces;
 
@@ -11,11 +17,13 @@ namespace Identity.Infrastructure.DIContainer
         public static IServiceCollection AddIdentityCollection(this IServiceCollection services,
             IConfiguration configuration, IHostEnvironment environment)
         {
-            var connectionString = configuration.GetConnectionString("Identity")
-                ?? throw new InvalidOperationException("Connection string 'Identity' was not found.");
+            #region CONFIG
 
-            services.AddDbContext<IdentityDbContext>(options =>
-            {
+            var connectionString = configuration.GetConnectionString("Identity")
+                                   ?? throw new InvalidOperationException(
+                                       "Connection string 'Identity' was not found.");
+
+            services.AddDbContext<IdentityDbContext>(options => {
                 options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
 
                 // options.EnableServiceProviderCaching();
@@ -29,8 +37,19 @@ namespace Identity.Infrastructure.DIContainer
                 }
             });
 
+            #endregion
+
+            #region REPOSITORY
+            
             services.AddScoped<IUnitOfWork, EfIdentityUnitOfWork>();
             services.AddScoped<IAccountRepository, AccountRepository>();
+            services.AddScoped<IBaseAuthorizationRepository<RoleModel, Guid>, RoleRepository>();
+            services.AddScoped<IBaseAuthorizationRepository<PermissionModel, Guid>, PermissionRepository>();
+            services.AddScoped<IBaseAssociativeRepository<AccountPermissionModel, Guid>, AccountPermissionRepository>();
+            services.AddScoped<IBaseAssociativeRepository<AccountRoleModel, Guid>, AccountRoleRepository>();
+            services.AddScoped<IBaseAssociativeRepository<RolePermissionModel, Guid>, RolePermissionRepository>();
+
+            #endregion
 
             return services;
         }

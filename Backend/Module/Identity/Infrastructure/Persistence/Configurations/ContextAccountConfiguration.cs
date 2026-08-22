@@ -6,9 +6,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Identity.Infrastructure.Persistence.Configurations
 {
-    public sealed class ContextAccountConfiguration : IEntityTypeConfiguration<Account>
+    public sealed class ContextAccountConfiguration : IEntityTypeConfiguration<AccountModel>
     {
-        public void Configure(EntityTypeBuilder<Account> entity)
+        public void Configure(EntityTypeBuilder<AccountModel> entity)
         {
             entity.ToTable("account");
 
@@ -52,13 +52,12 @@ namespace Identity.Infrastructure.Persistence.Configurations
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .ValueGeneratedOnAddOrUpdate();
 
-            entity.HasMany(account => account.Roles).WithMany().UsingEntity<AccountRole>(
-                right => right.HasOne<Role>().WithMany().HasForeignKey(role => role.RoleId)
+            entity.HasMany(account => account.Roles).WithMany().UsingEntity<AccountRoleModel>(
+                right => right.HasOne<RoleModel>().WithMany().HasForeignKey(role => role.RoleId)
                     .OnDelete(DeleteBehavior.Cascade),
-                left => left.HasOne<Account>().WithMany().HasForeignKey(account => account.AccountId)
+                left => left.HasOne<AccountModel>().WithMany().HasForeignKey(account => account.AccountId)
                     .OnDelete(DeleteBehavior.Cascade),
-                join =>
-                {
+                join => {
                     join.ToTable("account_role");
                     join.HasKey(accountRole => new
                     {
@@ -78,13 +77,12 @@ namespace Identity.Infrastructure.Persistence.Configurations
                         .ValueGeneratedOnAdd();
                 });
 
-            entity.HasMany(account => account.Permissions).WithMany().UsingEntity<AccountPermission>(
-                right => right.HasOne<Permission>().WithMany().HasForeignKey(permission => permission.PermissionId)
+            entity.HasMany(account => account.Permissions).WithMany().UsingEntity<AccountPermissionModel>(
+                right => right.HasOne<PermissionModel>().WithMany().HasForeignKey(permission => permission.PermissionId)
                     .OnDelete(DeleteBehavior.Cascade),
-                left => left.HasOne<Account>().WithMany().HasForeignKey(account => account.AccountId)
+                left => left.HasOne<AccountModel>().WithMany().HasForeignKey(account => account.AccountId)
                     .OnDelete(DeleteBehavior.Cascade),
-                join =>
-                {
+                join => {
                     join.ToTable("account_permission");
                     join.HasKey(accountPermission => new
                     {

@@ -4,20 +4,17 @@ using Shared.Persistence;
 
 namespace Identity.Interfaces.IRepository
 {
-    public interface IAccountRepository : IBaseReadRepository<Account>
+    public interface IAccountRepository : IBaseReadRepository<AccountModel>, IBasePostRepository<AccountModel, Guid>
     {
-        Task<RecordBaseCursorPage<Account>> GetApplyPaging(Guid? cursor, int pageSize,
+        Task<RecordBaseCursorPage<AccountModel>> GetApplyPaging(Guid? cursor, int pageSize,
             CancellationToken cancellationToken = default);
-        
-        Task<Account> GetAccountByEmail(string email, CancellationToken cancellationToken = default);
 
-        Task<IReadOnlyList<Account>> GetAccountByPhoneNumber(string phoneNumber, CancellationToken cancellationToken = default);
-        
-        Task<RecordBaseCursorPage<Account>> GetApplyPagingByStatus(Guid? cursor, int pageSize, bool isActive,
+        Task<AccountModel> GetAccountByEmail(string email, CancellationToken cancellationToken = default);
+
+        Task<IReadOnlyList<AccountModel>> GetAccountByPhoneNumber(string phoneNumber,
             CancellationToken cancellationToken = default);
-        
-        Task<Guid> AddAsync(Account account, CancellationToken cancellationToken = default);
-        
-        Task<int> UpdateAsync(Account account, CancellationToken cancellationToken = default);
+
+        Task<RecordBaseCursorPage<AccountModel>> GetApplyPagingByStatus(Guid? cursor, int pageSize, bool isActive,
+            CancellationToken cancellationToken = default);
     }
 }

@@ -1,16 +1,16 @@
 using System.ComponentModel.DataAnnotations;
+using Identity.Models.Permission;
 using Shared.ModelHelper;
+
 namespace Identity.Models.Role
 {
-    public class Role
+    public class RoleModel
     {
         public Guid RoleId { get; init; }
 
-        [MaxLength(150)]
-        public string RoleName { get; private set; } = string.Empty;
+        [MaxLength(150)] public string RoleName { get; private set; } = string.Empty;
 
-        [MaxLength(300)]
-        public string? RoleDescription { get; private set; }
+        [MaxLength(300)] public string? RoleDescription { get; private set; }
 
         public bool RoleIsActive { get; private set; } = true;
 
@@ -18,8 +18,9 @@ namespace Identity.Models.Role
 
         public DateTime RoleUpdatedAt { get; private set; } = DateTime.UtcNow;
 
-        public IReadOnlyList<Permission.Permission> Permissions { get; private set; } = new List<Permission.Permission>();
-        
+        public IReadOnlyList<PermissionModel> Permissions { get; private set; } =
+            new List<PermissionModel>();
+
         #region Setter
 
         public void SetRoleName(string name)
@@ -27,11 +28,13 @@ namespace Identity.Models.Role
             RoleName = ModelFieldGuard.Required(name, 100, nameof(name));
             RoleUpdatedAt = DateTime.UtcNow;
         }
-        
+
         public void SetRoleIsActive(bool isActive)
         {
             if (RoleIsActive == isActive)
+            {
                 return;
+            }
 
             RoleIsActive = isActive;
             RoleUpdatedAt = DateTime.UtcNow;
@@ -40,23 +43,25 @@ namespace Identity.Models.Role
         public void ClearRoleDescription()
         {
             if (RoleDescription is null)
+            {
                 return;
+            }
 
             RoleDescription = null;
             RoleUpdatedAt = DateTime.UtcNow;
         }
-        
+
         public void SetRoleDescription(string description)
         {
             RoleDescription = ModelFieldGuard.Required(description, 300, nameof(description));
             RoleUpdatedAt = DateTime.UtcNow;
         }
 
-        public void SetPermissions(IReadOnlyList<Permission.Permission> permissions)
+        public void SetPermissions(IReadOnlyList<PermissionModel> permissions)
         {
             Permissions = permissions;
         }
-        
+
         #endregion
     }
 }

@@ -3,15 +3,13 @@ using Shared.ModelHelper;
 
 namespace Identity.Models.Permission
 {
-    public class Permission
+    public class PermissionModel
     {
         public Guid PermissionId { get; init; }
 
-        [MaxLength(150)]
-        public string PermissionName { get; private set; } = string.Empty;
+        [MaxLength(150)] public string PermissionName { get; private set; } = string.Empty;
 
-        [MaxLength(300)]
-        public string? PermissionDescription { get; private set; }
+        [MaxLength(300)] public string? PermissionDescription { get; private set; }
 
         public bool PermissionIsActive { get; private set; } = true;
 
@@ -20,7 +18,7 @@ namespace Identity.Models.Permission
 
         public DateTime PermissionUpdatedAt { get; private set; } = DateTime.UtcNow;
 
-        
+
         #region Setter
 
         public void SetPermissionName(string name)
@@ -32,7 +30,9 @@ namespace Identity.Models.Permission
         public void SetPermissionIsActive(bool isActive)
         {
             if (PermissionIsActive == isActive)
+            {
                 return;
+            }
 
             PermissionIsActive = isActive;
             PermissionUpdatedAt = DateTime.UtcNow;
@@ -41,18 +41,20 @@ namespace Identity.Models.Permission
         public void ClearPermissionDescription()
         {
             if (PermissionDescription is null)
+            {
                 return;
+            }
 
             PermissionDescription = null;
             PermissionUpdatedAt = DateTime.UtcNow;
         }
-        
+
         public void SetPermissionDescription(string description)
         {
             PermissionDescription = ModelFieldGuard.Required(description, 300, nameof(description));
             PermissionUpdatedAt = DateTime.UtcNow;
         }
-        
+
         #endregion
     }
 }

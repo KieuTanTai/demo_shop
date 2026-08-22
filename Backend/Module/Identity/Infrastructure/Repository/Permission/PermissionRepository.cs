@@ -1,0 +1,106 @@
+using Identity.Infrastructure.Persistence.DBContext;
+using Identity.Interfaces.IRepository;
+using Identity.Models.Permission;
+using Microsoft.EntityFrameworkCore;
+
+namespace Identity.Infrastructure.Repository.Permission
+{
+    public class PermissionRepository(IdentityDbContext context)
+        : IBaseAuthorizationRepository<PermissionModel, Guid>
+    {
+        #region GET
+
+        public async Task<IReadOnlyList<PermissionModel>> GetAllAsync(
+            CancellationToken cancellationToken = default)
+        {
+            return await context.Permissions.AsNoTracking().ToListAsync(cancellationToken);
+        }
+
+        public async Task<PermissionModel?> GetByIdAsync(Guid id,
+            CancellationToken cancellationToken = default)
+        {
+            return await context.Permissions.AsNoTracking()
+                .FirstOrDefaultAsync(permission => permission.PermissionId == id, cancellationToken);
+        }
+
+        public async Task<PermissionModel?> GetTrackedByIdAsync(Guid id,
+            CancellationToken cancellationToken = default)
+        {
+            return await context.Permissions.FirstOrDefaultAsync(permission => permission.PermissionId == id,
+                cancellationToken);
+        }
+
+        public async Task<bool> ExistsAsync(Guid id, CancellationToken cancellationToken = default)
+        {
+            return await context.Permissions.AnyAsync(permission => permission.PermissionId == id, cancellationToken);
+        }
+
+        public async Task<IReadOnlyList<PermissionModel>> GetByNameAsync(string name,
+            CancellationToken cancellationToken = default)
+        {
+            return await context.Permissions.AsNoTracking().Where(permission => permission.PermissionName == name)
+                .ToListAsync(cancellationToken);
+        }
+
+        public async Task<IReadOnlyList<PermissionModel>> GetByDescriptionAsync(string description,
+            CancellationToken cancellationToken = default)
+        {
+            return await context.Permissions.AsNoTracking()
+                .Where(permission => permission.PermissionDescription == description).ToListAsync(cancellationToken);
+        }
+
+        public async Task<IReadOnlyList<PermissionModel>> GetByActiveStatus(bool isActive,
+            CancellationToken cancellationToken = default)
+        {
+            return await context.Permissions.AsNoTracking()
+                .Where(permission => permission.PermissionIsActive == isActive).ToListAsync(cancellationToken);
+        }
+
+        #endregion
+
+        #region POST
+
+        public async Task<Guid> AddAsync(PermissionModel entity,
+            CancellationToken cancellationToken = default)
+        {
+            if (string.IsNullOrWhiteSpace(entity.PermissionName))
+            {
+                throw new ArgumentException("PermissionModel name is required.", nameof(entity.PermissionName));
+            }
+
+            var isExisted = await context.Permissions.AnyAsync(
+                existedPermission => existedPermission.PermissionName == entity.PermissionName, cancellationToken);
+
+            if (isExisted)
+            {
+                throw new ArgumentException("PermissionModel name is already existed.", nameof(entity.PermissionName));
+            }
+
+            await context.Permissions.AddAsync(entity, cancellationToken);
+            await context.SaveChangesAsync(cancellationToken);
+            return entity.PermissionId;
+        }
+
+        public async Task<int> UpdateAsync(PermissionModel entity,
+            CancellationToken cancellationToken = default)
+        {
+            if (entity.PermissionId == Guid.Empty)
+            {
+                throw new ArgumentException("PermissionModel id is required.", nameof(entity.PermissionId));
+            }
+
+            var existedPermission = await context.Permissions.FirstOrDefaultAsync(
+                existedPermission => existedPermission.PermissionId == entity.PermissionId, cancellationToken);
+
+            if (existedPermission is null)
+            {
+                throw new InvalidOperationException("PermissionModel not found!");
+            }
+
+            context.Permissions.Update(entity);
+            return await context.SaveChangesAsync(cancellationToken);
+        }
+
+        #endregion
+    }
+}

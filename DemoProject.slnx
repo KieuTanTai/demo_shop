@@ -1,10 +1,10 @@
 <Solution>
-  <Folder Name="/Backend/">
-    <Project Path="Backend/Shared/Shared.csproj" />
-  </Folder>
-  <Folder Name="/Backend/Module/">
-    <Project Path="Backend/Module/Gateway/Gateway.csproj" />
-    <Project Path="Backend/Module/Identity/Identity.csproj" />
-  </Folder>
-  <Project Path="Frontend/Frontend.csproj" />
+    <Folder Name="/Backend/">
+        <Project Path="Backend/Shared/Shared.csproj"/>
+    </Folder>
+    <Folder Name="/Backend/Module/">
+        <Project Path="Backend/Module/Gateway/Gateway.csproj"/>
+        <Project Path="Backend/Module/Identity/Identity.csproj"/>
+    </Folder>
+    <Project Path="Frontend/Frontend.csproj"/>
 </Solution>
