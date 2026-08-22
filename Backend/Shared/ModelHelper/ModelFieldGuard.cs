@@ -1,6 +1,6 @@
 namespace Shared.ModelHelper
 {
-    public class ModelFieldGuard
+    public static class ModelFieldGuard
     {
         public static string Required(
             string? value,

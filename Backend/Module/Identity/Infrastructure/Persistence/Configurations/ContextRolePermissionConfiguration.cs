@@ -12,33 +12,33 @@ namespace Identity.Infrastructure.Persistence.Configurations
         {
             entity.ToTable("role_permission");
 
-            entity.HasKey(x => new
+            entity.HasKey(rolePermission => new
             {
-                x.RoleId,
-                x.PermissionId
+                rolePermission.RoleId,
+                rolePermission.PermissionId
             });
 
-            entity.Property(x => x.RoleId)
+            entity.Property(rolePermission => rolePermission.RoleId)
                 .HasColumnName("role_id")
                 .IsRequired();
 
-            entity.Property(x => x.PermissionId)
+            entity.Property(rolePermission => rolePermission.PermissionId)
                 .HasColumnName("permission_id")
                 .IsRequired();
 
-            entity.Property(x => x.AssignedAt)
+            entity.Property(rolePermission => rolePermission.AssignedAt)
                 .HasColumnName("assigned_at")
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .ValueGeneratedOnAdd();
 
             entity.HasOne<Role>()
                 .WithMany()
-                .HasForeignKey(x => x.RoleId)
+                .HasForeignKey(rolePermission => rolePermission.RoleId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             entity.HasOne<Permission>()
                 .WithMany()
-                .HasForeignKey(x => x.PermissionId)
+                .HasForeignKey(rolePermission => rolePermission.PermissionId)
                 .OnDelete(DeleteBehavior.Cascade);
         }
     }

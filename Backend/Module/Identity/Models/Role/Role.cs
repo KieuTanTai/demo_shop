@@ -1,6 +1,5 @@
 using System.ComponentModel.DataAnnotations;
 using Shared.ModelHelper;
-
 namespace Identity.Models.Role
 {
     public class Role
@@ -19,7 +18,8 @@ namespace Identity.Models.Role
 
         public DateTime RoleUpdatedAt { get; private set; } = DateTime.UtcNow;
 
-
+        public IReadOnlyList<Permission.Permission> Permissions { get; private set; } = new List<Permission.Permission>();
+        
         #region Setter
 
         public void SetRoleName(string name)
@@ -52,6 +52,11 @@ namespace Identity.Models.Role
             RoleUpdatedAt = DateTime.UtcNow;
         }
 
+        public void SetPermissions(IReadOnlyList<Permission.Permission> permissions)
+        {
+            Permissions = permissions;
+        }
+        
         #endregion
     }
 }

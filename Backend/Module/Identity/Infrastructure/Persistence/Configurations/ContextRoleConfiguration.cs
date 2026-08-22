@@ -1,3 +1,4 @@
+using Identity.Models.Permission;
 using Identity.Models.Role;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -42,6 +43,31 @@ namespace Identity.Infrastructure.Persistence.Configurations
                 .HasColumnName("role_updated_at")
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .ValueGeneratedOnAddOrUpdate();
+
+            entity.HasMany(role => role.Permissions).WithMany().UsingEntity<RolePermission>(
+                rolePermission => rolePermission.HasOne<Permission>().WithMany()
+                    .HasForeignKey(rolePerm => rolePerm.PermissionId),
+                rolePermission => rolePermission.HasOne<Role>().WithMany().HasForeignKey(rolePerm => rolePerm.RoleId),
+                rolePermission =>
+                {
+                    rolePermission.ToTable("role_permission");
+                    rolePermission.HasKey(rolePerm => new
+                    {
+                        rolePerm.RoleId,
+                        rolePerm.PermissionId
+                    });
+
+                    rolePermission.Property(rolePerm => rolePerm.RoleId)
+                        .HasColumnName("role_id");
+
+                    rolePermission.Property(rolePerm => rolePerm.PermissionId)
+                        .HasColumnName("permission_id");
+
+                    rolePermission.Property(rolePerm => rolePerm.AssignedAt)
+                        .HasColumnName("assigned_at")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                        .ValueGeneratedOnAdd();
+                });
         }
     }
 }

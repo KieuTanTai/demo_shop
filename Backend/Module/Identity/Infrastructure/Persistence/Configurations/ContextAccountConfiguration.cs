@@ -1,4 +1,6 @@
 using Identity.Models.Account;
+using Identity.Models.Permission;
+using Identity.Models.Role;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -49,6 +51,58 @@ namespace Identity.Infrastructure.Persistence.Configurations
                 .HasColumnName("account_updated_at")
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .ValueGeneratedOnAddOrUpdate();
+
+            entity.HasMany(account => account.Roles).WithMany().UsingEntity<AccountRole>(
+                right => right.HasOne<Role>().WithMany().HasForeignKey(role => role.RoleId)
+                    .OnDelete(DeleteBehavior.Cascade),
+                left => left.HasOne<Account>().WithMany().HasForeignKey(account => account.AccountId)
+                    .OnDelete(DeleteBehavior.Cascade),
+                join =>
+                {
+                    join.ToTable("account_role");
+                    join.HasKey(accountRole => new
+                    {
+                        accountRole.AccountId,
+                        accountRole.RoleId
+                    });
+
+                    join.Property(accountRole => accountRole.AccountId)
+                        .HasColumnName("account_id");
+
+                    join.Property(accountRole => accountRole.RoleId)
+                        .HasColumnName("role_id");
+
+                    join.Property(accountRole => accountRole.AssignedAt)
+                        .HasColumnName("assigned_at")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                        .ValueGeneratedOnAdd();
+                });
+
+            entity.HasMany(account => account.Permissions).WithMany().UsingEntity<AccountPermission>(
+                right => right.HasOne<Permission>().WithMany().HasForeignKey(permission => permission.PermissionId)
+                    .OnDelete(DeleteBehavior.Cascade),
+                left => left.HasOne<Account>().WithMany().HasForeignKey(account => account.AccountId)
+                    .OnDelete(DeleteBehavior.Cascade),
+                join =>
+                {
+                    join.ToTable("account_permission");
+                    join.HasKey(accountPermission => new
+                    {
+                        accountPermission.AccountId,
+                        accountPermission.PermissionId
+                    });
+
+                    join.Property(accountPermission => accountPermission.AccountId)
+                        .HasColumnName("account_id");
+
+                    join.Property(accountPermission => accountPermission.PermissionId)
+                        .HasColumnName("permission_id");
+
+                    join.Property(accountPermission => accountPermission.AssignedAt)
+                        .HasColumnName("assigned_at")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                        .ValueGeneratedOnAdd();
+                });
         }
     }
 }

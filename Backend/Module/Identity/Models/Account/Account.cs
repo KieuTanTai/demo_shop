@@ -23,7 +23,10 @@ namespace Identity.Models.Account
 
         public DateTime AccountUpdatedAt { get; private set; } = DateTime.UtcNow;
 
-
+        public IReadOnlyList<Role.Role> Roles { get; private set; } = new List<Role.Role>();
+        
+        public IReadOnlyList<Permission.Permission> Permissions { get; private set; } = new List<Permission.Permission>();
+        
         #region Setter
         
         public void SetEmail(string email)
@@ -63,6 +66,16 @@ namespace Identity.Models.Account
             AccountPhone = baseValidPhone;
             AccountUpdatedAt = DateTime.UtcNow;
         }
+
+        public void SetRoles(IReadOnlyList<Role.Role> roles)
+        {
+            Roles = roles;
+        }
+        
+        public void SetPermissions(IReadOnlyList<Permission.Permission> permissions)
+        {
+            Permissions = permissions;
+        }       
         
         #endregion
     }
