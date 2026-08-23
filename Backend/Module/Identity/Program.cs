@@ -2,7 +2,8 @@ using Identity.Infrastructure.DIContainer;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddIdentityCollection(builder.Configuration, builder.Environment);
+builder.Services.AddIdentityRepositoryCollection(builder.Configuration, builder.Environment);
+
 var app = builder.Build();
 
 app.MapGet("/", () => "Hello World!");

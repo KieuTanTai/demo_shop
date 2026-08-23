@@ -12,9 +12,9 @@ using Shared.Interfaces;
 
 namespace Identity.Infrastructure.DIContainer
 {
-    public static class ServiceCollectionAccount
+    public static class CollectionIdentityRepository
     {
-        public static IServiceCollection AddIdentityCollection(this IServiceCollection services,
+        public static IServiceCollection AddIdentityRepositoryCollection(this IServiceCollection services,
             IConfiguration configuration, IHostEnvironment environment)
         {
             #region CONFIG
