@@ -1,3 +1,4 @@
+using Identity.Interfaces;
 using Identity.Interfaces.IApplication;
 using Identity.Interfaces.IRepository;
 using Identity.Models.Account;
@@ -15,7 +16,8 @@ namespace Identity.Application
         IBaseAssociativeRepository<AccountPermissionModel, Guid> accountPermissionRepository,
         IBaseAssociativeRepository<RolePermissionModel, Guid> rolePermissionRepository,
         IBaseAuthorizationRepository<RoleModel, Guid> roleRepository,
-        IBaseAuthorizationRepository<PermissionModel, Guid> permissionRepository)
+        IBaseAuthorizationRepository<PermissionModel, Guid> permissionRepository,
+        IAccountHelper accountHelper) 
         : IAccountApplication
     {
         private readonly IAccountRepository _accountRepository = accountRepository;
@@ -25,6 +27,7 @@ namespace Identity.Application
         private readonly IBaseAssociativeRepository<RolePermissionModel, Guid> _rolePermissionRepository = rolePermissionRepository;
         private readonly IBaseAuthorizationRepository<RoleModel, Guid> _roleRepository = roleRepository;
         private readonly IBaseAuthorizationRepository<PermissionModel, Guid> _permissionRepository = permissionRepository;
+        private readonly IAccountHelper _accountHelper = accountHelper;
 
         #region USER
 

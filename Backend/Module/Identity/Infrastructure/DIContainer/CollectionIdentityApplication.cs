@@ -1,22 +1,34 @@
-using Identity.Infrastructure.Persistence.DBContext;
-using Identity.Infrastructure.Repository;
-using Identity.Infrastructure.Repository.Account;
-using Identity.Infrastructure.Repository.Permission;
-using Identity.Infrastructure.Repository.Role;
-using Identity.Interfaces.IRepository;
+
+
+using Identity.Interfaces;
+using Identity.Models;
 using Identity.Models.Account;
-using Identity.Models.Permission;
-using Identity.Models.Role;
-using Microsoft.EntityFrameworkCore;
-using Shared.Interfaces;
+using Identity.Utils;
+using Microsoft.AspNetCore.Identity;
 
 namespace Identity.Infrastructure.DIContainer
 {
     public static class CollectionIdentityApplication
     {
-        public static IServiceCollection AddIdentityApplicationCollection(this IServiceCollection services)
+        public static IServiceCollection AddIdentityApplicationCollection(this IServiceCollection services, IConfiguration configuration, IHostEnvironment environment)
         {
-            throw new NotImplementedException();
+            #region CONFIG
+
+            var accountRules = new AccountRulesModel();
+            configuration.GetSection("AccountRules").Bind(accountRules);
+
+            services.Configure<PasswordHasherOptions>(options => {
+                options.CompatibilityMode = PasswordHasherCompatibilityMode.IdentityV3;
+                options.IterationCount = configuration.GetValue<int>("PasswordHasherOptions:IterationCount");
+            });
+            
+            #endregion
+            
+            services.AddSingleton(accountRules);
+            services.AddSingleton<IPasswordHasher<AccountModel>, PasswordHasher<AccountModel>>();
+            services.AddSingleton<IAccountHelper, AccountHelper>();
+            
+            return services;
         }
     }
 }

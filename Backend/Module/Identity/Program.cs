@@ -3,6 +3,7 @@ using Identity.Infrastructure.DIContainer;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddIdentityRepositoryCollection(builder.Configuration, builder.Environment);
+builder.Services.AddIdentityApplicationCollection(builder.Configuration, builder.Environment);
 
 var app = builder.Build();
 
