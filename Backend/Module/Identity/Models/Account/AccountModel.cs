@@ -14,7 +14,7 @@ namespace Identity.Models.Account
 
         [MaxLength(255)] public string AccountPassword { get; private set; } = string.Empty;
 
-        [MaxLength(10)] public string? AccountPhone { get; private set; }
+        [MaxLength(10)] public string? AccountPhoneNumber { get; private set; }
 
         public bool AccountIsActive { get; private set; } = true;
 
@@ -52,18 +52,18 @@ namespace Identity.Models.Account
             AccountUpdatedAt = DateTime.UtcNow;
         }
 
-        public void ClearAccountPhone()
+        public void ClearAccountPhoneNumber()
         {
-            if (AccountPhone is null)
+            if (AccountPhoneNumber is null)
             {
                 return;
             }
 
-            AccountPhone = null;
+            AccountPhoneNumber = null;
             AccountUpdatedAt = DateTime.UtcNow;
         }
 
-        public void SetAccountPhone(string phone)
+        public void SetAccountPhoneNumber(string phone)
         {
             var baseValidPhone = ModelFieldGuard.Required(phone, 10, nameof(phone));
             const string pattern = @"^(03|05|07|08|09)\d{8}$";
@@ -73,7 +73,7 @@ namespace Identity.Models.Account
                     nameof(phone));
             }
 
-            AccountPhone = baseValidPhone;
+            AccountPhoneNumber = baseValidPhone;
             AccountUpdatedAt = DateTime.UtcNow;
         }
 

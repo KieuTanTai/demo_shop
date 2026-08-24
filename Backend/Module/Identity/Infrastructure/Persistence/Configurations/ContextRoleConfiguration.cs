@@ -23,7 +23,9 @@ namespace Identity.Infrastructure.Persistence.Configurations
                 .IsRequired();
 
             entity.HasIndex(role => role.RoleName)
-                .IsUnique();
+                .IsUnique()
+                .HasDatabaseName("idx_role_name");
+
 
             entity.Property(role => role.RoleDescription)
                 .HasColumnName("role_description")

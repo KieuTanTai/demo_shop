@@ -12,12 +12,12 @@ namespace Identity.Interfaces.IApplication
         Task<bool> UpdateProfile(AccountModel accountModel, CancellationToken cancellationToken = default);
         Task<bool> UpdateStatusAccount(Guid? accountId, string? email, CancellationToken cancellationToken = default);
         
-        // Methods for adminstration
-        Task<IReadOnlyList<AccountModel>> GetAllAccount(CancellationToken cancellationToken = default);
-        Task<RecordBaseCursorPage<AccountModel>> GetApplyPaging(Guid? cursor, int pageSize, CancellationToken cancellationToken = default);
-        Task<RecordBaseCursorPage<AccountModel>> GetApplyPagingByStatus(Guid? cursor, int pageSize, bool isActive, CancellationToken cancellationToken = default);
-        Task<AccountModel> GetAccountByEmail(string email, CancellationToken cancellationToken = default);
-        Task<IReadOnlyList<AccountModel>> GetAccountByPhoneNumber(string phoneNumber, CancellationToken cancellationToken = default);
-        
+        // Methods for admins
+        // Task<IReadOnlyList<AccountModel>> GetAllAccount(CancellationToken cancellationToken = default);
+        // Task<RecordBaseCursorPage<AccountModel>> GetApplyPaging(Guid? cursor, int pageSize, CancellationToken cancellationToken = default);
+        // Task<RecordBaseCursorPage<AccountModel>> GetApplyPagingByStatus(Guid? cursor, int pageSize, bool isActive, CancellationToken cancellationToken = default);
+        // Task<AccountModel> GetAccountByEmail(string email, CancellationToken cancellationToken = default);
+        // Task<RecordBaseCursorPage<AccountModel>> GetAccountByPhoneNumber(Guid? cursor, string phoneNumber, int pageSize, CancellationToken cancellationToken = default);
+        //
     }
 }

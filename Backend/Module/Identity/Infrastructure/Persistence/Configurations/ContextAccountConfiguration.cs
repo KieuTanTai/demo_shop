@@ -24,18 +24,22 @@ namespace Identity.Infrastructure.Persistence.Configurations
                 .IsRequired();
 
             entity.HasIndex(account => account.AccountEmail)
-                .IsUnique();
+                .IsUnique()
+                .HasDatabaseName("idx_account_email");
 
             entity.Property(account => account.AccountPassword)
                 .HasColumnName("account_password")
                 .HasMaxLength(255)
                 .IsRequired();
 
-            entity.Property(account => account.AccountPhone)
-                .HasColumnName("account_phone")
+            entity.Property(account => account.AccountPhoneNumber)
+                .HasColumnName("account_phone_number")
                 .HasMaxLength(10)
                 .IsUnicode(false)
                 .IsRequired(false);
+            
+            entity.HasIndex(account => account.AccountPhoneNumber)
+                .HasDatabaseName("idx_account_phone_number");
 
             entity.Property(account => account.AccountIsActive)
                 .HasColumnName("account_is_active")

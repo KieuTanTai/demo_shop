@@ -31,11 +31,17 @@ namespace Identity.Infrastructure.Repository.Account
                 cancellationToken);
         }
 
-        public async Task<IReadOnlyList<AccountModel>> GetAccountByPhoneNumber(string phoneNumber,
+        public async Task<RecordBaseCursorPage<AccountModel>> GetAccountByPhoneNumber(Guid? cursor, string phoneNumber, int pageSize,
             CancellationToken cancellationToken = default)
         {
-            return await _db.Accounts.AsNoTracking().Where(account => account.AccountPhone == phoneNumber)
-                .ToListAsync(cancellationToken);
+            ArgumentOutOfRangeException.ThrowIfLessThan(pageSize, 1);   
+            var accounts = _db.Accounts.AsNoTracking().OrderByDescending(account => account.AccountId)
+                .ToAsyncEnumerable();
+            if (cursor.HasValue)
+                accounts = accounts.Where(account => account.AccountId < cursor);
+            accounts = accounts.Where(account => account.AccountPhoneNumber == phoneNumber);
+            return await SharedGetApplyPagingRepository.ApplyPaging(accounts, pageSize, account => account.AccountId,
+                cancellationToken);
         }
 
         public async Task<AccountModel> GetAccountByEmail(string email,

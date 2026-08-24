@@ -11,7 +11,7 @@ namespace Identity.Interfaces.IRepository
 
         Task<AccountModel> GetAccountByEmail(string email, CancellationToken cancellationToken = default);
 
-        Task<IReadOnlyList<AccountModel>> GetAccountByPhoneNumber(string phoneNumber,
+        Task<RecordBaseCursorPage<AccountModel>> GetAccountByPhoneNumber(Guid? cursor, string phoneNumber, int pageSize,
             CancellationToken cancellationToken = default);
 
         Task<RecordBaseCursorPage<AccountModel>> GetApplyPagingByStatus(Guid? cursor, int pageSize, bool isActive,

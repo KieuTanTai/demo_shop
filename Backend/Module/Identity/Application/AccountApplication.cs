@@ -32,26 +32,33 @@ namespace Identity.Application
         {
             throw new NotImplementedException();
         }
+        
+        
         public async Task<AccountModel> Login(string email, string password, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }
+        
         public async Task<bool> Logout(CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }
+        
         public async Task<bool> ChangePassword(string oldPassword, string newPassword, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }
+        
         public async Task<bool> UpdateStatusAccount(Guid accountId, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }
+        
         public async Task<bool> UpdateProfile(AccountModel accountModel, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }
+        
         public async Task<bool> UpdateStatusAccount(Guid? accountId, string? email, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
@@ -65,19 +72,23 @@ namespace Identity.Application
         {
             throw new NotImplementedException();
         }
+        
         public async Task<RecordBaseCursorPage<AccountModel>> GetApplyPaging(Guid? cursor, int pageSize, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }
+        
         public async Task<RecordBaseCursorPage<AccountModel>> GetApplyPagingByStatus(Guid? cursor, int pageSize, bool isActive, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }
+        
         public async Task<AccountModel> GetAccountByEmail(string email, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }
-        public async Task<IReadOnlyList<AccountModel>> GetAccountByPhoneNumber(string phoneNumber, CancellationToken cancellationToken = default)
+        
+        public async Task<RecordBaseCursorPage<AccountModel>> GetAccountByPhoneNumber(Guid? cursor, string phoneNumber, int pageSize, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }

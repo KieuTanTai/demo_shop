@@ -52,24 +52,6 @@ CREATE TABLE `account_permission`
     PRIMARY KEY (`account_id`, `permission_id`)
 );
 
-ALTER TABLE `account_role`
-    ADD FOREIGN KEY (`account_id`) REFERENCES `account` (`account_id`);
-
-ALTER TABLE `account_role`
-    ADD FOREIGN KEY (`role_id`) REFERENCES `role` (`role_id`);
-
-ALTER TABLE `role_permission`
-    ADD FOREIGN KEY (`role_id`) REFERENCES `role` (`role_id`);
-
-ALTER TABLE `role_permission`
-    ADD FOREIGN KEY (`permission_id`) REFERENCES `permission` (`permission_id`);
-
-ALTER TABLE `account_permission`
-    ADD FOREIGN KEY (`account_id`) REFERENCES `account` (`account_id`);
-
-ALTER TABLE `account_permission`
-    ADD FOREIGN KEY (`permission_id`) REFERENCES `permission` (`permission_id`);
-
 ALTER TABLE `account`
     MODIFY COLUMN `account_password`
         VARCHAR(255)
@@ -80,7 +62,7 @@ ALTER TABLE `account`
     ADD COLUMN `account_is_active` BOOLEAN NOT NULL DEFAULT TRUE;
 
 ALTER TABLE `account`
-    MODIFY COLUMN `account_phone` varchar(10);
+    ADD COLUMN `account_phone_number` VARCHAR(10);
 
 ALTER TABLE `role`
     MODIFY COLUMN `role_description` VARCHAR(300);
@@ -98,6 +80,36 @@ ALTER TABLE `role`
 ALTER TABLE `permission`
     CHANGE COLUMN `permission_active`
         `permission_is_active` BOOLEAN NOT NULL DEFAULT TRUE;
+
+ALTER TABLE `account_role`
+    ADD FOREIGN KEY (`account_id`) REFERENCES `account` (`account_id`);
+
+ALTER TABLE `account_role`
+    ADD FOREIGN KEY (`role_id`) REFERENCES `role` (`role_id`);
+
+ALTER TABLE `role_permission`
+    ADD FOREIGN KEY (`role_id`) REFERENCES `role` (`role_id`);
+
+ALTER TABLE `role_permission`
+    ADD FOREIGN KEY (`permission_id`) REFERENCES `permission` (`permission_id`);
+
+ALTER TABLE `account_permission`
+    ADD FOREIGN KEY (`account_id`) REFERENCES `account` (`account_id`);
+
+ALTER TABLE `account_permission`
+    ADD FOREIGN KEY (`permission_id`) REFERENCES `permission` (`permission_id`);
+
+ALTER TABLE `account`
+ADD UNIQUE INDEX `idx_account_email` (`account_email`),
+ADD INDEX `idx_account_phone_number` (`account_phone_number`);
+
+ALTER TABLE `role`
+ADD UNIQUE INDEX `idx_role_name` (`role_name`);
+
+ALTER TABLE `permission`
+ADD UNIQUE INDEX `idx_permission_name` (`permission_name`);
+
+
 
 SHOW COLUMNS FROM account;
 SHOW COLUMNS FROM role;
