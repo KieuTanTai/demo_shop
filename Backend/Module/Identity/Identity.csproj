@@ -29,6 +29,7 @@
 
     <ItemGroup>
       <Folder Include="Gateway\" />
+      <Folder Include="Utils\Enum\" />
     </ItemGroup>
 
 </Project>

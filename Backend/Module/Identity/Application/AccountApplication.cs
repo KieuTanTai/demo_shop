@@ -46,6 +46,7 @@ namespace Identity.Application
 
             try
             {
+                //! TODO: create method for get role and permission for registered account, like using role service, permission service for get roles, perms, and write new method for batch update
                 await _accountRepository.AddAsync(accountModel, cancellationToken);
                 
                 var result = _unitOfWork.SaveChangesAsync(cancellationToken);
