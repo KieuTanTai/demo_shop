@@ -2,7 +2,7 @@ using Shared.Interfaces;
 
 namespace Identity.Interfaces.IRepository
 {
-    public interface IBaseAuthorizationRepository<T, TTypeId> : IBaseReadRepository<T>, IBasePostRepository<T, TTypeId>
+    public interface IBaseAuthorizationRepository<T> : IBaseReadRepository<T>, IBasePostRepository<T>
         where T : class
     {
         Task<IReadOnlyList<T>> GetByNameAsync(string name, CancellationToken cancellationToken = default);

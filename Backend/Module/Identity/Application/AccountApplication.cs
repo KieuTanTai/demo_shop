@@ -15,8 +15,8 @@ namespace Identity.Application
         IBaseAssociativeRepository<AccountRoleModel, Guid> accountRoleRepository,
         IBaseAssociativeRepository<AccountPermissionModel, Guid> accountPermissionRepository,
         IBaseAssociativeRepository<RolePermissionModel, Guid> rolePermissionRepository,
-        IBaseAuthorizationRepository<RoleModel, Guid> roleRepository,
-        IBaseAuthorizationRepository<PermissionModel, Guid> permissionRepository,
+        IBaseAuthorizationRepository<RoleModel> roleRepository,
+        IBaseAuthorizationRepository<PermissionModel> permissionRepository,
         IAccountHelper accountHelper) 
         : IAccountApplication
     {
@@ -25,15 +25,41 @@ namespace Identity.Application
         private readonly IBaseAssociativeRepository<AccountRoleModel, Guid> _accountRoleRepository = accountRoleRepository;
         private readonly IBaseAssociativeRepository<AccountPermissionModel, Guid> _accountPermissionRepository = accountPermissionRepository;
         private readonly IBaseAssociativeRepository<RolePermissionModel, Guid> _rolePermissionRepository = rolePermissionRepository;
-        private readonly IBaseAuthorizationRepository<RoleModel, Guid> _roleRepository = roleRepository;
-        private readonly IBaseAuthorizationRepository<PermissionModel, Guid> _permissionRepository = permissionRepository;
+        private readonly IBaseAuthorizationRepository<RoleModel> _roleRepository = roleRepository;
+        private readonly IBaseAuthorizationRepository<PermissionModel> _permissionRepository = permissionRepository;
         private readonly IAccountHelper _accountHelper = accountHelper;
 
         #region USER
 
         public async Task<AccountModel> Register(string email, string password, CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            var existedAccount = await _accountRepository.GetAccountByEmail(email, cancellationToken);
+            if (existedAccount != null)
+                throw new ArgumentException("AccountModel email is existed.", nameof(email));
+            if (!_accountHelper.IsPasswordValid(password))
+                throw new ArgumentException("AccountModel password is invalid.", nameof(password));
+            if (!_accountHelper.IsEmailValid(email))
+                throw new ArgumentException("AccountModel email is invalid.", nameof(email));
+            
+            var accountModel = new AccountModel(email, password);
+            var hashedPassword = _accountHelper.GetPasswordHash(accountModel, password);
+
+            try
+            {
+                await _accountRepository.AddAsync(accountModel, cancellationToken);
+                
+                var result = _unitOfWork.SaveChangesAsync(cancellationToken);
+                return accountModel;
+            }
+            catch(OperationCanceledException canceledException)
+            {
+                throw new OperationCanceledException("Operation was canceled.", canceledException);
+                
+            }
+            catch (Exception e)
+            {
+                throw new InvalidOperationException("Failed to add account.", e);
+            }
         }
         
         

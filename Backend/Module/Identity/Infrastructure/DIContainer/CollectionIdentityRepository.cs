@@ -43,8 +43,8 @@ namespace Identity.Infrastructure.DIContainer
             
             services.AddScoped<IUnitOfWork, EfIdentityUnitOfWork>();
             services.AddScoped<IAccountRepository, AccountRepository>();
-            services.AddScoped<IBaseAuthorizationRepository<RoleModel, Guid>, RoleRepository>();
-            services.AddScoped<IBaseAuthorizationRepository<PermissionModel, Guid>, PermissionRepository>();
+            services.AddScoped<IBaseAuthorizationRepository<RoleModel>, RoleRepository>();
+            services.AddScoped<IBaseAuthorizationRepository<PermissionModel>, PermissionRepository>();
             services.AddScoped<IBaseAssociativeRepository<AccountPermissionModel, Guid>, AccountPermissionRepository>();
             services.AddScoped<IBaseAssociativeRepository<AccountRoleModel, Guid>, AccountRoleRepository>();
             services.AddScoped<IBaseAssociativeRepository<RolePermissionModel, Guid>, RolePermissionRepository>();

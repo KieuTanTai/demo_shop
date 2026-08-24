@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Identity.Infrastructure.Repository.Permission
 {
     public class PermissionRepository(IdentityDbContext context)
-        : IBaseAuthorizationRepository<PermissionModel, Guid>
+        : IBaseAuthorizationRepository<PermissionModel>
     {
         #region GET
 
@@ -60,7 +60,7 @@ namespace Identity.Infrastructure.Repository.Permission
 
         #region POST
 
-        public async Task<Guid> AddAsync(PermissionModel entity,
+        public async Task AddAsync(PermissionModel entity,
             CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrWhiteSpace(entity.PermissionName))
@@ -77,11 +77,9 @@ namespace Identity.Infrastructure.Repository.Permission
             }
 
             await context.Permissions.AddAsync(entity, cancellationToken);
-            await context.SaveChangesAsync(cancellationToken);
-            return entity.PermissionId;
         }
 
-        public async Task<int> UpdateAsync(PermissionModel entity,
+        public async Task UpdateAsync(PermissionModel entity,
             CancellationToken cancellationToken = default)
         {
             if (entity.PermissionId == Guid.Empty)
@@ -98,7 +96,6 @@ namespace Identity.Infrastructure.Repository.Permission
             }
 
             context.Permissions.Update(entity);
-            return await context.SaveChangesAsync(cancellationToken);
         }
 
         #endregion

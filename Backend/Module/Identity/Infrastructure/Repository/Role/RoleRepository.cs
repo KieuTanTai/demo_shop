@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Identity.Infrastructure.Repository.Role
 {
-    public class RoleRepository(IdentityDbContext context) : IBaseAuthorizationRepository<RoleModel, Guid>
+    public class RoleRepository(IdentityDbContext context) : IBaseAuthorizationRepository<RoleModel>
     {
         private readonly IdentityDbContext _db = context;
 
@@ -55,7 +55,7 @@ namespace Identity.Infrastructure.Repository.Role
 
         #region POST
 
-        public async Task<Guid> AddAsync(RoleModel entity, CancellationToken cancellationToken = default)
+        public async Task AddAsync(RoleModel entity, CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrWhiteSpace(entity.RoleName))
             {
@@ -66,16 +66,12 @@ namespace Identity.Infrastructure.Repository.Role
                 cancellationToken);
 
             if (isExisted)
-            {
                 throw new ArgumentException("RoleModel name is existed.", nameof(entity.RoleName));
-            }
 
             await _db.Roles.AddAsync(entity, cancellationToken);
-            await _db.SaveChangesAsync(cancellationToken);
-            return entity.RoleId;
         }
 
-        public async Task<int> UpdateAsync(RoleModel entity, CancellationToken cancellationToken = default)
+        public async Task UpdateAsync(RoleModel entity, CancellationToken cancellationToken = default)
         {
             if (entity.RoleId == Guid.Empty)
             {
@@ -86,12 +82,9 @@ namespace Identity.Infrastructure.Repository.Role
                 cancellationToken);
 
             if (existedRole is null)
-            {
                 throw new InvalidOperationException("RoleModel not found!");
-            }
 
             _db.Roles.Update(entity);
-            return await _db.SaveChangesAsync(cancellationToken);
         }
 
         #endregion

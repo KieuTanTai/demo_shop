@@ -97,7 +97,7 @@ namespace Identity.Infrastructure.Repository.Account
 
         #region POST
 
-        public async Task<Guid> AddAsync(AccountModel accountModel, CancellationToken cancellationToken = default)
+        public async Task AddAsync(AccountModel accountModel, CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrWhiteSpace(accountModel.AccountEmail))
             {
@@ -112,13 +112,10 @@ namespace Identity.Infrastructure.Repository.Account
             {
                 throw new InvalidOperationException("Already existed!");
             }
-
-            var result = await _db.Accounts.AddAsync(accountModel, cancellationToken);
-            await _db.SaveChangesAsync(cancellationToken);
-            return result.Entity.AccountId;
+            await _db.Accounts.AddAsync(accountModel, cancellationToken);
         }
 
-        public async Task<int> UpdateAsync(AccountModel accountModel,
+        public async Task UpdateAsync(AccountModel accountModel,
             CancellationToken cancellationToken = default)
         {
             if (accountModel.AccountId == Guid.Empty)
@@ -134,9 +131,7 @@ namespace Identity.Infrastructure.Repository.Account
             {
                 throw new InvalidOperationException("AccountModel not found!");
             }
-
             _db.Accounts.Update(accountModel);
-            return await _db.SaveChangesAsync(cancellationToken);
         }
 
         #endregion

@@ -10,10 +10,10 @@ namespace Identity.Interfaces.IRepository
         Task<bool> ExistsAsync(TTypeId firstForeignId, TTypeId secondForeignId,
             CancellationToken cancellationToken = default);
 
-        Task<int> AddAsync(List<T> entities, CancellationToken cancellationToken = default);
+        Task AddAsync(List<T> entities, CancellationToken cancellationToken = default);
 
-        Task<int> DeleteByFirstForeignIdAsync(TTypeId firstForeignId, CancellationToken cancellationToken = default);
-        Task<int> DeleteBySecondForeignIdAsync(TTypeId secondForeignId, CancellationToken cancellationToken = default);
-        Task<int> DeleteAsync(TTypeId firstForeignId, TTypeId secondForeignId, CancellationToken cancellationToken = default);
+        Task DeleteByFirstForeignIdAsync(TTypeId firstForeignId, CancellationToken cancellationToken = default);
+        Task DeleteBySecondForeignIdAsync(TTypeId secondForeignId, CancellationToken cancellationToken = default);
+        Task DeleteAsync(TTypeId firstForeignId, TTypeId secondForeignId, CancellationToken cancellationToken = default);
     }
 }

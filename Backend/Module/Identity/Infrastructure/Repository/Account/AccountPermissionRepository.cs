@@ -11,14 +11,11 @@ namespace Identity.Infrastructure.Repository.Account
 
         #region POST
 
-        public async Task<int> AddAsync(List<AccountPermissionModel> entities, CancellationToken cancellationToken = default)
+        public async Task AddAsync(List<AccountPermissionModel> entities, CancellationToken cancellationToken = default)
         {
             if (entities is null || entities.Count == 0)
-            {
                 throw new ArgumentException("Entities is required.", nameof(entities));
-            }
             await _db.AccountPermissions.AddRangeAsync(entities, cancellationToken);
-            return await _db.SaveChangesAsync(cancellationToken);
         }
 
         #endregion
@@ -44,7 +41,7 @@ namespace Identity.Infrastructure.Repository.Account
 
         #region DELETE
 
-        public async Task<int> DeleteByFirstForeignIdAsync(Guid firstForeignId, CancellationToken cancellationToken = default)
+        public async Task DeleteByFirstForeignIdAsync(Guid firstForeignId, CancellationToken cancellationToken = default)
         {
             if (firstForeignId == Guid.Empty)
             {
@@ -52,10 +49,9 @@ namespace Identity.Infrastructure.Repository.Account
             }
             var accountPermissionsToDelete = await _db.AccountPermissions.Where(ap => ap.AccountId == firstForeignId).ToListAsync(cancellationToken);
             _db.AccountPermissions.RemoveRange(accountPermissionsToDelete);
-            return await _db.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task<int> DeleteBySecondForeignIdAsync(Guid secondForeignId, CancellationToken cancellationToken = default)
+        public async Task DeleteBySecondForeignIdAsync(Guid secondForeignId, CancellationToken cancellationToken = default)
         {
             if (secondForeignId == Guid.Empty)
             {
@@ -63,10 +59,9 @@ namespace Identity.Infrastructure.Repository.Account
             }
             var accountPermissionsToDelete = await _db.AccountPermissions.Where(ap => ap.PermissionId == secondForeignId).ToListAsync(cancellationToken);
             _db.AccountPermissions.RemoveRange(accountPermissionsToDelete);
-            return await _db.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task<int> DeleteAsync(Guid firstForeignId, Guid secondForeignId, CancellationToken cancellationToken = default)
+        public async Task DeleteAsync(Guid firstForeignId, Guid secondForeignId, CancellationToken cancellationToken = default)
         {
             if (firstForeignId == Guid.Empty || secondForeignId == Guid.Empty)
             {
@@ -78,7 +73,6 @@ namespace Identity.Infrastructure.Repository.Account
                 throw new InvalidOperationException("AccountModel permission not found!");
             }
             _db.AccountPermissions.Remove(existedAccountPermission);
-            return await _db.SaveChangesAsync(cancellationToken);
         }
 
         #endregion

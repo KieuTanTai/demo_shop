@@ -11,7 +11,7 @@ namespace Identity.Infrastructure.Repository.Role
 
         #region POST
 
-        public async Task<int> AddAsync(List<RolePermissionModel> entities, CancellationToken cancellationToken = default)
+        public async Task AddAsync(List<RolePermissionModel> entities, CancellationToken cancellationToken = default)
         {
             if (entities is null || entities.Count == 0)
             {
@@ -23,7 +23,6 @@ namespace Identity.Infrastructure.Repository.Role
             // await _db.RolePermissions.AddRangeAsync(filteredRolePermissions, cancellationToken);
 
             await _db.RolePermissions.AddRangeAsync(entities, cancellationToken);
-            return await _db.SaveChangesAsync(cancellationToken);
         }
 
         #endregion
@@ -40,7 +39,7 @@ namespace Identity.Infrastructure.Repository.Role
 
         #region DELETE
 
-        public async Task<int> DeleteAsync(Guid firstForeignId, Guid secondForeignId,
+        public async Task DeleteAsync(Guid firstForeignId, Guid secondForeignId,
             CancellationToken cancellationToken = default)
         {
             if (firstForeignId == Guid.Empty || secondForeignId == Guid.Empty)
@@ -49,14 +48,11 @@ namespace Identity.Infrastructure.Repository.Role
             }
             var existedRolePermission = await GetByIdAsync(firstForeignId, secondForeignId, cancellationToken);
             if (existedRolePermission is null)
-            {
-                return 0;
-            }
+                throw new InvalidOperationException("RoleModel permission not found!");
             _db.RolePermissions.Remove(existedRolePermission);
-            return await _db.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task<int> DeleteByFirstForeignIdAsync(Guid firstForeignId, CancellationToken cancellationToken = default)
+        public async Task DeleteByFirstForeignIdAsync(Guid firstForeignId, CancellationToken cancellationToken = default)
         {
             if (firstForeignId == Guid.Empty)
             {
@@ -64,10 +60,9 @@ namespace Identity.Infrastructure.Repository.Role
             }
             var rolePermissionsToDelete = await _db.RolePermissions.Where(rp => rp.RoleId == firstForeignId).ToListAsync(cancellationToken);
             _db.RolePermissions.RemoveRange(rolePermissionsToDelete);
-            return await _db.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task<int> DeleteBySecondForeignIdAsync(Guid secondForeignId, CancellationToken cancellationToken = default)
+        public async Task DeleteBySecondForeignIdAsync(Guid secondForeignId, CancellationToken cancellationToken = default)
         {
             if (secondForeignId == Guid.Empty)
             {
@@ -75,7 +70,6 @@ namespace Identity.Infrastructure.Repository.Role
             }
             var rolePermissionsToDelete = await _db.RolePermissions.Where(rp => rp.PermissionId == secondForeignId).ToListAsync(cancellationToken);
             _db.RolePermissions.RemoveRange(rolePermissionsToDelete);
-            return await _db.SaveChangesAsync(cancellationToken);
         }
 
         #endregion

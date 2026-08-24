@@ -27,6 +27,13 @@ namespace Identity.Models.Account
         public IReadOnlyList<PermissionModel> Permissions { get; private set; } =
             new List<PermissionModel>();
 
+        public AccountModel(string email, string password)
+        {
+            AccountEmail = ModelFieldGuard.Required(email, 255, nameof(email));
+            AccountPassword = ModelFieldGuard.Required(password, 255, nameof(password));
+        }
+        
+
         #region Setter
 
         public void SetEmail(string email)

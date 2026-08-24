@@ -11,7 +11,7 @@ namespace Identity.Infrastructure.Repository.Account
 
         #region POST
 
-        public async Task<int> AddAsync(List<AccountRoleModel> entities, CancellationToken cancellationToken = default)
+        public async Task AddAsync(List<AccountRoleModel> entities, CancellationToken cancellationToken = default)
         {
             if (entities is null || entities.Count == 0)
             {
@@ -24,7 +24,6 @@ namespace Identity.Infrastructure.Repository.Account
             // }
             // await _db.AccountRoles.AddRangeAsync(filteredAccountRoles, cancellationToken);
             await _db.AccountRoles.AddRangeAsync(entities, cancellationToken);
-            return await _db.SaveChangesAsync(cancellationToken);
         }
 
         #endregion
@@ -40,7 +39,7 @@ namespace Identity.Infrastructure.Repository.Account
 
         #region DELETE
 
-        public async Task<int> DeleteAsync(Guid firstForeignId, Guid secondForeignId, CancellationToken cancellationToken = default)
+        public async Task DeleteAsync(Guid firstForeignId, Guid secondForeignId, CancellationToken cancellationToken = default)
         {
             if (firstForeignId == Guid.Empty || secondForeignId == Guid.Empty)
             {
@@ -52,10 +51,9 @@ namespace Identity.Infrastructure.Repository.Account
                 throw new InvalidOperationException("AccountModel role not found!");
             }
             _db.AccountRoles.Remove(existedAccountRole);
-            return await _db.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task<int> DeleteByFirstForeignIdAsync(Guid firstForeignId, CancellationToken cancellationToken = default)
+        public async Task DeleteByFirstForeignIdAsync(Guid firstForeignId, CancellationToken cancellationToken = default)
         {
             if (firstForeignId == Guid.Empty)
             {
@@ -63,10 +61,9 @@ namespace Identity.Infrastructure.Repository.Account
             }
             var accountRolesToDelete = await _db.AccountRoles.Where(ar => ar.AccountId == firstForeignId).ToListAsync(cancellationToken);
             _db.AccountRoles.RemoveRange(accountRolesToDelete);
-            return await _db.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task<int> DeleteBySecondForeignIdAsync(Guid secondForeignId, CancellationToken cancellationToken = default)
+        public async Task DeleteBySecondForeignIdAsync(Guid secondForeignId, CancellationToken cancellationToken = default)
         {
             if (secondForeignId == Guid.Empty)
             {
@@ -74,7 +71,6 @@ namespace Identity.Infrastructure.Repository.Account
             }
             var accountRolesToDelete = await _db.AccountRoles.Where(ar => ar.RoleId == secondForeignId).ToListAsync(cancellationToken);
             _db.AccountRoles.RemoveRange(accountRolesToDelete);
-            return await _db.SaveChangesAsync(cancellationToken);
         }
 
         #endregion
