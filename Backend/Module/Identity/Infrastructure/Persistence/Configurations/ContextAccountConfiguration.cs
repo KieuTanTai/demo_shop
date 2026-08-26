@@ -81,7 +81,7 @@ namespace Identity.Infrastructure.Persistence.Configurations
                         .ValueGeneratedOnAdd();
                 });
 
-            entity.HasMany(account => account.Permissions).WithMany().UsingEntity<AccountPermissionModel>(
+            entity.HasMany(account => account.Permissions).WithMany().UsingEntity<AccountAdditionalPermissionModel>(
                 right => right.HasOne<PermissionModel>().WithMany().HasForeignKey(permission => permission.PermissionId)
                     .OnDelete(DeleteBehavior.Cascade),
                 left => left.HasOne<AccountModel>().WithMany().HasForeignKey(account => account.AccountId)

@@ -13,7 +13,7 @@ namespace Identity.Application
         IAccountRepository accountRepository,
         IUnitOfWork unitOfWork,
         IBaseAssociativeRepository<AccountRoleModel, Guid> accountRoleRepository,
-        IBaseAssociativeRepository<AccountPermissionModel, Guid> accountPermissionRepository,
+        IBaseAssociativeRepository<AccountAdditionalPermissionModel, Guid> accountPermissionRepository,
         IBaseAssociativeRepository<RolePermissionModel, Guid> rolePermissionRepository,
         IBaseAuthorizationRepository<RoleModel> roleRepository,
         IBaseAuthorizationRepository<PermissionModel> permissionRepository,
@@ -23,7 +23,7 @@ namespace Identity.Application
         private readonly IAccountRepository _accountRepository = accountRepository;
         private readonly IUnitOfWork _unitOfWork = unitOfWork;
         private readonly IBaseAssociativeRepository<AccountRoleModel, Guid> _accountRoleRepository = accountRoleRepository;
-        private readonly IBaseAssociativeRepository<AccountPermissionModel, Guid> _accountPermissionRepository = accountPermissionRepository;
+        private readonly IBaseAssociativeRepository<AccountAdditionalPermissionModel, Guid> _accountPermissionRepository = accountPermissionRepository;
         private readonly IBaseAssociativeRepository<RolePermissionModel, Guid> _rolePermissionRepository = rolePermissionRepository;
         private readonly IBaseAuthorizationRepository<RoleModel> _roleRepository = roleRepository;
         private readonly IBaseAuthorizationRepository<PermissionModel> _permissionRepository = permissionRepository;

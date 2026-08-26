@@ -14,7 +14,7 @@ namespace Identity.Infrastructure.Persistence.DBContext
 
         public DbSet<AccountRoleModel> AccountRoles { get; set; }
         public DbSet<RolePermissionModel> RolePermissions { get; set; }
-        public DbSet<AccountPermissionModel> AccountPermissions { get; set; }
+        public DbSet<AccountAdditionalPermissionModel> AccountPermissions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

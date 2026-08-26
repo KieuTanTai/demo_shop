@@ -1,6 +1,6 @@
 namespace Identity.Models.Account
 {
-    public class AccountPermissionModel
+    public class AccountAdditionalPermissionModel
     {
         public Guid AccountId { get; init; }
 

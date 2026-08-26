@@ -5,12 +5,12 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Identity.Infrastructure.Persistence.Configurations
 {
-    public sealed class ContextAccountPermissionConfiguration
-        : IEntityTypeConfiguration<AccountPermissionModel>
+    public sealed class ContextAccountAdditionalPermissionConfiguration
+        : IEntityTypeConfiguration<AccountAdditionalPermissionModel>
     {
-        public void Configure(EntityTypeBuilder<AccountPermissionModel> entity)
+        public void Configure(EntityTypeBuilder<AccountAdditionalPermissionModel> entity)
         {
-            entity.ToTable("account_permission");
+            entity.ToTable("account_additional_permission");
 
             entity.HasKey(accountPermission => new
             {

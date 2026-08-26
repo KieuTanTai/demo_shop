@@ -109,11 +109,13 @@ ADD UNIQUE INDEX `idx_role_name` (`role_name`);
 ALTER TABLE `permission`
 ADD UNIQUE INDEX `idx_permission_name` (`permission_name`);
 
-
+RENAME TABLE `account_permission`
+    TO `account_additional_permission`;
 
 SHOW COLUMNS FROM account;
 SHOW COLUMNS FROM role;
 SHOW COLUMNS FROM permission;
+SHOW COLUMNS FROM account_additional_permission;
 
 SHOW VARIABLES LIKE 'character_set_server';
 SHOW VARIABLES LIKE 'collation_server';

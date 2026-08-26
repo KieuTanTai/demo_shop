@@ -5,13 +5,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Identity.Infrastructure.Repository.Account
 {
-    public class AccountPermissionRepository(IdentityDbContext context) : IBaseAssociativeRepository<AccountPermissionModel, Guid>
+    public class AccountAdditionalPermissionRepository(IdentityDbContext context) : IBaseAssociativeRepository<AccountAdditionalPermissionModel, Guid>
     {
         private readonly IdentityDbContext _db = context;
 
         #region POST
 
-        public async Task AddAsync(List<AccountPermissionModel> entities, CancellationToken cancellationToken = default)
+        public async Task AddAsync(List<AccountAdditionalPermissionModel> entities, CancellationToken cancellationToken = default)
         {
             if (entities is null || entities.Count == 0)
                 throw new ArgumentException("Entities is required.", nameof(entities));
@@ -22,12 +22,12 @@ namespace Identity.Infrastructure.Repository.Account
 
         #region GET
 
-        public async Task<IReadOnlyList<AccountPermissionModel>> GetAllAsync(CancellationToken cancellationToken = default)
+        public async Task<IReadOnlyList<AccountAdditionalPermissionModel>> GetAllAsync(CancellationToken cancellationToken = default)
         {
             return await _db.AccountPermissions.AsNoTracking().ToListAsync(cancellationToken);
         }
 
-        public async Task<AccountPermissionModel?> GetByIdAsync(Guid firstForeignId, Guid secondForeignId, CancellationToken cancellationToken = default)
+        public async Task<AccountAdditionalPermissionModel?> GetByIdAsync(Guid firstForeignId, Guid secondForeignId, CancellationToken cancellationToken = default)
         {
             return await _db.AccountPermissions.AsNoTracking().FirstOrDefaultAsync(ap => ap.AccountId == firstForeignId && ap.PermissionId == secondForeignId, cancellationToken);
         }
