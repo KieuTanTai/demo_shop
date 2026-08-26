@@ -1,12 +1,13 @@
 using Identity.Infrastructure.Persistence.DBContext;
 using Identity.Interfaces.IRepository;
 using Identity.Models.Permission;
+using Identity.Utils.Enum;
 using Microsoft.EntityFrameworkCore;
 
 namespace Identity.Infrastructure.Repository.Permission
 {
     public class PermissionRepository(IdentityDbContext context)
-        : IBaseAuthorizationRepository<PermissionModel>
+        : IBaseAuthorizationRepository<PermissionModel, ESystemPermissionCode>
     {
         #region GET
 
@@ -35,9 +36,10 @@ namespace Identity.Infrastructure.Repository.Permission
             return await context.Permissions.AnyAsync(permission => permission.PermissionId == id, cancellationToken);
         }
 
-        public async Task<IReadOnlyList<PermissionModel>> GetByCodeAsync(string permissionCode, CancellationToken cancellationToken = default)
+        public async Task<IReadOnlyList<PermissionModel>> GetByCodeAsync(ESystemPermissionCode permissionCode, CancellationToken cancellationToken = default)
         {
-            return await context.Permissions.AsNoTracking().Where(permission => permission.PermissionCode == permissionCode)
+            var code = permissionCode.ToString().ToLower();
+            return await context.Permissions.AsNoTracking().Where(permission => permission.PermissionCode == code)
                 .ToListAsync(cancellationToken);
         }
 

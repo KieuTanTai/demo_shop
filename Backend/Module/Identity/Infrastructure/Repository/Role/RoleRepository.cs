@@ -1,11 +1,12 @@
 using Identity.Infrastructure.Persistence.DBContext;
 using Identity.Interfaces.IRepository;
 using Identity.Models.Role;
+using Identity.Utils.Enum;
 using Microsoft.EntityFrameworkCore;
 
 namespace Identity.Infrastructure.Repository.Role
 {
-    public class RoleRepository(IdentityDbContext context) : IBaseAuthorizationRepository<RoleModel>
+    public class RoleRepository(IdentityDbContext context) : IBaseAuthorizationRepository<RoleModel, ESystemRoleCode>
     {
         private readonly IdentityDbContext _db = context;
 
@@ -37,9 +38,10 @@ namespace Identity.Infrastructure.Repository.Role
             return await _db.Roles.AsNoTracking().Where(role => role.RoleName == name).ToListAsync(cancellationToken);
         }
 
-        public async Task<IReadOnlyList<RoleModel>> GetByCodeAsync(string roleCode, CancellationToken cancellationToken = default)
+        public async Task<IReadOnlyList<RoleModel>> GetByCodeAsync(ESystemRoleCode roleCode, CancellationToken cancellationToken = default)
         {
-            return await  _db.Roles.AsNoTracking().Where(role => role.RoleCode == roleCode).ToListAsync(cancellationToken);
+            var code = roleCode.ToString().ToLower();
+            return await  _db.Roles.AsNoTracking().Where(role => role.RoleCode == code).ToListAsync(cancellationToken);
         }
         
         public async Task<IReadOnlyList<RoleModel>> GetByDescriptionAsync(string description,

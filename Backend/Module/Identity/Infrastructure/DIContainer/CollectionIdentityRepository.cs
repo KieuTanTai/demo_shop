@@ -7,6 +7,7 @@ using Identity.Interfaces.IRepository;
 using Identity.Models.Account;
 using Identity.Models.Permission;
 using Identity.Models.Role;
+using Identity.Utils.Enum;
 using Microsoft.EntityFrameworkCore;
 using Shared.Interfaces;
 
@@ -43,8 +44,8 @@ namespace Identity.Infrastructure.DIContainer
             
             services.AddScoped<IUnitOfWork, EfIdentityUnitOfWork>();
             services.AddScoped<IAccountRepository, AccountRepository>();
-            services.AddScoped<IBaseAuthorizationRepository<RoleModel>, RoleRepository>();
-            services.AddScoped<IBaseAuthorizationRepository<PermissionModel>, PermissionRepository>();
+            services.AddScoped<IBaseAuthorizationRepository<RoleModel, ESystemRoleCode>, RoleRepository>();
+            services.AddScoped<IBaseAuthorizationRepository<PermissionModel, ESystemPermissionCode>, PermissionRepository>();
             services.AddScoped<IBaseAssociativeRepository<AccountAdditionalPermissionModel, Guid>, AccountAdditionalPermissionRepository>();
             services.AddScoped<IBaseAssociativeRepository<AccountRoleModel, Guid>, AccountRoleRepository>();
             services.AddScoped<IBaseAssociativeRepository<RolePermissionModel, Guid>, RolePermissionRepository>();

@@ -4,6 +4,7 @@ using Identity.Interfaces.IRepository;
 using Identity.Models.Account;
 using Identity.Models.Permission;
 using Identity.Models.Role;
+using Identity.Utils.Enum;
 using Shared.Interfaces;
 using Shared.Persistence;
 
@@ -15,8 +16,8 @@ namespace Identity.Application
         IBaseAssociativeRepository<AccountRoleModel, Guid> accountRoleRepository,
         IBaseAssociativeRepository<AccountAdditionalPermissionModel, Guid> accountPermissionRepository,
         IBaseAssociativeRepository<RolePermissionModel, Guid> rolePermissionRepository,
-        IBaseAuthorizationRepository<RoleModel> roleRepository,
-        IBaseAuthorizationRepository<PermissionModel> permissionRepository,
+        IBaseAuthorizationRepository<RoleModel, ESystemRoleCode> roleRepository,
+        IBaseAuthorizationRepository<PermissionModel, ESystemPermissionCode> permissionRepository,
         IAccountHelper accountHelper) 
         : IAccountApplication
     {
@@ -25,8 +26,8 @@ namespace Identity.Application
         private readonly IBaseAssociativeRepository<AccountRoleModel, Guid> _accountRoleRepository = accountRoleRepository;
         private readonly IBaseAssociativeRepository<AccountAdditionalPermissionModel, Guid> _accountPermissionRepository = accountPermissionRepository;
         private readonly IBaseAssociativeRepository<RolePermissionModel, Guid> _rolePermissionRepository = rolePermissionRepository;
-        private readonly IBaseAuthorizationRepository<RoleModel> _roleRepository = roleRepository;
-        private readonly IBaseAuthorizationRepository<PermissionModel> _permissionRepository = permissionRepository;
+        private readonly IBaseAuthorizationRepository<RoleModel, ESystemRoleCode> _roleRepository = roleRepository;
+        private readonly IBaseAuthorizationRepository<PermissionModel, ESystemPermissionCode> _permissionRepository = permissionRepository;
         private readonly IAccountHelper _accountHelper = accountHelper;
 
         #region USER
