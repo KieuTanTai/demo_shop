@@ -15,6 +15,15 @@ namespace Identity.Infrastructure.Persistence.Configurations
             entity.Property(permission => permission.PermissionId)
                 .HasColumnName("permission_id")
                 .ValueGeneratedOnAdd();
+            
+            entity.Property(permission => permission.PermissionCode)
+                .HasColumnName("permission_code")
+                .HasMaxLength(50)
+                .IsRequired();
+            
+            entity.HasIndex(permission => permission.PermissionCode)
+                .IsUnique()
+                .HasDatabaseName("idx_permission_code");
 
             entity.Property(permission => permission.PermissionName)
                 .HasColumnName("permission_name")

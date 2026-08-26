@@ -35,6 +35,12 @@ namespace Identity.Infrastructure.Repository.Permission
             return await context.Permissions.AnyAsync(permission => permission.PermissionId == id, cancellationToken);
         }
 
+        public async Task<IReadOnlyList<PermissionModel>> GetByCodeAsync(string permissionCode, CancellationToken cancellationToken = default)
+        {
+            return await context.Permissions.AsNoTracking().Where(permission => permission.PermissionCode == permissionCode)
+                .ToListAsync(cancellationToken);
+        }
+
         public async Task<IReadOnlyList<PermissionModel>> GetByNameAsync(string name,
             CancellationToken cancellationToken = default)
         {

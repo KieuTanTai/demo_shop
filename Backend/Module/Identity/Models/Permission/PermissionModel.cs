@@ -6,6 +6,8 @@ namespace Identity.Models.Permission
     public class PermissionModel
     {
         public Guid PermissionId { get; init; }
+        
+        [MaxLength(50)] public string PermissionCode { get; private set; } = string.Empty;
 
         [MaxLength(150)] public string PermissionName { get; private set; } = string.Empty;
 
@@ -54,7 +56,7 @@ namespace Identity.Models.Permission
             PermissionDescription = ModelFieldGuard.Required(description, 300, nameof(description));
             PermissionUpdatedAt = DateTime.UtcNow;
         }
-
+        
         #endregion
     }
 }

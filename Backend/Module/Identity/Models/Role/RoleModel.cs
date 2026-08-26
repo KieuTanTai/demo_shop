@@ -8,6 +8,8 @@ namespace Identity.Models.Role
     {
         public Guid RoleId { get; init; }
 
+        [MaxLength(50)] public string RoleCode { get; private set; } = string.Empty;
+        
         [MaxLength(150)] public string RoleName { get; private set; } = string.Empty;
 
         [MaxLength(300)] public string? RoleDescription { get; private set; }

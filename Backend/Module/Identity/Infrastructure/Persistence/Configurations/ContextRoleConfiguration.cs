@@ -13,6 +13,15 @@ namespace Identity.Infrastructure.Persistence.Configurations
 
             entity.HasKey(role => role.RoleId);
 
+            entity.Property(role => role.RoleCode)
+                .HasColumnName("role_code")
+                .HasMaxLength(50)
+                .IsRequired();
+
+            entity.HasIndex(role => role.RoleCode)
+                .IsUnique()
+                .HasDatabaseName("idx_role_code");
+            
             entity.Property(role => role.RoleId)
                 .HasColumnName("role_id")
                 .ValueGeneratedOnAdd();

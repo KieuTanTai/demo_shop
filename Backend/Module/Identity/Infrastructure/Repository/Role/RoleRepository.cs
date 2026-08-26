@@ -37,6 +37,11 @@ namespace Identity.Infrastructure.Repository.Role
             return await _db.Roles.AsNoTracking().Where(role => role.RoleName == name).ToListAsync(cancellationToken);
         }
 
+        public async Task<IReadOnlyList<RoleModel>> GetByCodeAsync(string roleCode, CancellationToken cancellationToken = default)
+        {
+            return await  _db.Roles.AsNoTracking().Where(role => role.RoleCode == roleCode).ToListAsync(cancellationToken);
+        }
+        
         public async Task<IReadOnlyList<RoleModel>> GetByDescriptionAsync(string description,
             CancellationToken cancellationToken = default)
         {

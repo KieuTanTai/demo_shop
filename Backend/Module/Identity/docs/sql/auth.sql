@@ -112,6 +112,19 @@ ADD UNIQUE INDEX `idx_permission_name` (`permission_name`);
 RENAME TABLE `account_permission`
     TO `account_additional_permission`;
 
+ALTER TABLE `role`
+    ADD COLUMN `role_code` VARCHAR(50) NOT NULL AFTER `role_id`;
+
+ALTER TABLE `role`
+    ADD UNIQUE INDEX `idx_role_code` (`role_code`);
+
+ALTER TABLE `permission`
+    ADD COLUMN `permission_code` VARCHAR(50) NOT NULL AFTER `permission_id`;
+
+ALTER TABLE `permission`
+    ADD UNIQUE INDEX `idx_permission_code` (`permission_code`);
+
+
 SHOW COLUMNS FROM account;
 SHOW COLUMNS FROM role;
 SHOW COLUMNS FROM permission;
@@ -119,3 +132,29 @@ SHOW COLUMNS FROM account_additional_permission;
 
 SHOW VARIABLES LIKE 'character_set_server';
 SHOW VARIABLES LIKE 'collation_server';
+
+# TRIGGER
+DELIMITER //
+CREATE TRIGGER `trigger_permission_code_immutable`
+    BEFORE UPDATE ON `permission`
+    FOR EACH ROW 
+    BEGIN
+        IF NOT (OLD.`permission_code` <=> NEW.`permission_code`)
+        THEN
+            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Permission code cannot be changed';
+        END IF;
+    END //
+
+CREATE TRIGGER `trigger_role_code_immutable`
+    BEFORE UPDATE ON `role`
+    FOR EACH ROW
+    BEGIN
+        IF NOT (OLD.`role_code` <=> NEW.`role_code`)
+        THEN
+            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Role code cannot be changed';
+        END IF;
+    END //
+
+DELIMITER ;
+
+SHOW TRIGGERS;
