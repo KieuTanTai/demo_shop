@@ -50,7 +50,7 @@ namespace Identity.Infrastructure.Repository.Account
             var account =
                 await _db.Accounts.FirstOrDefaultAsync(account => account.AccountEmail == email, cancellationToken);
 
-            return account ?? throw new ArgumentException("AccountModel email is required.", nameof(email));
+            return account ?? throw new ArgumentException($"Account with email: '{email}' was not found !", nameof(email));
         }
 
         public async Task<bool> ExistsAsync(Guid id, CancellationToken cancellationToken = default)

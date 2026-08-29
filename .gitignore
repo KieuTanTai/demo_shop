@@ -94,3 +94,4 @@ Frontend/.cache/
 #Prevent Test files
 **/Test/**
 **/Tests/
+**/TestProject/**

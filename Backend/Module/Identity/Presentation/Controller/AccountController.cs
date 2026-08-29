@@ -2,7 +2,7 @@ using Identity.Interfaces.IApplication;
 using Identity.Models.Account;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Identity.Controller
+namespace Identity.Presentation.Controller
 {
     public class AccountController(IAccountApplication accountApplication) : ControllerBase
     {
