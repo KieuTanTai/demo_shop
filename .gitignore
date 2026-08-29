@@ -90,3 +90,7 @@ Frontend/yarn-error.log*
 Frontend/pnpm-debug.log*
 Frontend/.sass-cache/
 Frontend/.cache/
+
+#Prevent Test files
+**/Test/**
+**/Tests/

@@ -11,7 +11,7 @@ namespace Identity.Infrastructure.Repository.Role
 
         #region POST
 
-        public async Task AddAsync(List<RolePermissionModel> entities, CancellationToken cancellationToken = default)
+        public async Task AddRangeAsync(List<RolePermissionModel> entities, CancellationToken cancellationToken = default)
         {
             if (entities is null || entities.Count == 0)
             {

@@ -11,13 +11,14 @@ using Shared.Persistence;
 namespace Identity.Application
 {
     public class AccountApplication(
-        IAccountRepository accountRepository,
         IUnitOfWork unitOfWork,
+        IAccountRepository accountRepository,
         IBaseAssociativeRepository<AccountRoleModel, Guid> accountRoleRepository,
         IBaseAssociativeRepository<AccountAdditionalPermissionModel, Guid> accountPermissionRepository,
         IBaseAssociativeRepository<RolePermissionModel, Guid> rolePermissionRepository,
         IBaseAuthorizationRepository<RoleModel, ESystemRoleCode> roleRepository,
         IBaseAuthorizationRepository<PermissionModel, ESystemPermissionCode> permissionRepository,
+        IRoleApplication roleApplication,
         IAccountHelper accountHelper) 
         : IAccountApplication
     {
@@ -28,11 +29,13 @@ namespace Identity.Application
         private readonly IBaseAssociativeRepository<RolePermissionModel, Guid> _rolePermissionRepository = rolePermissionRepository;
         private readonly IBaseAuthorizationRepository<RoleModel, ESystemRoleCode> _roleRepository = roleRepository;
         private readonly IBaseAuthorizationRepository<PermissionModel, ESystemPermissionCode> _permissionRepository = permissionRepository;
+
+        private readonly IRoleApplication _roleApplication = roleApplication;
         private readonly IAccountHelper _accountHelper = accountHelper;
 
         #region USER
 
-        public async Task<AccountModel> Register(string email, string password, CancellationToken cancellationToken = default)
+        public async Task<AccountModel> RegisterAsync(string email, string password, CancellationToken cancellationToken = default)
         {
             var existedAccount = await _accountRepository.GetAccountByEmail(email, cancellationToken);
             if (existedAccount != null)
@@ -44,13 +47,15 @@ namespace Identity.Application
             
             var accountModel = new AccountModel(email, password);
             var hashedPassword = _accountHelper.GetPasswordHash(accountModel, password);
-
+            accountModel.SetHashedPassword(hashedPassword);
+            
             try
             {
-                //! TODO: create method for get role and permission for registered account, like using role service, permission service for get roles, perms, and write new method for batch update
+                var baseRole = await _roleApplication.GetBaseRolesForUserAsync(cancellationToken);
+                var accountRoles = baseRole.Select(role => new AccountRoleModel(accountModel.AccountId, role.RoleId)).ToList();
                 await _accountRepository.AddAsync(accountModel, cancellationToken);
-                
-                var result = _unitOfWork.SaveChangesAsync(cancellationToken);
+                await _accountRoleRepository.AddRangeAsync(accountRoles, cancellationToken);
+                var result = await _unitOfWork.SaveChangesAsync(cancellationToken);
                 return accountModel;
             }
             catch(OperationCanceledException canceledException)
@@ -65,32 +70,32 @@ namespace Identity.Application
         }
         
         
-        public async Task<AccountModel> Login(string email, string password, CancellationToken cancellationToken = default)
+        public async Task<AccountModel> LoginAsync(string email, string password, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }
         
-        public async Task<bool> Logout(CancellationToken cancellationToken = default)
+        public async Task<bool> LogoutAsync(CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }
         
-        public async Task<bool> ChangePassword(string oldPassword, string newPassword, CancellationToken cancellationToken = default)
+        public async Task<bool> ChangePasswordAsync(string oldPassword, string newPassword, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }
         
-        public async Task<bool> UpdateStatusAccount(Guid accountId, CancellationToken cancellationToken = default)
+        public async Task<bool> UpdateStatusAccountAsync(Guid accountId, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }
         
-        public async Task<bool> UpdateProfile(AccountModel accountModel, CancellationToken cancellationToken = default)
+        public async Task<bool> UpdateProfileAsync(AccountModel accountModel, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }
         
-        public async Task<bool> UpdateStatusAccount(Guid? accountId, string? email, CancellationToken cancellationToken = default)
+        public async Task<bool> UpdateStatusAccountAsync(Guid? accountId, string? email, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }
@@ -99,27 +104,27 @@ namespace Identity.Application
 
         #region ADMIN
         
-        public async Task<IReadOnlyList<AccountModel>> GetAllAccount(CancellationToken cancellationToken = default)
+        public async Task<IReadOnlyList<AccountModel>> GetAllAccountAsync(CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }
         
-        public async Task<RecordBaseCursorPage<AccountModel>> GetApplyPaging(Guid? cursor, int pageSize, CancellationToken cancellationToken = default)
+        public async Task<RecordBaseCursorPage<AccountModel>> GetApplyPagingAsync(Guid? cursor, int pageSize, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }
         
-        public async Task<RecordBaseCursorPage<AccountModel>> GetApplyPagingByStatus(Guid? cursor, int pageSize, bool isActive, CancellationToken cancellationToken = default)
+        public async Task<RecordBaseCursorPage<AccountModel>> GetApplyPagingByStatusAsync(Guid? cursor, int pageSize, bool isActive, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }
         
-        public async Task<AccountModel> GetAccountByEmail(string email, CancellationToken cancellationToken = default)
+        public async Task<AccountModel> GetAccountByEmailAsync(string email, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }
         
-        public async Task<RecordBaseCursorPage<AccountModel>> GetAccountByPhoneNumber(Guid? cursor, string phoneNumber, int pageSize, CancellationToken cancellationToken = default)
+        public async Task<RecordBaseCursorPage<AccountModel>> GetAccountByPhoneNumberAsync(Guid? cursor, string phoneNumber, int pageSize, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }

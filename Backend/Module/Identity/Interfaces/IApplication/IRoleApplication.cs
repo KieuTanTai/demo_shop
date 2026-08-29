@@ -4,7 +4,6 @@ namespace Identity.Interfaces.IApplication
 {
     public interface IRoleApplication
     {
-        Task<List<RoleModel>> GetBaseRolesForUserAsync(Guid userId);
-        Task<List<RoleModel>> GetAllRolesForUserAsync(string userId);
+        Task<IReadOnlyList<RoleModel>> GetBaseRolesForUserAsync(CancellationToken cancellationToken = default);
     }
 }

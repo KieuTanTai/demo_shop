@@ -1,6 +1,8 @@
 
 
+using Identity.Application;
 using Identity.Interfaces;
+using Identity.Interfaces.IApplication;
 using Identity.Models;
 using Identity.Models.Account;
 using Identity.Utils;
@@ -27,6 +29,8 @@ namespace Identity.Infrastructure.DIContainer
             services.AddSingleton(accountRules);
             services.AddSingleton<IPasswordHasher<AccountModel>, PasswordHasher<AccountModel>>();
             services.AddSingleton<IAccountHelper, AccountHelper>();
+            services.AddSingleton<IRoleApplication, RoleApplication>();
+            services.AddSingleton<IAccountApplication, AccountApplication>();
             
             return services;
         }

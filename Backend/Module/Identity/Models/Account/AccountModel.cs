@@ -53,7 +53,7 @@ namespace Identity.Models.Account
             AccountUpdatedAt = DateTime.UtcNow;
         }
 
-        public void SetPasswordHash(string passwordHash)
+        public void SetHashedPassword(string passwordHash)
         {
             AccountPassword = ModelFieldGuard.Required(passwordHash, 255, nameof(passwordHash));
             AccountUpdatedAt = DateTime.UtcNow;
