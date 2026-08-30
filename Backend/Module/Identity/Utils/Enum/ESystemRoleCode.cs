@@ -5,6 +5,7 @@ namespace Identity.Utils.Enum
         Customer,
         Admin,
         Manager,
-        Other
+        Assistant,
+        Employee
     }
 }

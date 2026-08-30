@@ -6,11 +6,15 @@ using Shared.Interfaces;
 
 namespace Identity.Application
 {
-    public class RoleApplication( IUnitOfWork unitOfWork, IBaseAuthorizationRepository<RoleModel, ESystemRoleCode> roleRepository, 
+    public class RoleApplication(
+        IUnitOfWork unitOfWork,
+        IBaseAuthorizationRepository<RoleModel, ESystemRoleCode> roleRepository,
         IAccountRepository accountRepository) : IRoleApplication
     {
         private readonly IAccountRepository _accountRepository = accountRepository;
+
         private readonly IBaseAuthorizationRepository<RoleModel, ESystemRoleCode> _roleRepository = roleRepository;
+
         private readonly IUnitOfWork _unitOfWork = unitOfWork;
 
         public async Task<IReadOnlyList<RoleModel>> GetBaseRolesForUserAsync(CancellationToken cancellationToken = default)
@@ -19,7 +23,9 @@ namespace Identity.Application
             {
                 var result = await _roleRepository.GetByCodeAsync(ESystemRoleCode.Customer, cancellationToken);
                 if (result.Count == 0)
+                {
                     throw new InvalidOperationException("base role not found!");
+                }
                 return result;
             }
             catch (OperationCanceledException canceledException)

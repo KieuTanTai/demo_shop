@@ -1,6 +1,8 @@
 using Identity.Infrastructure.Persistence.DBContext;
+using Identity.Interfaces;
 using Identity.Interfaces.IRepository;
 using Identity.Models.Account;
+using Identity.Utils;
 using Microsoft.EntityFrameworkCore;
 using Shared.Persistence;
 
@@ -9,6 +11,7 @@ namespace Identity.Infrastructure.Repository.Account
     public class AccountRepository(IdentityDbContext context) : IAccountRepository
     {
         private readonly IdentityDbContext _db = context;
+
 
         #region GET
 
@@ -34,11 +37,13 @@ namespace Identity.Infrastructure.Repository.Account
         public async Task<RecordBaseCursorPage<AccountModel>> GetAccountByPhoneNumber(Guid? cursor, string phoneNumber, int pageSize,
             CancellationToken cancellationToken = default)
         {
-            ArgumentOutOfRangeException.ThrowIfLessThan(pageSize, 1);   
+            ArgumentOutOfRangeException.ThrowIfLessThan(pageSize, 1);
             var accounts = _db.Accounts.AsNoTracking().OrderByDescending(account => account.AccountId)
                 .ToAsyncEnumerable();
             if (cursor.HasValue)
+            {
                 accounts = accounts.Where(account => account.AccountId < cursor);
+            }
             accounts = accounts.Where(account => account.AccountPhoneNumber == phoneNumber);
             return await SharedGetApplyPagingRepository.ApplyPaging(accounts, pageSize, account => account.AccountId,
                 cancellationToken);

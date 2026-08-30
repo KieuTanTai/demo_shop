@@ -14,7 +14,9 @@ namespace Identity.Infrastructure.Repository.Account
         public async Task AddRangeAsync(List<AccountAdditionalPermissionModel> entities, CancellationToken cancellationToken = default)
         {
             if (entities is null || entities.Count == 0)
+            {
                 throw new ArgumentException("Entities is required.", nameof(entities));
+            }
             await _db.AccountPermissions.AddRangeAsync(entities, cancellationToken);
         }
 

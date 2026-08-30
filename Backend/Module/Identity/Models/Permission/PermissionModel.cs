@@ -3,17 +3,17 @@ using Shared.ModelHelper;
 
 namespace Identity.Models.Permission
 {
-    public class PermissionModel
+    public class PermissionModel(Guid permissionId, string? permissionDescription, bool permissionIsActive)
     {
-        public Guid PermissionId { get; init; }
-        
+        public Guid PermissionId { get; init; } = permissionId;
+
         [MaxLength(50)] public string PermissionCode { get; private set; } = string.Empty;
 
         [MaxLength(150)] public string PermissionName { get; private set; } = string.Empty;
 
-        [MaxLength(300)] public string? PermissionDescription { get; private set; }
+        [MaxLength(300)] public string? PermissionDescription { get; private set; } = permissionDescription;
 
-        public bool PermissionIsActive { get; private set; } = true;
+        public bool PermissionIsActive { get; private set; } = permissionIsActive;
 
 
         public DateTime PermissionCreatedAt { get; init; } = DateTime.UtcNow;
@@ -56,7 +56,7 @@ namespace Identity.Models.Permission
             PermissionDescription = ModelFieldGuard.Required(description, 300, nameof(description));
             PermissionUpdatedAt = DateTime.UtcNow;
         }
-        
+
         #endregion
     }
 }

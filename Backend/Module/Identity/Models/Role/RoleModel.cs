@@ -4,17 +4,17 @@ using Shared.ModelHelper;
 
 namespace Identity.Models.Role
 {
-    public class RoleModel
+    public class RoleModel(Guid roleId, string? roleDescription, bool roleIsActive)
     {
-        public Guid RoleId { get; init; }
+        public Guid RoleId { get; init; } = roleId;
 
         [MaxLength(50)] public string RoleCode { get; private set; } = string.Empty;
-        
+
         [MaxLength(150)] public string RoleName { get; private set; } = string.Empty;
 
-        [MaxLength(300)] public string? RoleDescription { get; private set; }
+        [MaxLength(300)] public string? RoleDescription { get; private set; } = roleDescription;
 
-        public bool RoleIsActive { get; private set; } = true;
+        public bool RoleIsActive { get; private set; } = roleIsActive;
 
         public DateTime RoleCreatedAt { get; init; } = DateTime.UtcNow;
 

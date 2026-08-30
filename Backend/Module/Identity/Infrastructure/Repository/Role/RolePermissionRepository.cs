@@ -48,7 +48,9 @@ namespace Identity.Infrastructure.Repository.Role
             }
             var existedRolePermission = await GetByIdAsync(firstForeignId, secondForeignId, cancellationToken);
             if (existedRolePermission is null)
+            {
                 throw new InvalidOperationException("RoleModel permission not found!");
+            }
             _db.RolePermissions.Remove(existedRolePermission);
         }
 

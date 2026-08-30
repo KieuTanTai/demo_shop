@@ -8,8 +8,9 @@ namespace Identity.Utils
 {
     public sealed class AccountHelper(AccountRulesModel rules, IPasswordHasher<AccountModel> hasher) : IAccountHelper
     {
-        private readonly AccountRulesModel _rules = rules;
         private readonly IPasswordHasher<AccountModel> _hasher = hasher;
+
+        private readonly AccountRulesModel _rules = rules;
 
         public bool IsEmailValid(string email)
         {
@@ -22,30 +23,42 @@ namespace Identity.Utils
             var pattern = _rules.RegexForPhoneNumber;
             return !string.IsNullOrWhiteSpace(phoneNumber) && Regex.IsMatch(phoneNumber, pattern);
         }
-        
+
         public bool IsPasswordValid(string password)
         {
             if (string.IsNullOrWhiteSpace(password))
+            {
                 return false;
-            
+            }
+
             if (password.Length < _rules.MinPasswordLength)
+            {
                 return false;
-            
+            }
+
             if (password.Length > _rules.MaxPasswordLength)
+            {
                 return false;
-            
+            }
+
             if (!_rules.RequireDigit && password.Any(char.IsDigit))
+            {
                 return false;
-            
+            }
+
             if (!_rules.RequireUpperCase && password.Any(char.IsUpper))
+            {
                 return false;
-            
+            }
+
             if (!_rules.RequireLowerCase && password.Any(char.IsLower))
+            {
                 return false;
-            
+            }
+
             return _rules.RequiredLetter || !password.Any(char.IsLetter);
         }
-        
+
         public string GetPasswordHash(AccountModel account, string password)
         {
             return _hasher.HashPassword(account, password);

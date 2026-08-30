@@ -41,7 +41,7 @@ namespace Identity.Infrastructure.DIContainer
             #endregion
 
             #region REPOSITORY
-            
+
             services.AddScoped<IUnitOfWork, EfIdentityUnitOfWork>();
             services.AddScoped<IAccountRepository, AccountRepository>();
             services.AddScoped<IBaseAuthorizationRepository<RoleModel, ESystemRoleCode>, RoleRepository>();

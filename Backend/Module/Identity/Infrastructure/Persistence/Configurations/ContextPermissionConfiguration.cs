@@ -15,12 +15,12 @@ namespace Identity.Infrastructure.Persistence.Configurations
             entity.Property(permission => permission.PermissionId)
                 .HasColumnName("permission_id")
                 .ValueGeneratedOnAdd();
-            
+
             entity.Property(permission => permission.PermissionCode)
                 .HasColumnName("permission_code")
                 .HasMaxLength(50)
                 .IsRequired();
-            
+
             entity.HasIndex(permission => permission.PermissionCode)
                 .IsUnique()
                 .HasDatabaseName("idx_permission_code");
@@ -29,7 +29,7 @@ namespace Identity.Infrastructure.Persistence.Configurations
                 .HasColumnName("permission_name")
                 .HasMaxLength(150)
                 .IsRequired();
-            
+
             entity.Property(permission => permission.PermissionDescription)
                 .HasColumnName("permission_description")
                 .HasMaxLength(300);
@@ -48,7 +48,7 @@ namespace Identity.Infrastructure.Persistence.Configurations
                 .HasColumnName("permission_updated_at")
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .ValueGeneratedOnAddOrUpdate();
-            
+
             entity.HasIndex(permission => permission.PermissionName)
                 .IsUnique()
                 .HasDatabaseName("idx_permission_name");

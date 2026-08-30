@@ -1,5 +1,3 @@
-
-
 using Identity.Application;
 using Identity.Interfaces;
 using Identity.Interfaces.IApplication;
@@ -23,15 +21,15 @@ namespace Identity.Infrastructure.DIContainer
                 options.CompatibilityMode = PasswordHasherCompatibilityMode.IdentityV3;
                 options.IterationCount = configuration.GetValue<int>("PasswordHasherOptions:IterationCount");
             });
-            
+
             #endregion
-            
+
             services.AddSingleton(accountRules);
-            services.AddSingleton<IPasswordHasher<AccountModel>, PasswordHasher<AccountModel>>();
             services.AddSingleton<IAccountHelper, AccountHelper>();
-            services.AddSingleton<IRoleApplication, RoleApplication>();
-            services.AddSingleton<IAccountApplication, AccountApplication>();
-            
+            services.AddSingleton<IPasswordHasher<AccountModel>, PasswordHasher<AccountModel>>();
+            services.AddScoped<IRoleApplication, RoleApplication>();
+            services.AddScoped<IAccountApplication, AccountApplication>();
+
             return services;
         }
     }

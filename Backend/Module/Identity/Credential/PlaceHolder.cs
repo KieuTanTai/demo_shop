@@ -1,7 +1,4 @@
 namespace Identity.Credential
 {
-    public class PlaceHolder
-    {
-        
-    }
+    public class PlaceHolder {}
 }

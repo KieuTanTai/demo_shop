@@ -1,5 +1,4 @@
 using Identity.Models.Account;
-using Shared.Persistence;
 
 namespace Identity.Interfaces.IApplication
 {
@@ -11,7 +10,7 @@ namespace Identity.Interfaces.IApplication
         Task<bool> ChangePasswordAsync(string oldPassword, string newPassword, CancellationToken cancellationToken = default);
         Task<bool> UpdateProfileAsync(AccountModel accountModel, CancellationToken cancellationToken = default);
         Task<bool> UpdateStatusAccountAsync(Guid? accountId, string? email, CancellationToken cancellationToken = default);
-        
+
         // Methods for admins
         // Task<IReadOnlyList<AccountModel>> GetAllAccountAsync(CancellationToken cancellationToken = default);
         // Task<RecordBaseCursorPage<AccountModel>> GetApplyPagingAsync(Guid? cursor, int pageSize, CancellationToken cancellationToken = default);

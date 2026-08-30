@@ -37,7 +37,7 @@ namespace Identity.Infrastructure.Persistence.Configurations
                 .HasMaxLength(10)
                 .IsUnicode(false)
                 .IsRequired(false);
-            
+
             entity.HasIndex(account => account.AccountPhoneNumber)
                 .HasDatabaseName("idx_account_phone_number");
 

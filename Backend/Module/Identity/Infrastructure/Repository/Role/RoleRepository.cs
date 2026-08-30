@@ -41,9 +41,9 @@ namespace Identity.Infrastructure.Repository.Role
         public async Task<IReadOnlyList<RoleModel>> GetByCodeAsync(ESystemRoleCode roleCode, CancellationToken cancellationToken = default)
         {
             var code = roleCode.ToString().ToLower();
-            return await  _db.Roles.AsNoTracking().Where(role => role.RoleCode == code).ToListAsync(cancellationToken);
+            return await _db.Roles.AsNoTracking().Where(role => role.RoleCode == code).ToListAsync(cancellationToken);
         }
-        
+
         public async Task<IReadOnlyList<RoleModel>> GetByDescriptionAsync(string description,
             CancellationToken cancellationToken = default)
         {
@@ -73,7 +73,9 @@ namespace Identity.Infrastructure.Repository.Role
                 cancellationToken);
 
             if (isExisted)
+            {
                 throw new ArgumentException("RoleModel name is existed.", nameof(entity.RoleName));
+            }
 
             await _db.Roles.AddAsync(entity, cancellationToken);
         }
@@ -89,7 +91,9 @@ namespace Identity.Infrastructure.Repository.Role
                 cancellationToken);
 
             if (existedRole is null)
+            {
                 throw new InvalidOperationException("RoleModel not found!");
+            }
 
             _db.Roles.Update(entity);
         }

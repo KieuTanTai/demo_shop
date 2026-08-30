@@ -6,11 +6,11 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
         <AllowMissingPrunePackageData>true</AllowMissingPrunePackageData>
-      <UserSecretsId>c165956c-842d-478c-97ce-5fba60daff00</UserSecretsId>
+        <UserSecretsId>c165956c-842d-478c-97ce-5fba60daff00</UserSecretsId>
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="../../Shared/Shared.csproj" />
+        <ProjectReference Include="../../Shared/Shared.csproj"/>
     </ItemGroup>
 
 
@@ -20,14 +20,14 @@
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
 
-        <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.0" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.0"/>
 
-        <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="9.0.0" />
+        <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="9.0.0"/>
     </ItemGroup>
 
 
     <ItemGroup>
-      <Folder Include="Presentation\" />
+        <Folder Include="Presentation\"/>
     </ItemGroup>
 
 </Project>

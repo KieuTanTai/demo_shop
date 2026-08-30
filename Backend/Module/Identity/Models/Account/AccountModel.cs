@@ -6,13 +6,36 @@ using Shared.ModelHelper;
 
 namespace Identity.Models.Account
 {
-    public class AccountModel
+    public partial class AccountModel
     {
+        public AccountModel(string email, string password)
+        {
+            AccountEmail = ModelFieldGuard.Required(email, 255, nameof(email));
+            AccountPassword = ModelFieldGuard.Required(password, 255, nameof(password));
+        }
+
+        public AccountModel(Guid accountId, string? accountPhoneNumber, bool accountIsActive)
+        {
+            AccountId = accountId;
+            AccountPhoneNumber = accountPhoneNumber;
+            AccountIsActive = accountIsActive;
+        }
+
+        public AccountModel(Guid accountId, string? accountPhoneNumber, string? accountEmail, string? accountPassword, bool accountIsActive)
+        {
+            AccountId = accountId;
+            AccountPhoneNumber = accountPhoneNumber;
+            AccountEmail = accountEmail;
+            AccountPassword = accountPassword;
+            AccountIsActive = accountIsActive;
+        }
+
+        public AccountModel() {}
         public Guid AccountId { get; init; }
 
-        [MaxLength(255)] public string AccountEmail { get; private set; } = string.Empty;
+        [MaxLength(255)] public string? AccountEmail { get; private set; } = string.Empty;
 
-        [MaxLength(255)] public string AccountPassword { get; private set; } = string.Empty;
+        [MaxLength(255)] public string? AccountPassword { get; private set; } = string.Empty;
 
         [MaxLength(10)] public string? AccountPhoneNumber { get; private set; }
 
@@ -26,13 +49,6 @@ namespace Identity.Models.Account
 
         public IReadOnlyList<PermissionModel> Permissions { get; private set; } =
             new List<PermissionModel>();
-
-        public AccountModel(string email, string password)
-        {
-            AccountEmail = ModelFieldGuard.Required(email, 255, nameof(email));
-            AccountPassword = ModelFieldGuard.Required(password, 255, nameof(password));
-        }
-        
 
         #region Setter
 
@@ -73,8 +89,7 @@ namespace Identity.Models.Account
         public void SetAccountPhoneNumber(string phone)
         {
             var baseValidPhone = ModelFieldGuard.Required(phone, 10, nameof(phone));
-            const string pattern = @"^(03|05|07|08|09)\d{8}$";
-            if (!Regex.IsMatch(baseValidPhone, pattern))
+            if (!MyRegex().IsMatch(baseValidPhone))
             {
                 throw new ArgumentException("Phone number must be a valid Vietnamese 10-digit phone number.",
                     nameof(phone));
@@ -94,6 +109,8 @@ namespace Identity.Models.Account
             Permissions = permissions;
         }
 
+        [GeneratedRegex(@"^(03|05|07|08|09)\d{8}$")]
+        private static partial Regex MyRegex();
         #endregion
     }
 }

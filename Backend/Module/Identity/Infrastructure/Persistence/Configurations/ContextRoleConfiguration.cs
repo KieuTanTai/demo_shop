@@ -21,7 +21,7 @@ namespace Identity.Infrastructure.Persistence.Configurations
             entity.HasIndex(role => role.RoleCode)
                 .IsUnique()
                 .HasDatabaseName("idx_role_code");
-            
+
             entity.Property(role => role.RoleId)
                 .HasColumnName("role_id")
                 .ValueGeneratedOnAdd();

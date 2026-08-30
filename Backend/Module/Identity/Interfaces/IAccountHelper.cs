@@ -1,4 +1,3 @@
-using Identity.Models;
 using Identity.Models.Account;
 
 namespace Identity.Interfaces
@@ -9,7 +8,7 @@ namespace Identity.Interfaces
         bool IsPasswordValid(string password);
         bool IsPhoneNumberValid(string phoneNumber);
         string GetPasswordHash(AccountModel account, string password);
-        
+
         bool PasswordVerify(AccountModel account, string password, string hash);
     }
 }
