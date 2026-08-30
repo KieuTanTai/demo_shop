@@ -41,22 +41,22 @@ namespace Identity.Utils
                 return false;
             }
 
-            if (!_rules.RequireDigit && password.Any(char.IsDigit))
+            if (_rules.RequireDigit && !password.Any(char.IsDigit))
             {
                 return false;
             }
 
-            if (!_rules.RequireUpperCase && password.Any(char.IsUpper))
+            if (_rules.RequireUppercase && !password.Any(char.IsUpper))
             {
                 return false;
             }
 
-            if (!_rules.RequireLowerCase && password.Any(char.IsLower))
+            if (_rules.RequireLowercase && !password.Any(char.IsLower))
             {
                 return false;
             }
 
-            return _rules.RequiredLetter || !password.Any(char.IsLetter);
+            return !_rules.RequiredSpecialCharacter || password.Any(char.IsPunctuation);
         }
 
         public string GetPasswordHash(AccountModel account, string password)

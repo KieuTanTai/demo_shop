@@ -14,6 +14,13 @@ namespace Identity.Models.Account
             AccountPassword = ModelFieldGuard.Required(password, 255, nameof(password));
         }
 
+        public AccountModel(string accountEmail, string? accountPassword, string? accountPhoneNumber, bool accountIsActive)
+        {
+            AccountEmail = ModelFieldGuard.Required(accountEmail, 255, nameof(accountEmail));
+            AccountPassword = ModelFieldGuard.Required(accountPassword, 255, nameof(accountPassword));
+            AccountIsActive = accountIsActive;
+        }
+        
         public AccountModel(Guid accountId, string? accountPhoneNumber, bool accountIsActive)
         {
             AccountId = accountId;

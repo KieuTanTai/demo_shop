@@ -6,15 +6,15 @@ namespace Identity.Interfaces.IRepository
 {
     public interface IAccountRepository : IBaseReadRepository<AccountModel>, IBasePostRepository<AccountModel>
     {
-        Task<RecordBaseCursorPage<AccountModel>> GetApplyPaging(Guid? cursor, int pageSize,
+        Task<RecordBaseCursorPage<AccountModel>> GetApplyPagingAsync(Guid? cursor, int pageSize,
             CancellationToken cancellationToken = default);
 
-        Task<AccountModel> GetAccountByEmail(string email, CancellationToken cancellationToken = default);
+        Task<AccountModel> GetAccountByEmailAsync(string email, CancellationToken cancellationToken = default);
 
-        Task<RecordBaseCursorPage<AccountModel>> GetAccountByPhoneNumber(Guid? cursor, string phoneNumber, int pageSize,
+        Task<RecordBaseCursorPage<AccountModel>> GetAccountByPhoneNumberAsync(Guid? cursor, string phoneNumber, int pageSize,
             CancellationToken cancellationToken = default);
 
-        Task<RecordBaseCursorPage<AccountModel>> GetApplyPagingByStatus(Guid? cursor, int pageSize, bool isActive,
+        Task<RecordBaseCursorPage<AccountModel>> GetApplyPagingByStatusAsync(Guid? cursor, int pageSize, bool isActive,
             CancellationToken cancellationToken = default);
     }
 }

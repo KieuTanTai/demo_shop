@@ -34,7 +34,7 @@ namespace Identity.Infrastructure.Repository.Account
                 cancellationToken);
         }
 
-        public async Task<RecordBaseCursorPage<AccountModel>> GetAccountByPhoneNumber(Guid? cursor, string phoneNumber, int pageSize,
+        public async Task<RecordBaseCursorPage<AccountModel>> GetAccountByPhoneNumberAsync(Guid? cursor, string phoneNumber, int pageSize,
             CancellationToken cancellationToken = default)
         {
             ArgumentOutOfRangeException.ThrowIfLessThan(pageSize, 1);
@@ -49,7 +49,7 @@ namespace Identity.Infrastructure.Repository.Account
                 cancellationToken);
         }
 
-        public async Task<AccountModel> GetAccountByEmail(string email,
+        public async Task<AccountModel> GetAccountByEmailAsync(string email,
             CancellationToken cancellationToken = default)
         {
             var account =
@@ -64,7 +64,7 @@ namespace Identity.Infrastructure.Repository.Account
         }
 
         // Paging methods
-        public async Task<RecordBaseCursorPage<AccountModel>> GetApplyPaging(Guid? cursor, int pageSize,
+        public async Task<RecordBaseCursorPage<AccountModel>> GetApplyPagingAsync(Guid? cursor, int pageSize,
             CancellationToken cancellationToken = default)
         {
             ArgumentOutOfRangeException.ThrowIfLessThan(pageSize, 1);
@@ -80,7 +80,7 @@ namespace Identity.Infrastructure.Repository.Account
                 cancellationToken);
         }
 
-        public async Task<RecordBaseCursorPage<AccountModel>> GetApplyPagingByStatus(Guid? cursor,
+        public async Task<RecordBaseCursorPage<AccountModel>> GetApplyPagingByStatusAsync(Guid? cursor,
             int pageSize,
             bool isActive, CancellationToken cancellationToken = default)
         {

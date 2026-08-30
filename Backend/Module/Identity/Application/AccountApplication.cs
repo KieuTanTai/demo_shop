@@ -44,7 +44,7 @@ namespace Identity.Application
 
         public async Task<AccountModel> RegisterAsync(string email, string password, CancellationToken cancellationToken = default)
         {
-            var existedAccount = await _accountRepository.GetAccountByEmail(email, cancellationToken);
+            var existedAccount = await _accountRepository.GetAccountByEmailAsync(email, cancellationToken);
             if (existedAccount != null)
             {
                 throw new ArgumentException("AccountModel email is existed.", nameof(email));

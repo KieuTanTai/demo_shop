@@ -110,3 +110,10 @@ BEGIN
 END //
 
 DELIMITER ;
+
+select * from account;
+select * from role;
+select * from permission;
+select * from account_role;
+select * from role_permission;
+select * from account_additional_permission;

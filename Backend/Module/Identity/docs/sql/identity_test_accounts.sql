@@ -91,4 +91,6 @@ COMMIT ;
 
 select * from `account`;
 select * from `account_role`;
+select * from `role`;
+select * from `permission`;
 select * from `account_additional_permission`;
