@@ -38,13 +38,14 @@ namespace Identity.Infrastructure.Repository.Account
             CancellationToken cancellationToken = default)
         {
             ArgumentOutOfRangeException.ThrowIfLessThan(pageSize, 1);
-            var accounts = _db.Accounts.AsNoTracking().OrderByDescending(account => account.AccountId)
-                .ToAsyncEnumerable();
+            var query = _db.Accounts.AsNoTracking();
             if (cursor.HasValue)
             {
-                accounts = accounts.Where(account => account.AccountId < cursor);
+                query = query.Where(account => account.AccountId < cursor.Value);
             }
-            accounts = accounts.Where(account => account.AccountPhoneNumber == phoneNumber);
+            query = query.Where(account => account.AccountPhoneNumber != null && account.AccountPhoneNumber.Contains(phoneNumber));
+            query = query.OrderByDescending(account => account.AccountId);
+            var accounts = query.ToAsyncEnumerable();
             return await SharedGetApplyPagingRepository.ApplyPaging(accounts, pageSize, account => account.AccountId,
                 cancellationToken);
         }
@@ -68,14 +69,15 @@ namespace Identity.Infrastructure.Repository.Account
             CancellationToken cancellationToken = default)
         {
             ArgumentOutOfRangeException.ThrowIfLessThan(pageSize, 1);
-            var accounts = _db.Accounts.AsNoTracking().OrderByDescending(account => account.AccountId)
-                .ToAsyncEnumerable();
+            var query = _db.Accounts.AsNoTracking();
 
             if (cursor.HasValue)
             {
-                accounts = accounts.Where(account => account.AccountId < cursor);
+                query = query.Where(account => account.AccountId < cursor.Value);
             }
 
+            query = query.OrderByDescending(account => account.AccountId);
+            var accounts = query.ToAsyncEnumerable();
             return await SharedGetApplyPagingRepository.ApplyPaging(accounts, pageSize, account => account.AccountId,
                 cancellationToken);
         }
@@ -85,15 +87,16 @@ namespace Identity.Infrastructure.Repository.Account
             bool isActive, CancellationToken cancellationToken = default)
         {
             ArgumentOutOfRangeException.ThrowIfLessThan(pageSize, 1);
-            var accounts = _db.Accounts.AsNoTracking().OrderByDescending(account => account.AccountId)
-                .ToAsyncEnumerable();
+            var query = _db.Accounts.AsNoTracking();
 
             if (cursor.HasValue)
             {
-                accounts = accounts.Where(account => account.AccountId < cursor);
+                query = query.Where(account => account.AccountId < cursor.Value);
             }
 
-            accounts = accounts.Where(account => account.AccountIsActive == isActive);
+            query = query.Where(account => account.AccountIsActive == isActive);
+            query = query.OrderByDescending(account => account.AccountId);
+            var accounts = query.ToAsyncEnumerable();
             return await SharedGetApplyPagingRepository.ApplyPaging(accounts, pageSize, account => account.AccountId,
                 cancellationToken);
         }
