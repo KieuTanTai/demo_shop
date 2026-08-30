@@ -18,9 +18,18 @@ namespace Identity.Models.Account
         {
             AccountEmail = ModelFieldGuard.Required(accountEmail, 255, nameof(accountEmail));
             AccountPassword = ModelFieldGuard.Required(accountPassword, 255, nameof(accountPassword));
+            AccountPhoneNumber = accountPhoneNumber;
             AccountIsActive = accountIsActive;
         }
         
+        public AccountModel(Guid accountId, string? accountEmail, string? accountPassword, bool accountIsActive)
+        {
+            AccountId = accountId;
+            AccountEmail = accountEmail;
+            AccountPassword = accountPassword;
+            AccountIsActive = accountIsActive;
+        }
+
         public AccountModel(Guid accountId, string? accountPhoneNumber, bool accountIsActive)
         {
             AccountId = accountId;
@@ -48,9 +57,9 @@ namespace Identity.Models.Account
 
         public bool AccountIsActive { get; private set; } = true;
 
-        public DateTime AccountCreatedAt { get; init; } = DateTime.UtcNow;
+        public DateTime AccountCreatedAt { get; init; } = DateTime.Now;
 
-        public DateTime AccountUpdatedAt { get; private set; } = DateTime.UtcNow;
+        public DateTime AccountUpdatedAt { get; private set; } = DateTime.Now;
 
         public IReadOnlyList<RoleModel> Roles { get; private set; } = new List<RoleModel>();
 
@@ -62,7 +71,7 @@ namespace Identity.Models.Account
         public void SetEmail(string email)
         {
             AccountEmail = ModelFieldGuard.Required(email, 255, nameof(email));
-            AccountUpdatedAt = DateTime.UtcNow;
+            AccountUpdatedAt = DateTime.Now;
         }
 
         public void SetAccountIsActive(bool isActive)
@@ -73,13 +82,13 @@ namespace Identity.Models.Account
             }
 
             AccountIsActive = isActive;
-            AccountUpdatedAt = DateTime.UtcNow;
+            AccountUpdatedAt = DateTime.Now;
         }
 
         public void SetHashedPassword(string passwordHash)
         {
             AccountPassword = ModelFieldGuard.Required(passwordHash, 255, nameof(passwordHash));
-            AccountUpdatedAt = DateTime.UtcNow;
+            AccountUpdatedAt = DateTime.Now;
         }
 
         public void ClearAccountPhoneNumber()
@@ -90,7 +99,7 @@ namespace Identity.Models.Account
             }
 
             AccountPhoneNumber = null;
-            AccountUpdatedAt = DateTime.UtcNow;
+            AccountUpdatedAt = DateTime.Now;
         }
 
         public void SetAccountPhoneNumber(string phone)
@@ -103,7 +112,7 @@ namespace Identity.Models.Account
             }
 
             AccountPhoneNumber = baseValidPhone;
-            AccountUpdatedAt = DateTime.UtcNow;
+            AccountUpdatedAt = DateTime.Now;
         }
 
         public void SetRoles(IReadOnlyList<RoleModel> roles)

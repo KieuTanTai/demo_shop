@@ -44,30 +44,17 @@ namespace Identity.Application
 
         public async Task<AccountModel> RegisterAsync(string email, string password, CancellationToken cancellationToken = default)
         {
-            var existedAccount = await _accountRepository.GetAccountByEmailAsync(email, cancellationToken);
-            if (existedAccount != null)
-            {
-                throw new ArgumentException("AccountModel email is existed.", nameof(email));
-            }
-            if (!_accountHelper.IsPasswordValid(password))
-            {
-                throw new ArgumentException("AccountModel password is invalid.", nameof(password));
-            }
-            if (!_accountHelper.IsEmailValid(email))
-            {
-                throw new ArgumentException("AccountModel email is invalid.", nameof(email));
-            }
-
-            var accountModel = new AccountModel(email, password);
+            await IsValidForRegisterAsync(email, password, cancellationToken);
+            
+            var accountModel = new AccountModel(Guid.CreateVersion7(), email, password, true);
             var hashedPassword = _accountHelper.GetPasswordHash(accountModel, password);
             accountModel.SetHashedPassword(hashedPassword);
-
             try
             {
                 var baseRole = await _roleApplication.GetBaseRolesForUserAsync(cancellationToken);
-                var accountRoles = baseRole.Select(role => new AccountRoleModel(accountModel.AccountId, role.RoleId)).ToList();
+                var accountRole = new AccountRoleModel(accountModel.AccountId, baseRole.RoleId);
                 await _accountRepository.AddAsync(accountModel, cancellationToken);
-                await _accountRoleRepository.AddRangeAsync(accountRoles, cancellationToken);
+                await _accountRoleRepository.AddAsync(accountRole, cancellationToken);
                 var result = await _unitOfWork.SaveChangesAsync(cancellationToken);
                 return accountModel;
             }
@@ -139,6 +126,28 @@ namespace Identity.Application
         public async Task<RecordBaseCursorPage<AccountModel>> GetAccountByPhoneNumberAsync(Guid? cursor, string phoneNumber, int pageSize, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
+        }
+
+        #endregion
+
+        #region Private
+
+        private async Task IsValidForRegisterAsync(string email, string password, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                var existedAccount = await _accountRepository.GetAccountByEmailAsync(email, cancellationToken);
+                if (existedAccount != null)
+                    throw new ArgumentException("AccountModel email is existed.", nameof(email));
+            }
+            catch (InvalidOperationException)
+            {
+                if (!_accountHelper.IsPasswordValid(password))
+                    throw new ArgumentException("AccountModel password is invalid.", nameof(password));
+
+                if (!_accountHelper.IsEmailValid(email))
+                    throw new ArgumentException("AccountModel email is invalid.", nameof(email));
+            }
         }
 
         #endregion

@@ -6,6 +6,6 @@ namespace Identity.Models.Role
 
         public Guid PermissionId { get; init; } = permissionId;
 
-        public DateTime AssignedAt { get; init; } = DateTime.UtcNow;
+        public DateTime AssignedAt { get; init; } = DateTime.Now;
     }
 }

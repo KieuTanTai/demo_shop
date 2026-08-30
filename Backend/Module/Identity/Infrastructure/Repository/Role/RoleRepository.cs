@@ -38,10 +38,10 @@ namespace Identity.Infrastructure.Repository.Role
             return await _db.Roles.AsNoTracking().Where(role => role.RoleName == name).ToListAsync(cancellationToken);
         }
 
-        public async Task<IReadOnlyList<RoleModel>> GetByCodeAsync(ESystemRoleCode roleCode, CancellationToken cancellationToken = default)
+        public async Task<RoleModel?> GetByCodeAsync(ESystemRoleCode roleCode, CancellationToken cancellationToken = default)
         {
             var code = roleCode.ToString().ToLower();
-            return await _db.Roles.AsNoTracking().Where(role => role.RoleCode == code).ToListAsync(cancellationToken);
+            return await _db.Roles.AsNoTracking().FirstOrDefaultAsync(role => role.RoleCode == code, cancellationToken);
         }
 
         public async Task<IReadOnlyList<RoleModel>> GetByDescriptionAsync(string description,

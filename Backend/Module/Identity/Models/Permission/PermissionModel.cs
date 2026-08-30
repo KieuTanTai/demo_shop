@@ -16,9 +16,9 @@ namespace Identity.Models.Permission
         public bool PermissionIsActive { get; private set; } = permissionIsActive;
 
 
-        public DateTime PermissionCreatedAt { get; init; } = DateTime.UtcNow;
+        public DateTime PermissionCreatedAt { get; init; } = DateTime.Now;
 
-        public DateTime PermissionUpdatedAt { get; private set; } = DateTime.UtcNow;
+        public DateTime PermissionUpdatedAt { get; private set; } = DateTime.Now;
 
 
         #region Setter
@@ -26,7 +26,7 @@ namespace Identity.Models.Permission
         public void SetPermissionName(string name)
         {
             PermissionName = ModelFieldGuard.Required(name, 150, nameof(name));
-            PermissionUpdatedAt = DateTime.UtcNow;
+            PermissionUpdatedAt = DateTime.Now;
         }
 
         public void SetPermissionIsActive(bool isActive)
@@ -37,7 +37,7 @@ namespace Identity.Models.Permission
             }
 
             PermissionIsActive = isActive;
-            PermissionUpdatedAt = DateTime.UtcNow;
+            PermissionUpdatedAt = DateTime.Now;
         }
 
         public void ClearPermissionDescription()
@@ -48,13 +48,13 @@ namespace Identity.Models.Permission
             }
 
             PermissionDescription = null;
-            PermissionUpdatedAt = DateTime.UtcNow;
+            PermissionUpdatedAt = DateTime.Now;
         }
 
         public void SetPermissionDescription(string description)
         {
             PermissionDescription = ModelFieldGuard.Required(description, 300, nameof(description));
-            PermissionUpdatedAt = DateTime.UtcNow;
+            PermissionUpdatedAt = DateTime.Now;
         }
 
         #endregion

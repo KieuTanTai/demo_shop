@@ -36,11 +36,10 @@ namespace Identity.Infrastructure.Repository.Permission
             return await context.Permissions.AnyAsync(permission => permission.PermissionId == id, cancellationToken);
         }
 
-        public async Task<IReadOnlyList<PermissionModel>> GetByCodeAsync(ESystemPermissionCode permissionCode, CancellationToken cancellationToken = default)
+        public async Task<PermissionModel?> GetByCodeAsync(ESystemPermissionCode permissionCode, CancellationToken cancellationToken = default)
         {
             var code = permissionCode.ToString().ToLower();
-            return await context.Permissions.AsNoTracking().Where(permission => permission.PermissionCode == code)
-                .ToListAsync(cancellationToken);
+            return await context.Permissions.AsNoTracking().FirstOrDefaultAsync(permission => permission.PermissionCode.Contains(code), cancellationToken);
         }
 
         public async Task<IReadOnlyList<PermissionModel>> GetByNameAsync(string name,

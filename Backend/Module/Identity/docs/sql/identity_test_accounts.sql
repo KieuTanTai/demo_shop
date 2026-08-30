@@ -96,4 +96,5 @@ select * from `permission`;
 select * from `role_permission`;
 select * from `account_additional_permission`;
 
+select * from account_role where account_role.account_id = '01a052fc-efb9-7ef1-b57f-029e779396de';
 select * from account where account.account_phone_number LIKE '084%';

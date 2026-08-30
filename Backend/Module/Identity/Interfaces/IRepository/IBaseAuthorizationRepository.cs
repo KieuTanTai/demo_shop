@@ -6,7 +6,7 @@ namespace Identity.Interfaces.IRepository
         where T : class
         where TEnumType : Enum
     {
-        Task<IReadOnlyList<T>> GetByCodeAsync(TEnumType code, CancellationToken cancellationToken = default);
+        Task<T?> GetByCodeAsync(TEnumType code, CancellationToken cancellationToken = default);
         Task<IReadOnlyList<T>> GetByNameAsync(string name, CancellationToken cancellationToken = default);
         Task<IReadOnlyList<T>> GetByDescriptionAsync(string description, CancellationToken cancellationToken = default);
         Task<IReadOnlyList<T>> GetByActiveStatus(bool isActive, CancellationToken cancellationToken = default);

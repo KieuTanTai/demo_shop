@@ -11,6 +11,18 @@ namespace Identity.Infrastructure.Repository.Account
 
         #region POST
 
+        public async Task AddAsync(AccountRoleModel entity, CancellationToken cancellationToken = default)
+        {
+            if (entity.AccountId == Guid.Empty || entity.RoleId == Guid.Empty)
+            {
+                throw new ArgumentException("AccountModel and RoleModel id is required.", nameof(entity));
+            }
+            var existedAccountRole = await GetByIdAsync(entity.AccountId, entity.RoleId, cancellationToken);
+            if (existedAccountRole is not null)
+                throw new InvalidOperationException("AccountModel role already exist!");
+            await _db.AccountRoles.AddAsync(entity, cancellationToken);
+        }
+        
         public async Task AddRangeAsync(List<AccountRoleModel> entities, CancellationToken cancellationToken = default)
         {
             if (entities is null || entities.Count == 0)

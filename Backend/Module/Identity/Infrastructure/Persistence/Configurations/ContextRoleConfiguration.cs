@@ -41,7 +41,7 @@ namespace Identity.Infrastructure.Persistence.Configurations
                 .HasMaxLength(300);
 
             entity.Property(role => role.RoleIsActive)
-                .HasColumnName("role_active")
+                .HasColumnName("role_is_active")
                 .HasDefaultValue(true)
                 .IsRequired();
 

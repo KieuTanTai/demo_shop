@@ -16,9 +16,9 @@ namespace Identity.Models.Role
 
         public bool RoleIsActive { get; private set; } = roleIsActive;
 
-        public DateTime RoleCreatedAt { get; init; } = DateTime.UtcNow;
+        public DateTime RoleCreatedAt { get; init; } = DateTime.Now;
 
-        public DateTime RoleUpdatedAt { get; private set; } = DateTime.UtcNow;
+        public DateTime RoleUpdatedAt { get; private set; } = DateTime.Now;
 
         public IReadOnlyList<PermissionModel> Permissions { get; private set; } =
             new List<PermissionModel>();
@@ -28,7 +28,7 @@ namespace Identity.Models.Role
         public void SetRoleName(string name)
         {
             RoleName = ModelFieldGuard.Required(name, 100, nameof(name));
-            RoleUpdatedAt = DateTime.UtcNow;
+            RoleUpdatedAt = DateTime.Now;
         }
 
         public void SetRoleIsActive(bool isActive)
@@ -39,7 +39,7 @@ namespace Identity.Models.Role
             }
 
             RoleIsActive = isActive;
-            RoleUpdatedAt = DateTime.UtcNow;
+            RoleUpdatedAt = DateTime.Now;
         }
 
         public void ClearRoleDescription()
@@ -50,13 +50,13 @@ namespace Identity.Models.Role
             }
 
             RoleDescription = null;
-            RoleUpdatedAt = DateTime.UtcNow;
+            RoleUpdatedAt = DateTime.Now;
         }
 
         public void SetRoleDescription(string description)
         {
             RoleDescription = ModelFieldGuard.Required(description, 300, nameof(description));
-            RoleUpdatedAt = DateTime.UtcNow;
+            RoleUpdatedAt = DateTime.Now;
         }
 
         public void SetPermissions(IReadOnlyList<PermissionModel> permissions)

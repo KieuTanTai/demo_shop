@@ -9,6 +9,8 @@ namespace Identity.Interfaces.IRepository
 
         Task<bool> ExistsAsync(TTypeId firstForeignId, TTypeId secondForeignId,
             CancellationToken cancellationToken = default);
+        
+        Task AddAsync(T entity, CancellationToken cancellationToken = default);
 
         Task AddRangeAsync(List<T> entities, CancellationToken cancellationToken = default);
 

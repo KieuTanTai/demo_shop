@@ -11,6 +11,18 @@ namespace Identity.Infrastructure.Repository.Account
 
         #region POST
 
+        public async Task AddAsync(AccountAdditionalPermissionModel entity, CancellationToken cancellationToken = default)
+        {
+            if (entity.AccountId == Guid.Empty || entity.PermissionId == Guid.Empty)
+            {
+                throw new ArgumentNullException(nameof(entity), "Entity is required.");
+            }
+            var existedAccountPermission = await GetByIdAsync(entity.AccountId, entity.PermissionId, cancellationToken);
+            if (existedAccountPermission is not null)
+                throw new InvalidOperationException("AccountModel permission already exist!");
+            await _db.AccountPermissions.AddAsync(entity, cancellationToken);
+        }
+        
         public async Task AddRangeAsync(List<AccountAdditionalPermissionModel> entities, CancellationToken cancellationToken = default)
         {
             if (entities is null || entities.Count == 0)

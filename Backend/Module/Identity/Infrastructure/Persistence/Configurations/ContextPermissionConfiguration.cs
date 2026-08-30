@@ -35,7 +35,7 @@ namespace Identity.Infrastructure.Persistence.Configurations
                 .HasMaxLength(300);
 
             entity.Property(permission => permission.PermissionIsActive)
-                .HasColumnName("permission_active")
+                .HasColumnName("permission_is_active")
                 .HasDefaultValue(true)
                 .IsRequired();
 

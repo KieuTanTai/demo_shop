@@ -13,6 +13,6 @@ namespace Identity.Models.Account
 
         public Guid RoleId { get; init; }
 
-        public DateTime AssignedAt { get; init; } = DateTime.UtcNow;
+        public DateTime AssignedAt { get; init; } = DateTime.Now;
     }
 }

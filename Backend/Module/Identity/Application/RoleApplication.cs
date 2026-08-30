@@ -17,16 +17,12 @@ namespace Identity.Application
 
         private readonly IUnitOfWork _unitOfWork = unitOfWork;
 
-        public async Task<IReadOnlyList<RoleModel>> GetBaseRolesForUserAsync(CancellationToken cancellationToken = default)
+        public async Task<RoleModel> GetBaseRolesForUserAsync(CancellationToken cancellationToken = default)
         {
             try
             {
                 var result = await _roleRepository.GetByCodeAsync(ESystemRoleCode.Customer, cancellationToken);
-                if (result.Count == 0)
-                {
-                    throw new InvalidOperationException("base role not found!");
-                }
-                return result;
+                return result ?? throw new Exception("Role not found.");
             }
             catch (OperationCanceledException canceledException)
             {
@@ -35,9 +31,8 @@ namespace Identity.Application
             catch (Exception ex)
             {
                 // Log the exception
-                Console.WriteLine($"Error occurred while fetching base roles for user: {ex.Message}");
+                throw new Exception("Failed to fetch base role for user.", ex);
             }
-            throw new Exception("Failed to fetch base roles for user.");
         }
     }
 }

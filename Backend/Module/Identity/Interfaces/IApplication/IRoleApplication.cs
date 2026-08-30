@@ -4,6 +4,6 @@ namespace Identity.Interfaces.IApplication
 {
     public interface IRoleApplication
     {
-        Task<IReadOnlyList<RoleModel>> GetBaseRolesForUserAsync(CancellationToken cancellationToken = default);
+        Task<RoleModel> GetBaseRolesForUserAsync(CancellationToken cancellationToken = default);
     }
 }
