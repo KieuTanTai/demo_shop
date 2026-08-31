@@ -3,7 +3,7 @@ using Identity.Interfaces.IRepository;
 using Identity.Models.Account;
 using Microsoft.EntityFrameworkCore;
 
-namespace Identity.Infrastructure.Repository.Account
+namespace Identity.Infrastructure.Repository.AccountRepository
 {
     public class AccountRoleRepository(IdentityDbContext context) : IBaseAssociativeRepository<AccountRoleModel, Guid>
     {
@@ -19,10 +19,12 @@ namespace Identity.Infrastructure.Repository.Account
             }
             var existedAccountRole = await GetByIdAsync(entity.AccountId, entity.RoleId, cancellationToken);
             if (existedAccountRole is not null)
+            {
                 throw new InvalidOperationException("AccountModel role already exist!");
+            }
             await _db.AccountRoles.AddAsync(entity, cancellationToken);
         }
-        
+
         public async Task AddRangeAsync(List<AccountRoleModel> entities, CancellationToken cancellationToken = default)
         {
             if (entities is null || entities.Count == 0)

@@ -3,7 +3,7 @@ using Identity.Interfaces.IRepository;
 using Identity.Models.Account;
 using Microsoft.EntityFrameworkCore;
 
-namespace Identity.Infrastructure.Repository.Account
+namespace Identity.Infrastructure.Repository.AccountRepository
 {
     public class AccountAdditionalPermissionRepository(IdentityDbContext context) : IBaseAssociativeRepository<AccountAdditionalPermissionModel, Guid>
     {
@@ -19,10 +19,12 @@ namespace Identity.Infrastructure.Repository.Account
             }
             var existedAccountPermission = await GetByIdAsync(entity.AccountId, entity.PermissionId, cancellationToken);
             if (existedAccountPermission is not null)
+            {
                 throw new InvalidOperationException("AccountModel permission already exist!");
+            }
             await _db.AccountPermissions.AddAsync(entity, cancellationToken);
         }
-        
+
         public async Task AddRangeAsync(List<AccountAdditionalPermissionModel> entities, CancellationToken cancellationToken = default)
         {
             if (entities is null || entities.Count == 0)

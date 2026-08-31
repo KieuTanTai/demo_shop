@@ -6,10 +6,9 @@ namespace Identity.Interfaces.IApplication
     {
         Task<AccountModel> RegisterAsync(string email, string password, CancellationToken cancellationToken = default);
         Task<AccountModel> LoginAsync(string email, string password, CancellationToken cancellationToken = default);
-        Task<bool> LogoutAsync(CancellationToken cancellationToken = default);
-        Task<bool> ChangePasswordAsync(string oldPassword, string newPassword, CancellationToken cancellationToken = default);
-        Task<bool> UpdateProfileAsync(AccountModel accountModel, CancellationToken cancellationToken = default);
-        Task<bool> UpdateStatusAccountAsync(Guid? accountId, string? email, CancellationToken cancellationToken = default);
+        Task<bool> LogoutAsync(string email, CancellationToken cancellationToken = default);
+        Task<int> ChangePasswordAsync(string email, string oldPassword, string newPassword, CancellationToken cancellationToken = default);
+        Task<int> InactiveAccountAsync(Guid? accountId, string? email, CancellationToken cancellationToken = default);
 
         // Methods for admins
         // Task<IReadOnlyList<AccountModel>> GetAllAccountAsync(CancellationToken cancellationToken = default);
@@ -17,6 +16,5 @@ namespace Identity.Interfaces.IApplication
         // Task<RecordBaseCursorPage<AccountModel>> GetApplyPagingByStatusAsync(Guid? cursor, int pageSize, bool isActive, CancellationToken cancellationToken = default);
         // Task<AccountModel> GetAccountByEmailAsync(string email, CancellationToken cancellationToken = default);
         // Task<RecordBaseCursorPage<AccountModel>> GetAccountByPhoneNumberAsync(Guid? cursor, string phoneNumber, int pageSize, CancellationToken cancellationToken = default);
-        //
     }
 }

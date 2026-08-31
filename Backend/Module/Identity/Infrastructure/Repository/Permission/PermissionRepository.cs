@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Identity.Infrastructure.Repository.Permission
 {
     public class PermissionRepository(IdentityDbContext context)
-        : IBaseAuthorizationRepository<PermissionModel, ESystemPermissionCode>
+        : IBaseAuthorizationRepository<PermissionModel, ESystemPermissionCode, Guid>
     {
         #region GET
 

@@ -8,12 +8,12 @@ namespace Identity.Application
 {
     public class RoleApplication(
         IUnitOfWork unitOfWork,
-        IBaseAuthorizationRepository<RoleModel, ESystemRoleCode> roleRepository,
+        IBaseAuthorizationRepository<RoleModel, ESystemRoleCode, Guid> roleRepository,
         IAccountRepository accountRepository) : IRoleApplication
     {
         private readonly IAccountRepository _accountRepository = accountRepository;
 
-        private readonly IBaseAuthorizationRepository<RoleModel, ESystemRoleCode> _roleRepository = roleRepository;
+        private readonly IBaseAuthorizationRepository<RoleModel, ESystemRoleCode, Guid> _roleRepository = roleRepository;
 
         private readonly IUnitOfWork _unitOfWork = unitOfWork;
 

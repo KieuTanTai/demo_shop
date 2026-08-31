@@ -15,38 +15,37 @@ START TRANSACTION;
 
 INSERT INTO `role`
     (`role_code`, `role_name`, `role_description`, `role_is_active`)
-VALUES
-    ('CUSTOMER',
-     'Customer',
-     'Customer role for browsing products, managing cart items, and making purchases.',
-     TRUE),
+VALUES ('CUSTOMER',
+        'Customer',
+        'Customer role for browsing products, managing cart items, and making purchases.',
+        TRUE),
 
-    ('EMPLOYEE',
-     'Employee',
-     'Employee role for selling existing products and reading role information and own permissions.',
-     TRUE),
+       ('EMPLOYEE',
+        'Employee',
+        'Employee role for selling existing products and reading role information and own permissions.',
+        TRUE),
 
-    ('ASSISTANT',
-     'Assistant',
-     'Assistant role with all Employee capabilities plus statistics access.',
-     TRUE),
+       ('ASSISTANT',
+        'Assistant',
+        'Assistant role with all Employee capabilities plus statistics access.',
+        TRUE),
 
-    ('MANAGER',
-     'Manager',
-     'Manager role for product, customer, order, role and permission management, plus statistics access.',
-     TRUE),
+       ('MANAGER',
+        'Manager',
+        'Manager role for product, customer, order, role and permission management, plus statistics access.',
+        TRUE),
 
-    ('ADMIN',
-     'Admin',
-     'System administrator with full administrative permissions. Customer purchase and employee selling capabilities are not assigned as explicit permissions.',
-     TRUE);
+       ('ADMIN',
+        'Admin',
+        'System administrator with full administrative permissions. Customer purchase and employee selling capabilities are not assigned as explicit permissions.',
+        TRUE);
 
 -- ============================================================
 -- PERMISSIONS
 -- ============================================================
 
 INSERT INTO `permission`
-    (`permission_code`, `permission_name`, `permission_description`, `permission_is_active`)
+(`permission_code`, `permission_name`, `permission_description`, `permission_is_active`)
 VALUES
     -- Product
     ('PRODUCT_READ',
@@ -199,78 +198,78 @@ VALUES
 INSERT INTO `role_permission` (`role_id`, `permission_id`)
 SELECT r.`role_id`, p.`permission_id`
 FROM `role` r
-CROSS JOIN `permission` p
+         CROSS JOIN `permission` p
 WHERE r.`role_code` = 'CUSTOMER'
   AND p.`permission_code` IN (
-      'PRODUCT_READ',
-      'CART_READ',
-      'CART_ADD_ITEM',
-      'CART_UPDATE_ITEM',
-      'CART_REMOVE_ITEM',
-      'PURCHASE_CREATE'
-  );
+                              'PRODUCT_READ',
+                              'CART_READ',
+                              'CART_ADD_ITEM',
+                              'CART_UPDATE_ITEM',
+                              'CART_REMOVE_ITEM',
+                              'PURCHASE_CREATE'
+    );
 
 -- EMPLOYEE
 INSERT INTO `role_permission` (`role_id`, `permission_id`)
 SELECT r.`role_id`, p.`permission_id`
 FROM `role` r
-CROSS JOIN `permission` p
+         CROSS JOIN `permission` p
 WHERE r.`role_code` = 'EMPLOYEE'
   AND p.`permission_code` IN (
-      'PRODUCT_READ',
-      'PRODUCT_SELL',
-      'ROLE_READ',
-      'PERMISSION_READ'
-  );
+                              'PRODUCT_READ',
+                              'PRODUCT_SELL',
+                              'ROLE_READ',
+                              'PERMISSION_READ'
+    );
 
 -- ASSISTANT
 INSERT INTO `role_permission` (`role_id`, `permission_id`)
 SELECT r.`role_id`, p.`permission_id`
 FROM `role` r
-CROSS JOIN `permission` p
+         CROSS JOIN `permission` p
 WHERE r.`role_code` = 'ASSISTANT'
   AND p.`permission_code` IN (
-      'PRODUCT_READ',
-      'PRODUCT_SELL',
-      'ROLE_READ',
-      'PERMISSION_READ',
-      'STATISTICS_READ'
-  );
+                              'PRODUCT_READ',
+                              'PRODUCT_SELL',
+                              'ROLE_READ',
+                              'PERMISSION_READ',
+                              'STATISTICS_READ'
+    );
 
 -- MANAGER
 INSERT INTO `role_permission` (`role_id`, `permission_id`)
 SELECT r.`role_id`, p.`permission_id`
 FROM `role` r
-CROSS JOIN `permission` p
+         CROSS JOIN `permission` p
 WHERE r.`role_code` = 'MANAGER'
   AND p.`permission_code` IN (
-      -- Product management
-      'PRODUCT_READ',
-      'PRODUCT_CREATE',
-      'PRODUCT_UPDATE',
-      'PRODUCT_DELETE',
+    -- Product management
+                              'PRODUCT_READ',
+                              'PRODUCT_CREATE',
+                              'PRODUCT_UPDATE',
+                              'PRODUCT_DELETE',
 
-      -- Customer management
-      'CUSTOMER_READ',
-      'CUSTOMER_CREATE',
-      'CUSTOMER_UPDATE',
-      'CUSTOMER_DELETE',
+    -- Customer management
+                              'CUSTOMER_READ',
+                              'CUSTOMER_CREATE',
+                              'CUSTOMER_UPDATE',
+                              'CUSTOMER_DELETE',
 
-      -- Manual / administrative order management
-      'ORDER_READ',
-      'ORDER_CREATE',
-      'ORDER_UPDATE',
-      'ORDER_DELETE',
+    -- Manual / administrative order management
+                              'ORDER_READ',
+                              'ORDER_CREATE',
+                              'ORDER_UPDATE',
+                              'ORDER_DELETE',
 
-      -- Role / permission management
-      'ROLE_READ',
-      'ROLE_UPDATE',
-      'PERMISSION_READ',
-      'PERMISSION_UPDATE',
+    -- Role / permission management
+                              'ROLE_READ',
+                              'ROLE_UPDATE',
+                              'PERMISSION_READ',
+                              'PERMISSION_UPDATE',
 
-      -- Statistics
-      'STATISTICS_READ'
-  );
+    -- Statistics
+                              'STATISTICS_READ'
+    );
 
 -- ADMIN
 -- Intentionally no rows.
@@ -281,6 +280,9 @@ WHERE r.`role_code` = 'MANAGER'
 
 COMMIT;
 
-select * from role;
-select * from permission;
-select * from role_permission;
+select *
+from role;
+select *
+from permission;
+select *
+from role_permission;

@@ -16,8 +16,8 @@ namespace Identity.Application
         IBaseAssociativeRepository<AccountRoleModel, Guid> accountRoleRepository,
         IBaseAssociativeRepository<AccountAdditionalPermissionModel, Guid> accountPermissionRepository,
         IBaseAssociativeRepository<RolePermissionModel, Guid> rolePermissionRepository,
-        IBaseAuthorizationRepository<RoleModel, ESystemRoleCode> roleRepository,
-        IBaseAuthorizationRepository<PermissionModel, ESystemPermissionCode> permissionRepository,
+        IBaseAuthorizationRepository<RoleModel, ESystemRoleCode, Guid> roleRepository,
+        IBaseAuthorizationRepository<PermissionModel, ESystemPermissionCode, Guid> permissionRepository,
         IRoleApplication roleApplication,
         IAccountHelper accountHelper)
         : IAccountApplication
@@ -30,13 +30,13 @@ namespace Identity.Application
 
         private readonly IBaseAssociativeRepository<AccountRoleModel, Guid> _accountRoleRepository = accountRoleRepository;
 
-        private readonly IBaseAuthorizationRepository<PermissionModel, ESystemPermissionCode> _permissionRepository = permissionRepository;
+        private readonly IBaseAuthorizationRepository<PermissionModel, ESystemPermissionCode, Guid> _permissionRepository = permissionRepository;
 
         private readonly IRoleApplication _roleApplication = roleApplication;
 
         private readonly IBaseAssociativeRepository<RolePermissionModel, Guid> _rolePermissionRepository = rolePermissionRepository;
 
-        private readonly IBaseAuthorizationRepository<RoleModel, ESystemRoleCode> _roleRepository = roleRepository;
+        private readonly IBaseAuthorizationRepository<RoleModel, ESystemRoleCode, Guid> _roleRepository = roleRepository;
 
         private readonly IUnitOfWork _unitOfWork = unitOfWork;
 
@@ -45,7 +45,7 @@ namespace Identity.Application
         public async Task<AccountModel> RegisterAsync(string email, string password, CancellationToken cancellationToken = default)
         {
             await IsValidForRegisterAsync(email, password, cancellationToken);
-            
+
             var accountModel = new AccountModel(Guid.CreateVersion7(), email, password, true);
             var hashedPassword = _accountHelper.GetPasswordHash(accountModel, password);
             accountModel.SetHashedPassword(hashedPassword);
@@ -56,6 +56,7 @@ namespace Identity.Application
                 await _accountRepository.AddAsync(accountModel, cancellationToken);
                 await _accountRoleRepository.AddAsync(accountRole, cancellationToken);
                 var result = await _unitOfWork.SaveChangesAsync(cancellationToken);
+
                 return accountModel;
             }
             catch (OperationCanceledException canceledException)
@@ -71,32 +72,65 @@ namespace Identity.Application
 
         public async Task<AccountModel> LoginAsync(string email, string password, CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            CheckValidEmailAndPassword(email, password); // throw exception if email or password is invalid
+            var accountModel = await GetAccountByEmailAsync(email, cancellationToken);
+            if (!accountModel.AccountIsActive)
+            {
+                throw new InvalidOperationException("Account is not active.");
+            }
+            return !_accountHelper.PasswordVerify(accountModel, password, accountModel.AccountPassword!) ? throw new InvalidOperationException("Account password is invalid.") : accountModel;
         }
 
-        public async Task<bool> LogoutAsync(CancellationToken cancellationToken = default)
+        public async Task<bool> LogoutAsync(string email, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<bool> ChangePasswordAsync(string oldPassword, string newPassword, CancellationToken cancellationToken = default)
+        public async Task<int> ChangePasswordAsync(string email, string oldPassword, string newPassword, CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            CheckValidEmailAndPassword(email, oldPassword);
+            if (!_accountHelper.IsPasswordValid(newPassword))
+            {
+                throw new ArgumentException("Account password is invalid.", nameof(newPassword));
+            }
+
+            var accountModel = await GetAccountByEmailAsync(email, cancellationToken);
+            if (!_accountHelper.PasswordVerify(accountModel, oldPassword, accountModel.AccountPassword!))
+            {
+                throw new InvalidOperationException("Account password is invalid.");
+            }
+
+            var hashedPassword = _accountHelper.GetPasswordHash(accountModel, newPassword);
+            accountModel.SetHashedPassword(hashedPassword);
+            await _accountRepository.UpdateAsync(accountModel, cancellationToken);
+            return await _unitOfWork.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task<bool> UpdateStatusAccountAsync(Guid accountId, CancellationToken cancellationToken = default)
+        public async Task<int> InactiveAccountAsync(Guid? accountId, string? email, CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
-        }
+            AccountModel? result = null;
+            if (accountId == null && email == null)
+            {
+                throw new ArgumentException("AccountModel id or email is required.", nameof(accountId));
+            }
 
-        public async Task<bool> UpdateProfileAsync(AccountModel accountModel, CancellationToken cancellationToken = default)
-        {
-            throw new NotImplementedException();
-        }
+            if (accountId != null)
+            {
+                result = await _accountRepository.GetTrackedByIdAsync(accountId.Value, cancellationToken);
+            }
+            else if (email != null)
+            {
+                result = await GetAccountByEmailAsync(email, true, cancellationToken);
+            }
 
-        public async Task<bool> UpdateStatusAccountAsync(Guid? accountId, string? email, CancellationToken cancellationToken = default)
-        {
-            throw new NotImplementedException();
+            if (result == null)
+            {
+                throw new ArgumentException("Account not found.", nameof(accountId));
+            }
+
+            result.SetAccountIsActive(false);
+            await _accountRepository.UpdateAsync(result, cancellationToken);
+            return await _unitOfWork.SaveChangesAsync(cancellationToken);
         }
 
         #endregion
@@ -134,20 +168,38 @@ namespace Identity.Application
 
         private async Task IsValidForRegisterAsync(string email, string password, CancellationToken cancellationToken = default)
         {
-            try
+            if (!CheckValidEmailAndPassword(email, password))
             {
-                var existedAccount = await _accountRepository.GetAccountByEmailAsync(email, cancellationToken);
-                if (existedAccount != null)
-                    throw new ArgumentException("AccountModel email is existed.", nameof(email));
+                return;
             }
-            catch (InvalidOperationException)
-            {
-                if (!_accountHelper.IsPasswordValid(password))
-                    throw new ArgumentException("AccountModel password is invalid.", nameof(password));
 
-                if (!_accountHelper.IsEmailValid(email))
-                    throw new ArgumentException("AccountModel email is invalid.", nameof(email));
+            var existedAccount = await _accountRepository.GetAccountByEmailAsync(email, cancellationToken);
+            if (existedAccount != null)
+            {
+                throw new ArgumentException("Account email is existed.", nameof(email));
             }
+        }
+
+        private async Task<AccountModel> GetAccountByEmailAsync(string email, bool isTracked = false, CancellationToken cancellationToken = default)
+        {
+            //! not check email and password, call IsValidEmailAndPassword method before call this method
+
+            if (isTracked)
+            {
+                return await _accountRepository.GetTrackedAccountByEmailAsync(email, cancellationToken);
+            }
+
+            var existedAccount = await _accountRepository.GetAccountByEmailAsync(email, cancellationToken);
+            return existedAccount;
+        }
+
+        private bool CheckValidEmailAndPassword(string email, string password)
+        {
+            if (!_accountHelper.IsPasswordValid(password))
+            {
+                throw new ArgumentException("Account password is invalid.", nameof(password));
+            }
+            return !_accountHelper.IsEmailValid(email) ? throw new ArgumentException("Account email is invalid.", nameof(email)) : true;
         }
 
         #endregion

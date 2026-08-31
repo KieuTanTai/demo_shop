@@ -2,7 +2,7 @@ using Shared.Interfaces;
 
 namespace Identity.Interfaces.IRepository
 {
-    public interface IBaseAuthorizationRepository<T, in TEnumType> : IBaseReadRepository<T>, IBasePostRepository<T>
+    public interface IBaseAuthorizationRepository<T, in TEnumType, in TId> : IBaseReadRepository<T, TId>, IBasePostRepository<T>
         where T : class
         where TEnumType : Enum
     {

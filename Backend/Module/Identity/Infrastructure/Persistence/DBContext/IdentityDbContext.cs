@@ -1,5 +1,6 @@
 using Identity.Models.Account;
 using Identity.Models.Permission;
+using Identity.Models.Profile;
 using Identity.Models.Role;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,6 +16,8 @@ namespace Identity.Infrastructure.Persistence.DBContext
         public DbSet<AccountRoleModel> AccountRoles { get; set; }
         public DbSet<RolePermissionModel> RolePermissions { get; set; }
         public DbSet<AccountAdditionalPermissionModel> AccountPermissions { get; set; }
+
+        public DbSet<UserProfileModel> UserProfiles { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

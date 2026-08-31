@@ -1,14 +1,14 @@
 namespace Shared.Interfaces
 {
-    public interface IBaseReadRepository<T>
+    public interface IBaseReadRepository<T, in TId>
         where T : class
     {
         Task<IReadOnlyList<T>> GetAllAsync(CancellationToken cancellationToken = default);
 
-        Task<T?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
+        Task<T?> GetByIdAsync(TId id, CancellationToken cancellationToken = default);
 
-        Task<T?> GetTrackedByIdAsync(Guid id, CancellationToken cancellationToken = default);
+        Task<T?> GetTrackedByIdAsync(TId id, CancellationToken cancellationToken = default);
 
-        Task<bool> ExistsAsync(Guid id, CancellationToken cancellationToken = default);
+        Task<bool> ExistsAsync(TId id, CancellationToken cancellationToken = default);
     }
 }

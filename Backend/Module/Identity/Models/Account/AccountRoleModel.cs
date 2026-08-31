@@ -9,6 +9,7 @@ namespace Identity.Models.Account
             AccountId = accountId;
             RoleId = roleId;
         }
+
         public Guid AccountId { get; init; }
 
         public Guid RoleId { get; init; }

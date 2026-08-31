@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Identity.Infrastructure.Repository.Role
 {
-    public class RoleRepository(IdentityDbContext context) : IBaseAuthorizationRepository<RoleModel, ESystemRoleCode>
+    public class RoleRepository(IdentityDbContext context) : IBaseAuthorizationRepository<RoleModel, ESystemRoleCode, Guid>
     {
         private readonly IdentityDbContext _db = context;
 

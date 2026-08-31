@@ -19,10 +19,12 @@ namespace Identity.Infrastructure.Repository.Role
             }
             var existedRolePermission = await GetByIdAsync(entity.RoleId, entity.PermissionId, cancellationToken);
             if (existedRolePermission is not null)
+            {
                 throw new InvalidOperationException("RoleModel permission already exist!");
+            }
             await _db.RolePermissions.AddAsync(entity, cancellationToken);
         }
-        
+
         public async Task AddRangeAsync(List<RolePermissionModel> entities, CancellationToken cancellationToken = default)
         {
             if (entities is null || entities.Count == 0)

@@ -32,15 +32,6 @@ namespace Identity.Infrastructure.Persistence.Configurations
                 .HasMaxLength(255)
                 .IsRequired();
 
-            entity.Property(account => account.AccountPhoneNumber)
-                .HasColumnName("account_phone_number")
-                .HasMaxLength(10)
-                .IsUnicode(false)
-                .IsRequired(false);
-
-            entity.HasIndex(account => account.AccountPhoneNumber)
-                .HasDatabaseName("idx_account_phone_number");
-
             entity.Property(account => account.AccountIsActive)
                 .HasColumnName("account_is_active")
                 .HasDefaultValue(true)

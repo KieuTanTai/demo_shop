@@ -1,6 +1,6 @@
 using Identity.Infrastructure.Persistence.DBContext;
 using Identity.Infrastructure.Repository;
-using Identity.Infrastructure.Repository.Account;
+using Identity.Infrastructure.Repository.AccountRepository;
 using Identity.Infrastructure.Repository.Permission;
 using Identity.Infrastructure.Repository.Role;
 using Identity.Interfaces.IRepository;
@@ -44,8 +44,8 @@ namespace Identity.Infrastructure.DIContainer
 
             services.AddScoped<IUnitOfWork, EfIdentityUnitOfWork>();
             services.AddScoped<IAccountRepository, AccountRepository>();
-            services.AddScoped<IBaseAuthorizationRepository<RoleModel, ESystemRoleCode>, RoleRepository>();
-            services.AddScoped<IBaseAuthorizationRepository<PermissionModel, ESystemPermissionCode>, PermissionRepository>();
+            services.AddScoped<IBaseAuthorizationRepository<RoleModel, ESystemRoleCode, Guid>, RoleRepository>();
+            services.AddScoped<IBaseAuthorizationRepository<PermissionModel, ESystemPermissionCode, Guid>, PermissionRepository>();
             services.AddScoped<IBaseAssociativeRepository<AccountAdditionalPermissionModel, Guid>, AccountAdditionalPermissionRepository>();
             services.AddScoped<IBaseAssociativeRepository<AccountRoleModel, Guid>, AccountRoleRepository>();
             services.AddScoped<IBaseAssociativeRepository<RolePermissionModel, Guid>, RolePermissionRepository>();

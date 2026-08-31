@@ -85,6 +85,23 @@ CREATE TABLE `account_additional_permission`
         FOREIGN KEY (`permission_id`) REFERENCES `permission` (`permission_id`)
 );
 
+CREATE TABLE `user_profile`
+(
+    `user_profile_id`           INT PRIMARY KEY AUTO_INCREMENT,
+    `user_profile_account_id`   UUID,
+    `user_profile_first_name`   VARCHAR(150),
+    `user_profile_last_name`    VARCHAR(150),
+    `user_profile_phone_number` VARCHAR(10),
+    `user_profile_avatar_url`   VARCHAR(255),
+    `user_profile_created_at`   TIMESTAMP DEFAULT (NOW()),
+    `user_profile_updated_at`   TIMESTAMP DEFAULT (NOW()),
+
+    CONSTRAINT `fk_user_profile_account`
+        FOREIGN KEY (`user_profile_account_id`) REFERENCES `account` (`account_id`),
+
+    INDEX `idx_user_profile_phone_number` (`user_profile_phone_number`)
+);
+
 DELIMITER //
 
 CREATE TRIGGER `trigger_permission_code_immutable`
@@ -111,9 +128,42 @@ END //
 
 DELIMITER ;
 
-select * from account;
-select * from role;
-select * from permission;
-select * from account_role;
-select * from role_permission;
-select * from account_additional_permission;
+ALTER TABLE `user_profile`
+    ADD column `user_profile_date_of_birth` DATE AFTER `user_profile_last_name`,
+    ADD column `user_profile_gender`        ENUM ('male', 'female', 'unspecified') AFTER `user_profile_date_of_birth`;
+
+ALTER TABLE `user_profile`
+    MODIFY `user_profile_account_id` UUID NOT NULL;
+
+ALTER TABLE `user_profile`
+    MODIFY `user_profile_gender` ENUM ('male', 'female', 'unspecified') NOT NULL DEFAULT 'unspecified';
+
+ALTER TABLE `user_profile`
+    MODIFY `user_profile_first_name` VARCHAR(30),
+    MODIFY `user_profile_last_name` VARCHAR(30);
+
+ALTER TABLE `account`
+    DROP INDEX `idx_account_phone_number`,
+    DROP COLUMN `account_phone_number`;
+
+show columns from user_profile;
+select *
+from account;
+
+select *
+from user_profile;
+
+select *
+from role;
+
+select *
+from permission;
+
+select *
+from account_role;
+
+select *
+from role_permission;
+
+select *
+from account_additional_permission;

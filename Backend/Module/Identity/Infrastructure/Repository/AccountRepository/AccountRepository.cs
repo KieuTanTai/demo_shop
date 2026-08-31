@@ -1,12 +1,10 @@
 using Identity.Infrastructure.Persistence.DBContext;
-using Identity.Interfaces;
 using Identity.Interfaces.IRepository;
 using Identity.Models.Account;
-using Identity.Utils;
 using Microsoft.EntityFrameworkCore;
 using Shared.Persistence;
 
-namespace Identity.Infrastructure.Repository.Account
+namespace Identity.Infrastructure.Repository.AccountRepository
 {
     public class AccountRepository(IdentityDbContext context) : IAccountRepository
     {
@@ -34,29 +32,17 @@ namespace Identity.Infrastructure.Repository.Account
                 cancellationToken);
         }
 
-        public async Task<RecordBaseCursorPage<AccountModel>> GetAccountByPhoneNumberAsync(Guid? cursor, string phoneNumber, int pageSize,
-            CancellationToken cancellationToken = default)
-        {
-            ArgumentOutOfRangeException.ThrowIfLessThan(pageSize, 1);
-            var query = _db.Accounts.AsNoTracking();
-            if (cursor.HasValue)
-            {
-                query = query.Where(account => account.AccountId < cursor.Value);
-            }
-            query = query.Where(account => account.AccountPhoneNumber != null && account.AccountPhoneNumber.Contains(phoneNumber));
-            query = query.OrderByDescending(account => account.AccountId);
-            var accounts = query.ToAsyncEnumerable();
-            return await SharedGetApplyPagingRepository.ApplyPaging(accounts, pageSize, account => account.AccountId,
-                cancellationToken);
-        }
-
         public async Task<AccountModel> GetAccountByEmailAsync(string email,
             CancellationToken cancellationToken = default)
         {
-            var account =
-                await _db.Accounts.FirstOrDefaultAsync(account => account.AccountEmail == email, cancellationToken);
-            return account ?? throw new InvalidOperationException("Account not found!");
-            
+            return await _db.Accounts.AsNoTracking()
+                       .FirstOrDefaultAsync(account => account.AccountEmail == email, cancellationToken)
+                   ?? throw new InvalidOperationException("AccountModel not found!");
+        }
+
+        public async Task<AccountModel> GetTrackedAccountByEmailAsync(string email, CancellationToken cancellationToken = default)
+        {
+            return await _db.Accounts.FirstOrDefaultAsync(account => account.AccountEmail == email, cancellationToken) ?? throw new InvalidOperationException("AccountModel not found!");
         }
 
         public async Task<bool> ExistsAsync(Guid id, CancellationToken cancellationToken = default)
@@ -141,7 +127,7 @@ namespace Identity.Infrastructure.Repository.Account
             }
             _db.Accounts.Update(accountModel);
         }
-        
+
         #endregion
     }
 }

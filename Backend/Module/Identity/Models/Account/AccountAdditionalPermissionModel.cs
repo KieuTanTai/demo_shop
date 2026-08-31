@@ -9,6 +9,7 @@ namespace Identity.Models.Account
             AccountId = accountId;
             PermissionId = permissionId;
         }
+
         public Guid AccountId { get; init; }
 
         public Guid PermissionId { get; init; }

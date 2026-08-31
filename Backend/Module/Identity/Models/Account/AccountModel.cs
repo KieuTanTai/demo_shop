@@ -1,12 +1,11 @@
 using System.ComponentModel.DataAnnotations;
-using System.Text.RegularExpressions;
 using Identity.Models.Permission;
 using Identity.Models.Role;
 using Shared.ModelHelper;
 
 namespace Identity.Models.Account
 {
-    public partial class AccountModel
+    public class AccountModel
     {
         public AccountModel(string email, string password)
         {
@@ -14,14 +13,13 @@ namespace Identity.Models.Account
             AccountPassword = ModelFieldGuard.Required(password, 255, nameof(password));
         }
 
-        public AccountModel(string accountEmail, string? accountPassword, string? accountPhoneNumber, bool accountIsActive)
+        public AccountModel(string accountEmail, string? accountPassword, bool accountIsActive)
         {
             AccountEmail = ModelFieldGuard.Required(accountEmail, 255, nameof(accountEmail));
             AccountPassword = ModelFieldGuard.Required(accountPassword, 255, nameof(accountPassword));
-            AccountPhoneNumber = accountPhoneNumber;
             AccountIsActive = accountIsActive;
         }
-        
+
         public AccountModel(Guid accountId, string? accountEmail, string? accountPassword, bool accountIsActive)
         {
             AccountId = accountId;
@@ -30,30 +28,19 @@ namespace Identity.Models.Account
             AccountIsActive = accountIsActive;
         }
 
-        public AccountModel(Guid accountId, string? accountPhoneNumber, bool accountIsActive)
+        public AccountModel(Guid accountId, bool accountIsActive)
         {
             AccountId = accountId;
-            AccountPhoneNumber = accountPhoneNumber;
-            AccountIsActive = accountIsActive;
-        }
-
-        public AccountModel(Guid accountId, string? accountPhoneNumber, string? accountEmail, string? accountPassword, bool accountIsActive)
-        {
-            AccountId = accountId;
-            AccountPhoneNumber = accountPhoneNumber;
-            AccountEmail = accountEmail;
-            AccountPassword = accountPassword;
             AccountIsActive = accountIsActive;
         }
 
         public AccountModel() {}
+
         public Guid AccountId { get; init; }
 
         [MaxLength(255)] public string? AccountEmail { get; private set; } = string.Empty;
 
         [MaxLength(255)] public string? AccountPassword { get; private set; } = string.Empty;
-
-        [MaxLength(10)] public string? AccountPhoneNumber { get; private set; }
 
         public bool AccountIsActive { get; private set; } = true;
 
@@ -91,30 +78,6 @@ namespace Identity.Models.Account
             AccountUpdatedAt = DateTime.Now;
         }
 
-        public void ClearAccountPhoneNumber()
-        {
-            if (AccountPhoneNumber is null)
-            {
-                return;
-            }
-
-            AccountPhoneNumber = null;
-            AccountUpdatedAt = DateTime.Now;
-        }
-
-        public void SetAccountPhoneNumber(string phone)
-        {
-            var baseValidPhone = ModelFieldGuard.Required(phone, 10, nameof(phone));
-            if (!MyRegex().IsMatch(baseValidPhone))
-            {
-                throw new ArgumentException("Phone number must be a valid Vietnamese 10-digit phone number.",
-                    nameof(phone));
-            }
-
-            AccountPhoneNumber = baseValidPhone;
-            AccountUpdatedAt = DateTime.Now;
-        }
-
         public void SetRoles(IReadOnlyList<RoleModel> roles)
         {
             Roles = roles;
@@ -125,8 +88,6 @@ namespace Identity.Models.Account
             Permissions = permissions;
         }
 
-        [GeneratedRegex(@"^(03|05|07|08|09)\d{8}$")]
-        private static partial Regex MyRegex();
         #endregion
     }
 }

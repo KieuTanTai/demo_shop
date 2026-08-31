@@ -17,7 +17,7 @@ namespace Identity.Utils
 
             ESystemPermissionCode.PurchaseCreate
         ];
-        
+
         #endregion
 
         #region Employee
@@ -30,7 +30,6 @@ namespace Identity.Utils
             ESystemPermissionCode.RoleRead,
             ESystemPermissionCode.PermissionRead
         ];
-
 
         #endregion
 
@@ -128,7 +127,6 @@ namespace Identity.Utils
             // Statistics
             ESystemPermissionCode.StatisticsRead
         ];
-
 
         #endregion
 
