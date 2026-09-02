@@ -23,6 +23,14 @@
         <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.0"/>
 
         <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="9.0.0"/>
+
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="10.2.3" />
+
+        <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="10.2.3" />
+
+        <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="10.2.3" />
+
+        <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="10.2.3" />
     </ItemGroup>
 
 </Project>

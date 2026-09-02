@@ -2,11 +2,13 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Identity.Presentation.DTO.Account
 {
-    public record RegisterOrLoginRequest(
+    public record AuthAndRegistrationRequestDto(
         [Required]
         [EmailAddress]
         string Email,
+        
         [Required]
+        [DataType(DataType.Password)]
         string Password
     );
 }

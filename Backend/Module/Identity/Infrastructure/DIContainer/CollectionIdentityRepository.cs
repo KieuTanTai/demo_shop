@@ -20,9 +20,9 @@ namespace Identity.Infrastructure.DIContainer
         {
             #region CONFIG
 
-            var connectionString = configuration.GetConnectionString("Identity")
+            var connectionString = configuration.GetConnectionString("IdentityTest")
                                    ?? throw new InvalidOperationException(
-                                       "Connection string 'Identity' was not found.");
+                                       "Connection string 'IdentityTest' was not found.");
 
             services.AddDbContext<IdentityDbContext>(options => {
                 options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));

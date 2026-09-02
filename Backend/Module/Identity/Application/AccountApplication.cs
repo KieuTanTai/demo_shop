@@ -2,9 +2,6 @@ using Identity.Interfaces;
 using Identity.Interfaces.IApplication;
 using Identity.Interfaces.IRepository;
 using Identity.Models.Account;
-using Identity.Models.Permission;
-using Identity.Models.Role;
-using Identity.Utils.Enum;
 using Shared.Interfaces;
 using Shared.Persistence;
 
@@ -14,29 +11,19 @@ namespace Identity.Application
         IUnitOfWork unitOfWork,
         IAccountRepository accountRepository,
         IBaseAssociativeRepository<AccountRoleModel, Guid> accountRoleRepository,
-        IBaseAssociativeRepository<AccountAdditionalPermissionModel, Guid> accountPermissionRepository,
-        IBaseAssociativeRepository<RolePermissionModel, Guid> rolePermissionRepository,
-        IBaseAuthorizationRepository<RoleModel, ESystemRoleCode, Guid> roleRepository,
-        IBaseAuthorizationRepository<PermissionModel, ESystemPermissionCode, Guid> permissionRepository,
         IRoleApplication roleApplication,
         IAccountHelper accountHelper)
         : IAccountApplication
     {
         private readonly IAccountHelper _accountHelper = accountHelper;
 
-        private readonly IBaseAssociativeRepository<AccountAdditionalPermissionModel, Guid> _accountPermissionRepository = accountPermissionRepository;
 
         private readonly IAccountRepository _accountRepository = accountRepository;
 
         private readonly IBaseAssociativeRepository<AccountRoleModel, Guid> _accountRoleRepository = accountRoleRepository;
 
-        private readonly IBaseAuthorizationRepository<PermissionModel, ESystemPermissionCode, Guid> _permissionRepository = permissionRepository;
 
         private readonly IRoleApplication _roleApplication = roleApplication;
-
-        private readonly IBaseAssociativeRepository<RolePermissionModel, Guid> _rolePermissionRepository = rolePermissionRepository;
-
-        private readonly IBaseAuthorizationRepository<RoleModel, ESystemRoleCode, Guid> _roleRepository = roleRepository;
 
         private readonly IUnitOfWork _unitOfWork = unitOfWork;
 
@@ -73,7 +60,7 @@ namespace Identity.Application
         public async Task<AccountModel> LoginAsync(string email, string password, CancellationToken cancellationToken = default)
         {
             CheckValidEmailAndPassword(email, password); // throw exception if email or password is invalid
-            var accountModel = await GetAccountByEmailAsync(email, cancellationToken);
+            var accountModel = await GetAccountByEmailAsync(email, false, cancellationToken);
             if (!accountModel.AccountIsActive)
             {
                 throw new InvalidOperationException("Account is not active.");
@@ -86,15 +73,21 @@ namespace Identity.Application
             throw new NotImplementedException();
         }
 
-        public async Task<int> ChangePasswordAsync(string email, string oldPassword, string newPassword, CancellationToken cancellationToken = default)
+        public async Task<int> ChangePasswordAsync(string email,string oldPassword, string newPassword, CancellationToken cancellationToken = default)
         {
+            if (string.CompareOrdinal(oldPassword, newPassword) == 0)
+                throw new ArgumentException("New password must be different from old password.", nameof(newPassword));
+
             CheckValidEmailAndPassword(email, oldPassword);
             if (!_accountHelper.IsPasswordValid(newPassword))
             {
                 throw new ArgumentException("Account password is invalid.", nameof(newPassword));
             }
 
-            var accountModel = await GetAccountByEmailAsync(email, cancellationToken);
+            var accountModel = await GetAccountByEmailAsync(email, true, cancellationToken);
+            if (!accountModel.AccountIsActive)
+                throw new InvalidOperationException("Account is not active.");
+            
             if (!_accountHelper.PasswordVerify(accountModel, oldPassword, accountModel.AccountPassword!))
             {
                 throw new InvalidOperationException("Account password is invalid.");
@@ -106,30 +99,16 @@ namespace Identity.Application
             return await _unitOfWork.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task<int> InactiveAccountAsync(Guid? accountId, string? email, CancellationToken cancellationToken = default)
+        public async Task<int> InactiveAccountAsync(string email, string password, CancellationToken cancellationToken = default)
         {
-            AccountModel? result = null;
-            if (accountId == null && email == null)
-            {
-                throw new ArgumentException("AccountModel id or email is required.", nameof(accountId));
-            }
-
-            if (accountId != null)
-            {
-                result = await _accountRepository.GetTrackedByIdAsync(accountId.Value, cancellationToken);
-            }
-            else if (email != null)
-            {
-                result = await GetAccountByEmailAsync(email, true, cancellationToken);
-            }
-
-            if (result == null)
-            {
-                throw new ArgumentException("Account not found.", nameof(accountId));
-            }
-
-            result.SetAccountIsActive(false);
-            await _accountRepository.UpdateAsync(result, cancellationToken);
+            CheckValidEmailAndPassword(email, password);
+            var accountModel = await GetAccountByEmailAsync(email, true, cancellationToken);
+            if (!_accountHelper.PasswordVerify(accountModel, password, accountModel.AccountPassword!))
+                throw new InvalidOperationException("Account password is invalid.");
+            if (!accountModel.AccountIsActive)
+                throw new InvalidOperationException("Account is already inactive.");
+            accountModel.SetAccountIsActive(false);
+            await _accountRepository.UpdateAsync(accountModel, cancellationToken);
             return await _unitOfWork.SaveChangesAsync(cancellationToken);
         }
 
@@ -137,6 +116,23 @@ namespace Identity.Application
 
         #region ADMIN
 
+        public async Task<int> InactiveAccountByAdminAsync(Guid accountId, CancellationToken cancellationToken = default)
+        {
+
+            var result = await _accountRepository.GetByIdAsync(accountId, cancellationToken);
+
+            if (result == null)
+            {
+                throw new ArgumentException("Account not found.", nameof(accountId));
+            }
+            
+            if (!result.AccountIsActive)
+                throw new InvalidOperationException("Account is already inactive.");
+            result.SetAccountIsActive(false);
+            await _accountRepository.UpdateAsync(result, cancellationToken);
+            return await _unitOfWork.SaveChangesAsync(cancellationToken);
+        }
+        
         public async Task<IReadOnlyList<AccountModel>> GetAllAccountAsync(CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
@@ -148,11 +144,6 @@ namespace Identity.Application
         }
 
         public async Task<RecordBaseCursorPage<AccountModel>> GetApplyPagingByStatusAsync(Guid? cursor, int pageSize, bool isActive, CancellationToken cancellationToken = default)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<AccountModel> GetAccountByEmailAsync(string email, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }
@@ -173,10 +164,17 @@ namespace Identity.Application
                 return;
             }
 
-            var existedAccount = await _accountRepository.GetAccountByEmailAsync(email, cancellationToken);
-            if (existedAccount != null)
+            try
             {
-                throw new ArgumentException("Account email is existed.", nameof(email));
+                var existedAccount = await _accountRepository.GetAccountByEmailAsync(email, cancellationToken);
+                if (existedAccount != null)
+                {
+                    throw new ArgumentException("Account email is existed.", nameof(email));
+                }
+            }
+            catch (InvalidOperationException)
+            {
+                //valid for register
             }
         }
 
