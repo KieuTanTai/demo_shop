@@ -11,9 +11,16 @@ namespace Frontend.Controllers
             return View();
         }
 
+        [HttpGet("/privacy")]
         public IActionResult Privacy()
         {
             return View();
+        }
+
+        [HttpGet("/welcome/{name?}")]
+        public string Welcome(string name = "World")
+        {
+            return $"Hello {name}!";
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

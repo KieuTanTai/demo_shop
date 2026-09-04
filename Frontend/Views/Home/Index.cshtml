@@ -1,14 +1,20 @@
-﻿@{
-    ViewData["Title"] = "Index";
+@{
+    ViewData["Title"] = "Products";
 }
 
 <section class="index-page">
     <div class="page-heading">
-        <p class="page-kicker">Base page</p>
-        <h1>Index</h1>
+        <p class="page-kicker">Collection</p>
+        <h1>Featured products</h1>
     </div>
 
-    <div class="content-placeholder">
-        <span class="text-4xl font-bold text-indigo-600 drop-shadow-md">Main content placeholder</span>
-    </div>
+    <section class="content-placeholder sample-content items-start justify-start p-5 text-left">
+        <div class="w-full">
+            <p class="page-kicker">Main content</p>
+            <h2 class="mt-1 text-xl font-bold text-(--ink)">Sample content container</h2>
+            <p class="mt-1 text-sm text-(--muted)">This reusable area can hold filters, summaries, or another page section.</p>
+        </div>
+    </section>
+
+    @await Html.PartialAsync("_ProductShowcase")
 </section>
