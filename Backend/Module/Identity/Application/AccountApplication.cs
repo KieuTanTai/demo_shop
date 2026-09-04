@@ -42,9 +42,8 @@ namespace Identity.Application
                 var accountRole = new AccountRoleModel(accountModel.AccountId, baseRole.RoleId);
                 await _accountRepository.AddAsync(accountModel, cancellationToken);
                 await _accountRoleRepository.AddAsync(accountRole, cancellationToken);
-                var result = await _unitOfWork.SaveChangesAsync(cancellationToken);
-
-                return accountModel;
+                var affectRows = await _unitOfWork.SaveChangesAsync(cancellationToken);
+                return affectRows == 0 ? throw new InvalidOperationException("Failed to add account.") : accountModel;
             }
             catch (OperationCanceledException canceledException)
             {
@@ -52,7 +51,7 @@ namespace Identity.Application
             }
             catch (Exception e)
             {
-                throw new InvalidOperationException("Failed to add account.", e);
+                throw new InvalidOperationException($"Failed to add account: {e.Message}", e);
             }
         }
 
@@ -65,7 +64,9 @@ namespace Identity.Application
             {
                 throw new InvalidOperationException("Account is not active.");
             }
-            return !_accountHelper.PasswordVerify(accountModel, password, accountModel.AccountPassword!) ? throw new InvalidOperationException("Account password is invalid.") : accountModel;
+            return !_accountHelper.PasswordVerify(accountModel, password, accountModel.AccountPassword!)
+                ? throw new InvalidOperationException($@"Account password is invalid: {accountModel.AccountPassword}")
+                : accountModel;
         }
 
         public async Task<bool> LogoutAsync(string email, CancellationToken cancellationToken = default)
@@ -73,10 +74,12 @@ namespace Identity.Application
             throw new NotImplementedException();
         }
 
-        public async Task<int> ChangePasswordAsync(string email,string oldPassword, string newPassword, CancellationToken cancellationToken = default)
+        public async Task<int> ChangePasswordAsync(string email, string oldPassword, string newPassword, CancellationToken cancellationToken = default)
         {
             if (string.CompareOrdinal(oldPassword, newPassword) == 0)
+            {
                 throw new ArgumentException("New password must be different from old password.", nameof(newPassword));
+            }
 
             CheckValidEmailAndPassword(email, oldPassword);
             if (!_accountHelper.IsPasswordValid(newPassword))
@@ -86,8 +89,10 @@ namespace Identity.Application
 
             var accountModel = await GetAccountByEmailAsync(email, true, cancellationToken);
             if (!accountModel.AccountIsActive)
+            {
                 throw new InvalidOperationException("Account is not active.");
-            
+            }
+
             if (!_accountHelper.PasswordVerify(accountModel, oldPassword, accountModel.AccountPassword!))
             {
                 throw new InvalidOperationException("Account password is invalid.");
@@ -96,7 +101,8 @@ namespace Identity.Application
             var hashedPassword = _accountHelper.GetPasswordHash(accountModel, newPassword);
             accountModel.SetHashedPassword(hashedPassword);
             await _accountRepository.UpdateAsync(accountModel, cancellationToken);
-            return await _unitOfWork.SaveChangesAsync(cancellationToken);
+            var affectRows = await _unitOfWork.SaveChangesAsync(cancellationToken);
+            return affectRows == 0 ? throw new InvalidOperationException("Failed to change password.") : affectRows;
         }
 
         public async Task<int> InactiveAccountAsync(string email, string password, CancellationToken cancellationToken = default)
@@ -104,12 +110,17 @@ namespace Identity.Application
             CheckValidEmailAndPassword(email, password);
             var accountModel = await GetAccountByEmailAsync(email, true, cancellationToken);
             if (!_accountHelper.PasswordVerify(accountModel, password, accountModel.AccountPassword!))
+            {
                 throw new InvalidOperationException("Account password is invalid.");
+            }
             if (!accountModel.AccountIsActive)
+            {
                 throw new InvalidOperationException("Account is already inactive.");
+            }
             accountModel.SetAccountIsActive(false);
             await _accountRepository.UpdateAsync(accountModel, cancellationToken);
-            return await _unitOfWork.SaveChangesAsync(cancellationToken);
+            var affectRows = await _unitOfWork.SaveChangesAsync(cancellationToken);
+            return affectRows == 0 ? throw new InvalidOperationException("Failed to inactive account.") : affectRows;
         }
 
         #endregion
@@ -118,21 +129,23 @@ namespace Identity.Application
 
         public async Task<int> InactiveAccountByAdminAsync(Guid accountId, CancellationToken cancellationToken = default)
         {
-
             var result = await _accountRepository.GetByIdAsync(accountId, cancellationToken);
 
             if (result == null)
             {
                 throw new ArgumentException("Account not found.", nameof(accountId));
             }
-            
+
             if (!result.AccountIsActive)
+            {
                 throw new InvalidOperationException("Account is already inactive.");
+            }
             result.SetAccountIsActive(false);
             await _accountRepository.UpdateAsync(result, cancellationToken);
-            return await _unitOfWork.SaveChangesAsync(cancellationToken);
+            var affectRows = await _unitOfWork.SaveChangesAsync(cancellationToken);
+            return affectRows == 0 ? throw new InvalidOperationException("Failed to inactive account.") : affectRows;
         }
-        
+
         public async Task<IReadOnlyList<AccountModel>> GetAllAccountAsync(CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();

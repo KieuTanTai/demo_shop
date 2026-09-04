@@ -9,6 +9,6 @@ namespace Identity.Models
         public bool RequireDigit { get; init; }
         public bool RequiredSpecialCharacter { get; init; }
         public string RegexForEmail { get; init; } = "";
-        public string RegexForPhoneNumber { get; init; } = "";  
+        public string RegexForPhoneNumber { get; init; } = "";
     }
 }

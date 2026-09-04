@@ -68,11 +68,13 @@ namespace Identity.Utils
         {
             return _hasher.VerifyHashedPassword(account, hash, password) == PasswordVerificationResult.Success;
         }
-        
+
         public Tuple<bool, string> ValidateEmailAndPassword(string email, string password)
         {
             if (string.IsNullOrWhiteSpace(email))
+            {
                 return Tuple.Create(false, "Email is required.");
+            }
             return string.IsNullOrWhiteSpace(password) ? Tuple.Create(false, "Password is required.") : Tuple.Create(true, string.Empty);
         }
     }

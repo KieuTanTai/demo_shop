@@ -21,7 +21,7 @@ namespace Identity.Infrastructure.DIContainer
                 options.CompatibilityMode = PasswordHasherCompatibilityMode.IdentityV3;
                 options.IterationCount = configuration.GetValue<int>("PasswordHasherOptions:IterationCount");
             });
-            
+
             #endregion
 
             services.AddSingleton(accountRules);

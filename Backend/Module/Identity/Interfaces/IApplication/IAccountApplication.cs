@@ -9,7 +9,7 @@ namespace Identity.Interfaces.IApplication
         Task<bool> LogoutAsync(string email, CancellationToken cancellationToken = default);
         Task<int> ChangePasswordAsync(string email, string oldPassword, string newPassword, CancellationToken cancellationToken = default);
         Task<int> InactiveAccountAsync(string email, string password, CancellationToken cancellationToken = default);
-        
+
         // Methods for admins
         Task<int> InactiveAccountByAdminAsync(Guid accountId, CancellationToken cancellationToken = default);
         // Task<IReadOnlyList<AccountModel>> GetAllAccountAsync(CancellationToken cancellationToken = default);
