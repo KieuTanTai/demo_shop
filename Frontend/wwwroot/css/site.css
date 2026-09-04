@@ -12,12 +12,13 @@ html {
     --header-surface: var(--surface);
     --header-border: #e2e8f0;
     --header-actions-bg: #f8fafc;
-    --menu-bg: #eff6ff;
+    --menu-bg: #f0fbff;
     --menu-hover: #dbeafe;
     --menu-border: #bfdbfe;
     --menu-open-bg: var(--menu-hover);
     --menu-open-text: #0f172a;
-
+    --menu-border-radius: 0.4rem;
+    
     /* Footer */
     --footer-surface: var(--surface);
     --footer-border: var(--header-border);
@@ -74,8 +75,9 @@ input {
     font: inherit;
 }
 
-.account-menu {
+#menu-toggle-btn {
     position: relative;
+    background: var(--menu-bg);
 }
 
 .account-menu::after {
@@ -95,7 +97,6 @@ input {
     z-index: 19;
     width: 1rem;
     height: 1rem;
-    background: var(--menu-bg);
     border-top: 1px solid var(--menu-border);
     border-left: 1px solid var(--menu-border);
     opacity: 0;
@@ -135,7 +136,6 @@ input {
     border-radius: var(--radius-container);
 }
 
-.sidebar-toggle,
 .auth-popup button,
 .product-popup button,
 .product-card button {

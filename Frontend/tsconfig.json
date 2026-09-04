@@ -6,6 +6,7 @@
     "removeComments": false,
     "sourceMap": true,
     "target": "ES6",
+    "module": "ES2020",
     "rootDir": "./scripts",
     "outDir": "wwwroot/js"
   },
