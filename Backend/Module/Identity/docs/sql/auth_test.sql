@@ -146,6 +146,13 @@ ALTER TABLE `account`
     DROP INDEX `idx_account_phone_number`,
     DROP COLUMN `account_phone_number`;
 
+ALTER TABLE `user_profile`
+    DROP COLUMN `user_profile_background_url`;
+
+ALTER TABLE `user_profile`
+    ADD COLUMN `user_profile_background_url` VARCHAR(255) AFTER `user_profile_avatar_url`;
+
+
 show columns from user_profile;
 select *
 from account;

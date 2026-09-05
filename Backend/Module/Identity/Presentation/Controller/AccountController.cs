@@ -45,7 +45,7 @@ namespace Identity.Presentation.Controller
         }
 
         [RequireHttps]
-        [HttpPost("loginRequest")]
+        [HttpPost("login")]
         public async Task<ActionResult<RecordAuthResponse>> LoginAsync([FromBody] RecordAuthRequest requestDto, CancellationToken cancellationToken = default)
         {
             var (isValid, errorMessage) = _helper.ValidateEmailAndPassword(requestDto.Email, requestDto.Password);
@@ -163,11 +163,12 @@ namespace Identity.Presentation.Controller
 
         #region PRIVATE
 
-        private RecordAuthResponse MappingResult(AccountModel result)
+        private static RecordAuthResponse MappingResult(AccountModel result)
         {
             var roleNames = result.Roles.Select(role => role.RoleName).ToList();
             var response = new RecordAuthResponse(result.AccountEmail!, result.AccountIsActive, roleNames,
-                result.UserProfile?.UserProfileFirstName, result.UserProfile?.UserProfileLastName, result.UserProfile?.UserProfileAvatarUrl,
+                result.UserProfile?.UserProfileFirstName, result.UserProfile?.UserProfileLastName,
+                result.UserProfile?.UserProfileAvatarUrl, result.UserProfile?.UserProfileBackgroundUrl,
                 result.UserProfile?.UserProfilePhoneNumber, result.UserProfile?.UserProfileDateOfBirth, result.UserProfile!.UserProfileGender, result.AccountCreatedAt, result.AccountUpdatedAt);
             return response;
         }

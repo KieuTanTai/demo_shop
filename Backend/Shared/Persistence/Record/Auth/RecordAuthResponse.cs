@@ -9,6 +9,7 @@ namespace Shared.Persistence.Record.Auth
         string? FirstName,
         string? LastName,
         string? AvatarUrl,
+        string? BackgroundUrl,
         string? PhoneNumber,
         DateOnly? DateOfBirth,
         ESystemUserGender Gender, 

@@ -44,6 +44,10 @@ namespace Identity.Infrastructure.Persistence.Configurations
                 .HasColumnName("user_profile_avatar_url")
                 .HasMaxLength(255);
 
+            entity.Property(userProfile => userProfile.UserProfileBackgroundUrl)
+                .HasColumnName("user_profile_background_url")
+                .HasMaxLength(255);
+
             entity.Property(userProfile => userProfile.UserProfileCreatedAt)
                 .HasColumnName("user_profile_created_at")
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")

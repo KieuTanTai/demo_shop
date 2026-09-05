@@ -7,7 +7,7 @@ namespace Identity.Models.Profile
     public class UserProfileModel
     {
         public UserProfileModel(int userProfileId, Guid userProfileAccountId, string userProfileFirstName, string userProfileLastName, DateOnly userProfileBirthday, ESystemUserGender userProfileGender,
-            string userProfilePhoneNumber, string userProfileAvatar)
+            string userProfilePhoneNumber, string userProfileAvatar, string userProfileBackground)
         {
             UserProfileId = userProfileId;
             UserProfileAccountId = userProfileAccountId;
@@ -17,6 +17,7 @@ namespace Identity.Models.Profile
             UserProfileGender = userProfileGender;
             UserProfilePhoneNumber = userProfilePhoneNumber ?? throw new ArgumentNullException(nameof(userProfilePhoneNumber));
             UserProfileAvatarUrl = userProfileAvatar ?? throw new ArgumentNullException(nameof(userProfileAvatar));
+            UserProfileBackgroundUrl = userProfileBackground ?? throw new ArgumentNullException(nameof(userProfileBackground));
         }
 
         public UserProfileModel(Guid userProfileAccountId, string userProfileFirstName, string userProfileLastName, DateOnly userProfileBirthday, ESystemUserGender userProfileGender)
@@ -51,6 +52,9 @@ namespace Identity.Models.Profile
 
         [MaxLength(255)]
         public string UserProfileAvatarUrl { get; private set; } = "";
+
+        [MaxLength(255)]
+        public string UserProfileBackgroundUrl { get; private set; } = "";
 
         public DateTime UserProfileCreatedAt { get; init; } = DateTime.Now;
         public DateTime UserProfileUpdatedAt { get; private set; } = DateTime.Now;
@@ -90,6 +94,12 @@ namespace Identity.Models.Profile
         public void SetUserProfileAvatar(string avatar)
         {
             UserProfileAvatarUrl = ModelFieldGuard.Required(avatar, 255, nameof(avatar));
+            UserProfileUpdatedAt = DateTime.Now;
+        }
+
+        public void SetUserProfileBackground(string background)
+        {
+            UserProfileBackgroundUrl = ModelFieldGuard.Required(background, 255, nameof(background));
             UserProfileUpdatedAt = DateTime.Now;
         }
 
