@@ -18,4 +18,8 @@
         <PackageReference Include="System.Composition.TypedParts" Version="11.0.0-preview.7.26381.103"/>
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Middleware\" />
+    </ItemGroup>
+
 </Project>

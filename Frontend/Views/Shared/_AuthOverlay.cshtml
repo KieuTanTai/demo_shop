@@ -1,5 +1,10 @@
-<div class="auth-overlay fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
-     data-auth-overlay hidden>
+@{
+    var authError = TempData["AuthError"]?.ToString();
+    var hasAuthError = !string.IsNullOrWhiteSpace(authError);
+}
+
+<div class="auth-overlay fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 @(hasAuthError ? "is-visible" : "")"
+     data-auth-overlay @(!hasAuthError ? "hidden" : "")>
     <section class="auth-popup relative w-full max-w-md bg-(--surface) p-5 shadow-xl"
              role="dialog" aria-modal="true" aria-label="Account form">
         <button
@@ -7,21 +12,23 @@
             type="button" aria-label="Close popup" data-auth-close>X
         </button>
 
-        <form class="auth-form active space-y-4" data-auth-form="login" novalidate>
+        <form class="auth-form active space-y-4" data-auth-form="login" method="post"
+              asp-controller="Auth" asp-action="Login">
+            @Html.AntiForgeryToken()
             <div class="auth-heading mb-1">
                 <h2>Login</h2>
             </div>
             <label class="auth-field block">
                 <span>Email</span>
                 <input class="mt-1 h-10 w-full border px-3 text-sm outline-none ring-(--accent) focus:ring-2"
-                       type="email" name="email" autocomplete="email" required/>
+                       type="email" name="email" autocomplete="email" />
             </label>
             <label class="auth-field block">
                 <span>Password</span>
                 <input class="mt-1 h-10 w-full border px-3 text-sm outline-none ring-(--accent) focus:ring-2"
-                       type="password" name="password" autocomplete="current-password" required/>
+                       type="password" name="password" autocomplete="current-password" />
             </label>
-            <div class="auth-message" role="alert" data-auth-message hidden></div>
+            <div class="auth-message" role="alert" data-auth-message @(!hasAuthError ? "hidden" : "")>@authError</div>
             <div class="auth-links flex gap-3 text-sm">
                 <button class="auth-switch-link text-(--accent) hover:underline" type="button"
                         data-auth-switch="signup">
@@ -36,6 +43,7 @@
         </form>
 
         <form class="auth-form space-y-4" data-auth-form="signup" novalidate>
+            @Html.AntiForgeryToken()
             <div class="auth-heading mb-1">
                 <h2>Register</h2>
             </div>
@@ -69,6 +77,7 @@
         </form>
 
         <form class="auth-form space-y-4" data-auth-form="forgot" data-forgot-form novalidate>
+            @Html.AntiForgeryToken()
             <div class="auth-heading mb-1">
                 <h2>Forgot password</h2>
             </div>

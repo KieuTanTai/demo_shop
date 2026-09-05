@@ -1,11 +1,12 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Identity.Presentation.Record
+namespace Shared.Persistence.Record.Auth
 {
-    public record RecordAuthAndRegistrationRequest(
+    public record RecordAuthRequest(
         [Required]
         [EmailAddress]
         string Email,
+        
         [Required]
         [DataType(DataType.Password)]
         string Password

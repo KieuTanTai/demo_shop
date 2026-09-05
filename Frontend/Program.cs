@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -6,6 +7,32 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews()
     .AddJsonOptions(options =>
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
+
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.Cookie.Name = "Frontend.Auth";
+        options.Cookie.HttpOnly = true;
+        options.Cookie.SameSite = SameSiteMode.Strict;
+        options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+        options.LoginPath = "/";
+    });
+
+builder.Services.Configure<CookiePolicyOptions>(options => {
+    builder.Configuration.GetSection("CookiePolicy").Bind(options);
+    options.Secure = CookieSecurePolicy.Always;
+    options.MinimumSameSitePolicy = SameSiteMode.Strict;
+});
+
+builder.Services.AddAntiforgery(options =>
+{
+    options.Cookie.Name = "Frontend.AntiForgery";
+    options.Cookie.HttpOnly = true;
+    options.Cookie.SameSite = SameSiteMode.Strict;
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+});
+
+builder.Services.AddAuthorization();
 builder.Services.AddHttpClient("BackendApiIdentityHttps", (serviceProvider, client) => {
     var configuration = serviceProvider.GetRequiredService<IConfiguration>();
     var baseUrl = configuration["BackendApi:IdentityHttps"] ?? throw new InvalidOperationException("BackendApi:PrefixHttps not found.");
@@ -24,7 +51,9 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseRouting();
+app.UseCookiePolicy();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapStaticAssets();

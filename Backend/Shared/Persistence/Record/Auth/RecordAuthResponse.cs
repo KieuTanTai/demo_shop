@@ -1,8 +1,8 @@
 using Shared.Enum;
 
-namespace Identity.Presentation.Record
+namespace Shared.Persistence.Record.Auth
 {
-    public record RecordAuthAndRegistrationResponse(
+    public record RecordAuthResponse(
         string Email,
         bool IsActive,
         List<string> RoleNames,

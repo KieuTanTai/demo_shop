@@ -3,6 +3,8 @@ using Identity.Interfaces.IApplication;
 using Identity.Models.Account;
 using Identity.Presentation.Record;
 using Microsoft.AspNetCore.Mvc;
+using Shared.Persistence.Record;
+using Shared.Persistence.Record.Auth;
 
 namespace Identity.Presentation.Controller
 {
@@ -18,7 +20,7 @@ namespace Identity.Presentation.Controller
 
         [RequireHttps]
         [HttpPost("register")]
-        public async Task<ActionResult<RecordAuthAndRegistrationResponse>> RegisterAsync([FromBody] RecordAuthAndRegistrationRequest requestDto, CancellationToken cancellationToken = default)
+        public async Task<ActionResult<RecordAuthResponse>> RegisterAsync([FromBody] RecordAuthRequest requestDto, CancellationToken cancellationToken = default)
         {
             var (isValid, errorMessage) = _helper.ValidateEmailAndPassword(requestDto.Email, requestDto.Password);
             if (!isValid)
@@ -44,7 +46,7 @@ namespace Identity.Presentation.Controller
 
         [RequireHttps]
         [HttpPost("loginRequest")]
-        public async Task<ActionResult<RecordAuthAndRegistrationResponse>> LoginAsync([FromBody] RecordAuthAndRegistrationRequest requestDto, CancellationToken cancellationToken = default)
+        public async Task<ActionResult<RecordAuthResponse>> LoginAsync([FromBody] RecordAuthRequest requestDto, CancellationToken cancellationToken = default)
         {
             var (isValid, errorMessage) = _helper.ValidateEmailAndPassword(requestDto.Email, requestDto.Password);
             if (!isValid)
@@ -161,10 +163,10 @@ namespace Identity.Presentation.Controller
 
         #region PRIVATE
 
-        private RecordAuthAndRegistrationResponse MappingResult(AccountModel result)
+        private RecordAuthResponse MappingResult(AccountModel result)
         {
             var roleNames = result.Roles.Select(role => role.RoleName).ToList();
-            var response = new RecordAuthAndRegistrationResponse(result.AccountEmail!, result.AccountIsActive, roleNames,
+            var response = new RecordAuthResponse(result.AccountEmail!, result.AccountIsActive, roleNames,
                 result.UserProfile?.UserProfileFirstName, result.UserProfile?.UserProfileLastName, result.UserProfile?.UserProfileAvatarUrl,
                 result.UserProfile?.UserProfilePhoneNumber, result.UserProfile?.UserProfileDateOfBirth, result.UserProfile!.UserProfileGender, result.AccountCreatedAt, result.AccountUpdatedAt);
             return response;

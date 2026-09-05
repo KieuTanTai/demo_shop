@@ -9,17 +9,26 @@
     <div
         class="account-dropdown absolute right-0 top-12 z-20 hidden min-w-40 rounded-(--radius-popup-container) border border-(--menu-border) bg-(--menu-bg) p-1 shadow-lg"
         aria-label="Account actions">
-        <button
-            class="account-action login block w-full rounded-(--radius-button) bg-(--button-primary) px-3 py-2 text-left text-sm font-semibold text-white hover:bg-(--button-primary-hover)"
-            type="button" data-auth-open="login" data-auth-guest>Login
-        </button>
-        <button
-            class="account-action signup mt-1 block w-full rounded-(--radius-button) border border-(--control-border) bg-(--surface) px-3 py-2 text-left text-sm font-semibold text-(--button-secondary-text) hover:bg-(--control-hover)"
-            type="button" data-auth-open="signup" data-auth-guest>Register
-        </button>
-        <button
-            class="account-action logout w-full rounded-(--radius-button) bg-(--button-danger) px-3 py-2 text-left text-sm font-semibold text-white hover:bg-(--button-danger-hover)"
-            type="button" data-authenticated-action hidden>Logout
-        </button>
+        @if (User.Identity?.IsAuthenticated == true)
+        {
+            <form asp-controller="Auth" asp-action="Logout" method="post" class="w-full">
+                @Html.AntiForgeryToken()
+                <button
+                    class="account-action logout w-full rounded-(--radius-button) bg-(--button-danger) px-3 py-2 text-left text-sm font-semibold text-white hover:bg-(--button-danger-hover)"
+                    type="submit">Logout
+                </button>
+            </form>
+        }
+        else
+        {
+            <button
+                class="account-action login block w-full rounded-(--radius-button) bg-(--button-primary) px-3 py-2 text-left text-sm font-semibold text-white hover:bg-(--button-primary-hover)"
+                type="button" data-auth-open="login">Login
+            </button>
+            <button
+                class="account-action signup mt-1 block w-full rounded-(--radius-button) border border-(--control-border) bg-(--surface) px-3 py-2 text-left text-sm font-semibold text-(--button-secondary-text) hover:bg-(--control-hover)"
+                type="button" data-auth-open="signup">Register
+            </button>
+        }
     </div>
 </div>

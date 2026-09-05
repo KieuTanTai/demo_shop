@@ -1,5 +1,4 @@
 import {bindOverlayCloseEvents, closeOverlay, openOverlay} from "../shared/overlay.js";
-import {loginRequest} from "../requests/auths/loginRequest.js";
 import {ForgotPasswordStage, visibleSteps} from "./ForgotPasswordStepsRecord.js";
 import type {AuthFormName} from "./AuthFormType.js";
 import type {AuthOverlayElements} from "./AuthOverlayElementsInterface.js";
@@ -131,24 +130,6 @@ async function handleAuthSubmit(
         return;
     }
 
-    if (form.dataset.authForm === "login") {
-        const email = getFormInput(form, "email")?.value.trim() ?? "";
-        const password = getFormInput(form, "password")?.value ?? "";
-
-        try {
-            await loginRequest(email, password);
-            window.dispatchEvent(new CustomEvent("auth-state-changed", {
-                detail: {isAuthenticated: true}
-            }));
-            form.reset();
-            closePopup();
-        } catch (error) {
-            const message = error instanceof Error ? error.message : "Login failed.";
-            setAuthMessage(form, message);
-        }
-        return;
-    }
-
     setAuthMessage(form, "");
 }
 
@@ -210,6 +191,10 @@ function bindAuthSwitchButtons(elements: AuthOverlayElements): void {
 
 function bindAuthForms(elements: AuthOverlayElements, closePopup: () => void): void {
     elements.authForms.forEach((form) => {
+        if (form.dataset.authForm === "login") {
+            return;
+        }
+
         form.addEventListener("submit", (event: SubmitEvent) => {
             void handleAuthSubmit(form, closePopup, event);
         });
