@@ -1,7 +1,16 @@
+using System.Text.Json.Serialization;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews()
+    .AddJsonOptions(options =>
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
+builder.Services.AddHttpClient("BackendApiIdentityHttps", (serviceProvider, client) => {
+    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
+    var baseUrl = configuration["BackendApi:IdentityHttps"] ?? throw new InvalidOperationException("BackendApi:PrefixHttps not found.");
+    client.BaseAddress = new Uri(baseUrl);
+});
 
 var app = builder.Build();
 

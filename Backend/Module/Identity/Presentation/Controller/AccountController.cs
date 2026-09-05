@@ -1,7 +1,7 @@
 using Identity.Interfaces;
 using Identity.Interfaces.IApplication;
 using Identity.Models.Account;
-using Identity.Presentation.Record.Account;
+using Identity.Presentation.Record;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Identity.Presentation.Controller
@@ -18,7 +18,7 @@ namespace Identity.Presentation.Controller
 
         [RequireHttps]
         [HttpPost("register")]
-        public async Task<ActionResult<AccountModel>> RegisterAsync([FromBody] AuthAndRegistrationRequestRecord requestDto, CancellationToken cancellationToken = default)
+        public async Task<ActionResult<RecordAuthAndRegistrationResponse>> RegisterAsync([FromBody] RecordAuthAndRegistrationRequest requestDto, CancellationToken cancellationToken = default)
         {
             var (isValid, errorMessage) = _helper.ValidateEmailAndPassword(requestDto.Email, requestDto.Password);
             if (!isValid)
@@ -29,7 +29,12 @@ namespace Identity.Presentation.Controller
             try
             {
                 var result = await _accountApplication.RegisterAsync(requestDto.Email, requestDto.Password, cancellationToken);
-                return Ok(result);
+                var response = MappingResult(result);
+                return Ok(response);
+            }
+            catch (OperationCanceledException ex)
+            {
+                return BadRequest(ex.Message);
             }
             catch (Exception ex)
             {
@@ -38,8 +43,8 @@ namespace Identity.Presentation.Controller
         }
 
         [RequireHttps]
-        [HttpPost("login")]
-        public async Task<ActionResult<AccountModel>> LoginAsync([FromBody] AuthAndRegistrationRequestRecord requestDto, CancellationToken cancellationToken = default)
+        [HttpPost("loginRequest")]
+        public async Task<ActionResult<RecordAuthAndRegistrationResponse>> LoginAsync([FromBody] RecordAuthAndRegistrationRequest requestDto, CancellationToken cancellationToken = default)
         {
             var (isValid, errorMessage) = _helper.ValidateEmailAndPassword(requestDto.Email, requestDto.Password);
             if (!isValid)
@@ -49,7 +54,12 @@ namespace Identity.Presentation.Controller
             try
             {
                 var result = await _accountApplication.LoginAsync(requestDto.Email, requestDto.Password, cancellationToken);
-                return Ok(result);
+                var response = MappingResult(result);
+                return Ok(response);
+            }
+            catch (OperationCanceledException ex)
+            {
+                return BadRequest(ex.Message);
             }
             catch (Exception ex)
             {
@@ -58,8 +68,8 @@ namespace Identity.Presentation.Controller
         }
 
         [RequireHttps]
-        [HttpPost("password/")]
-        public async Task<IActionResult> ChangePasswordAsync([FromBody] UpdateAccountPasswordRequestRecord requestDto, CancellationToken cancellationToken = default)
+        [HttpPost("password/change")]
+        public async Task<IActionResult> ChangePasswordAsync([FromBody] RecordUpdateAccountPasswordRequest requestDto, CancellationToken cancellationToken = default)
         {
             var (isValid, errorMessage) = _helper.ValidateEmailAndPassword(requestDto.Email, requestDto.OldPassword);
             if (!isValid)
@@ -96,7 +106,7 @@ namespace Identity.Presentation.Controller
 
         [RequireHttps]
         [HttpDelete("delete")]
-        public async Task<IActionResult> InactiveAccountAsync([FromBody] InactiveAccountRequestRecord requestDto, CancellationToken cancellationToken = default)
+        public async Task<IActionResult> InactiveAccountAsync([FromBody] RecordInactiveAccountRequest requestDto, CancellationToken cancellationToken = default)
         {
             var (isValid, errorMessage) = _helper.ValidateEmailAndPassword(requestDto.Email, requestDto.Password);
             if (!isValid)
@@ -145,6 +155,19 @@ namespace Identity.Presentation.Controller
             {
                 return BadRequest(ex.Message);
             }
+        }
+
+        #endregion
+
+        #region PRIVATE
+
+        private RecordAuthAndRegistrationResponse MappingResult(AccountModel result)
+        {
+            var roleNames = result.Roles.Select(role => role.RoleName).ToList();
+            var response = new RecordAuthAndRegistrationResponse(result.AccountEmail!, result.AccountIsActive, roleNames,
+                result.UserProfile?.UserProfileFirstName, result.UserProfile?.UserProfileLastName, result.UserProfile?.UserProfileAvatarUrl,
+                result.UserProfile?.UserProfilePhoneNumber, result.UserProfile?.UserProfileDateOfBirth, result.UserProfile!.UserProfileGender, result.AccountCreatedAt, result.AccountUpdatedAt);
+            return response;
         }
 
         #endregion

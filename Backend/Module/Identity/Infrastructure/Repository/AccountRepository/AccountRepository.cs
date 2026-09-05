@@ -3,6 +3,7 @@ using Identity.Interfaces.IRepository;
 using Identity.Models.Account;
 using Microsoft.EntityFrameworkCore;
 using Shared.Persistence;
+using Shared.Persistence.Record;
 
 namespace Identity.Infrastructure.Repository.AccountRepository
 {
@@ -48,6 +49,31 @@ namespace Identity.Infrastructure.Repository.AccountRepository
         public async Task<bool> ExistsAsync(Guid id, CancellationToken cancellationToken = default)
         {
             return await _db.Accounts.AnyAsync(account => account.AccountId == id, cancellationToken);
+        }
+
+        public async Task<AccountModel?> GetAccountAndNavigationByEmailAsync(string email, bool isGetRole = true, bool isGetProfile = false,
+            CancellationToken cancellationToken = default)
+        {
+            switch (isGetRole)
+            {
+                case true when isGetProfile:
+                    return await _db.Accounts
+                        .Include(account => account.Roles)
+                        .Include(account => account.UserProfile)
+                        .FirstOrDefaultAsync(account => account.AccountEmail == email, cancellationToken);
+                case true:
+                    return await _db.Accounts
+                        .Include(account => account.Roles)
+                        .FirstOrDefaultAsync(account => account.AccountEmail == email, cancellationToken);
+            }
+
+            if (isGetProfile)
+            {
+                return await _db.Accounts
+                    .Include(account => account.UserProfile)
+                    .FirstOrDefaultAsync(account => account.AccountEmail == email, cancellationToken);
+            }
+            return await _db.Accounts.FirstOrDefaultAsync(account => account.AccountEmail == email, cancellationToken);
         }
 
         // Paging methods

@@ -1,3 +1,4 @@
+const authStateStorageKey = "frontend.authenticated";
 function getAccountMenuElements() {
     const menu = document.querySelector(".account-menu");
     const dropdown = menu?.querySelector(".account-dropdown");
@@ -7,8 +8,28 @@ function getAccountMenuElements() {
     return {
         menu,
         button: menu.querySelector(".account-button"),
-        dropdown
+        dropdown,
+        guestActions: menu.querySelectorAll("[data-auth-guest]"),
+        authenticatedAction: menu.querySelector("[data-authenticated-action]")
     };
+}
+function setAuthenticatedState(elements, isAuthenticated) {
+    elements.guestActions.forEach((action) => {
+        action.hidden = isAuthenticated;
+    });
+    if (elements.authenticatedAction) {
+        elements.authenticatedAction.hidden = !isAuthenticated;
+    }
+}
+function getStoredAuthState() {
+    return sessionStorage.getItem(authStateStorageKey) === "true";
+}
+function setStoredAuthState(isAuthenticated) {
+    if (isAuthenticated) {
+        sessionStorage.setItem(authStateStorageKey, "true");
+        return;
+    }
+    sessionStorage.removeItem(authStateStorageKey);
 }
 function setAccountMenuState(elements, isOpen) {
     elements.dropdown.classList.toggle("hidden", !isOpen);
@@ -38,6 +59,21 @@ function bindEscapeKey(elements) {
         }
     });
 }
+function bindAuthStateEvents(elements) {
+    setAuthenticatedState(elements, getStoredAuthState());
+    window.addEventListener("auth-state-changed", (event) => {
+        const customEvent = event;
+        const isAuthenticated = customEvent.detail?.isAuthenticated === true;
+        setStoredAuthState(isAuthenticated);
+        setAuthenticatedState(elements, isAuthenticated);
+        closeAccountMenu(elements);
+    });
+    elements.authenticatedAction?.addEventListener("click", () => {
+        setStoredAuthState(false);
+        setAuthenticatedState(elements, false);
+        closeAccountMenu(elements);
+    });
+}
 export function initializeAccountMenu() {
     const elements = getAccountMenuElements();
     if (!elements) {
@@ -45,5 +81,6 @@ export function initializeAccountMenu() {
     }
     bindPointerAndFocusEvents(elements);
     bindEscapeKey(elements);
+    bindAuthStateEvents(elements);
 }
 //# sourceMappingURL=accountMenu.js.map

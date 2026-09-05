@@ -18,7 +18,7 @@ html {
     --menu-open-bg: var(--menu-hover);
     --menu-open-text: #0f172a;
     --menu-border-radius: 0.4rem;
-    
+
     /* Footer */
     --footer-surface: var(--surface);
     --footer-border: var(--header-border);
@@ -38,6 +38,7 @@ html {
 
     /* Container */
     --surface: #ffffff;
+    --radius-popup-container: 0.5rem;
     --radius-container: 1rem;
     --radius-card: 1rem;
     --radius-input: 1rem;

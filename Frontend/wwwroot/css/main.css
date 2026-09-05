@@ -203,9 +203,6 @@
   .-top-1 {
     top: calc(var(--spacing) * -1);
   }
-  .top-0 {
-    top: 0px;
-  }
   .top-3 {
     top: calc(var(--spacing) * 3);
   }
@@ -277,9 +274,6 @@
   }
   .table {
     display: table;
-  }
-  .h-2 {
-    height: calc(var(--spacing) * 2);
   }
   .h-4 {
     height: calc(var(--spacing) * 4);
@@ -418,8 +412,8 @@
   .rounded-\(--radius-button\) {
     border-radius: var(--radius-button);
   }
-  .rounded-\(--radius-container\) {
-    border-radius: var(--radius-container);
+  .rounded-\(--radius-popup-container\) {
+    border-radius: var(--radius-popup-container);
   }
   .rounded-\(--radius-text\) {
     border-radius: var(--radius-text);
@@ -458,9 +452,6 @@
   .border-\(--sidebar-border\) {
     border-color: var(--sidebar-border);
   }
-  .bg-\(--buttion-danger\) {
-    background-color: var(--buttion-danger);
-  }
   .bg-\(--button-danger\) {
     background-color: var(--button-danger);
   }
@@ -484,9 +475,6 @@
   }
   .bg-\(--surface-muted\) {
     background-color: var(--surface-muted);
-  }
-  .bg-\[var\(--buttion-danger\)\] {
-    background-color: var(--buttion-danger);
   }
   .bg-black {
     background-color: var(--color-black);
@@ -524,9 +512,6 @@
   .px-1 {
     padding-inline: var(--spacing);
   }
-  .px-1\.5 {
-    padding-inline: calc(var(--spacing) * 1.5);
-  }
   .px-2 {
     padding-inline: calc(var(--spacing) * 2);
   }
@@ -538,12 +523,6 @@
   }
   .px-4 {
     padding-inline: calc(var(--spacing) * 4);
-  }
-  .py-0 {
-    padding-block: 0px;
-  }
-  .py-0\.5 {
-    padding-block: calc(var(--spacing) * 0.5);
   }
   .py-1 {
     padding-block: var(--spacing);
@@ -599,10 +578,6 @@
     --tw-leading: calc(var(--spacing) * 6);
     line-height: calc(var(--spacing) * 6);
   }
-  .leading-none {
-    --tw-leading: 1;
-    line-height: 1;
-  }
   .font-bold {
     --tw-font-weight: var(--font-weight-bold);
     font-weight: var(--font-weight-bold);
@@ -648,12 +623,6 @@
   .underline {
     text-decoration-line: underline;
   }
-  .opacity-60 {
-    opacity: 60%;
-  }
-  .opacity-65 {
-    opacity: 65%;
-  }
   .opacity-80 {
     opacity: 80%;
   }
@@ -689,9 +658,6 @@
     color: var(--color-slate-400);
   }
   @media (hover: hover) {
-    .hover\:bg-\(--b\):hover {
-      background-color: var(--b);
-    }
     .hover\:bg-\(--button-danger-hover\):hover {
       background-color: var(--button-danger-hover);
     }
@@ -703,9 +669,6 @@
     }
     .hover\:bg-\(--surface\):hover {
       background-color: var(--surface);
-    }
-    .hover\:bg-\[var\(--control-hover\)\]:hover {
-      background-color: var(--control-hover);
     }
     .hover\:text-sky-600:hover {
       color: var(--color-sky-600);
@@ -757,6 +720,7 @@ html {
   --button-secondary-text: #334155;
   --radius-button: 1rem;
   --surface: #ffffff;
+  --radius-popup-container: 0.5rem;
   --radius-container: 1rem;
   --radius-card: 1rem;
   --radius-input: 1rem;

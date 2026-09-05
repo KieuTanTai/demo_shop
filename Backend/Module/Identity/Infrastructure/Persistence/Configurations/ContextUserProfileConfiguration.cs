@@ -28,8 +28,8 @@ namespace Identity.Infrastructure.Persistence.Configurations
                 .HasColumnName("user_profile_last_name")
                 .HasMaxLength(30);
 
-            entity.Property(userProfile => userProfile.UserProfileBirthday)
-                .HasColumnName("user_profile_birth_date");
+            entity.Property(userProfile => userProfile.UserProfileDateOfBirth)
+                .HasColumnName("user_profile_date_of_birth");
 
             entity.Property(userProfile => userProfile.UserProfileGender)
                 .HasColumnName("user_profile_gender")
@@ -40,8 +40,8 @@ namespace Identity.Infrastructure.Persistence.Configurations
                 .HasColumnName("user_profile_phone_number")
                 .HasMaxLength(10);
 
-            entity.Property(userProfile => userProfile.UserProfileAvatar)
-                .HasColumnName("user_profile_avatar")
+            entity.Property(userProfile => userProfile.UserProfileAvatarUrl)
+                .HasColumnName("user_profile_avatar_url")
                 .HasMaxLength(255);
 
             entity.Property(userProfile => userProfile.UserProfileCreatedAt)
@@ -53,11 +53,6 @@ namespace Identity.Infrastructure.Persistence.Configurations
                 .HasColumnName("user_profile_updated_at")
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .ValueGeneratedOnAddOrUpdate();
-
-            entity.HasOne(userProfile => userProfile.Account)
-                .WithOne()
-                .HasForeignKey<UserProfileModel>(userProfile => userProfile.UserProfileAccountId)
-                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

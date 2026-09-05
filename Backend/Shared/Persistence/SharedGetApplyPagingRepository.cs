@@ -1,3 +1,5 @@
+using Shared.Persistence.Record;
+
 namespace Shared.Persistence
 {
     public static class SharedGetApplyPagingRepository

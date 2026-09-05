@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using Identity.Models.Permission;
+using Identity.Models.Profile;
 using Identity.Models.Role;
 using Shared.ModelHelper;
 
@@ -53,6 +54,9 @@ namespace Identity.Models.Account
         public IReadOnlyList<PermissionModel> Permissions { get; private set; } =
             new List<PermissionModel>();
 
+        public UserProfileModel? UserProfile { get; private set; }
+
+
         #region Setter
 
         public void SetEmail(string email)
@@ -86,6 +90,11 @@ namespace Identity.Models.Account
         public void SetPermissions(IReadOnlyList<PermissionModel> permissions)
         {
             Permissions = permissions;
+        }
+
+        public void SetUserProfile(UserProfileModel userProfile)
+        {
+            UserProfile = userProfile;
         }
 
         #endregion

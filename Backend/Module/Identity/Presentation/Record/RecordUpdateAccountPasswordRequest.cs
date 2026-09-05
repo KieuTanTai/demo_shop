@@ -1,8 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Identity.Presentation.Record.Account
+namespace Identity.Presentation.Record
 {
-    public record UpdateAccountPasswordRequestRecord(
+    public record RecordUpdateAccountPasswordRequest(
         [Required]
         [EmailAddress]
         string Email,

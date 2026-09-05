@@ -1,8 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Identity.Presentation.Record.Account
+namespace Identity.Presentation.Record
 {
-    public record InactiveAccountRequestRecord(
+    public record RecordInactiveAccountRequest(
         [Required]
         [EmailAddress]
         string Email,

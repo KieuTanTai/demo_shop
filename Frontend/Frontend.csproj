@@ -13,6 +13,8 @@
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
+        <PackageReference Include="Serilog" Version="4.4.1-dev-02443"/>
+        <PackageReference Include="Serilog.Sinks.File" Version="8.0.0-nblumhardt-02322"/>
         <PackageReference Include="Swashbuckle.AspNetCore" Version="10.2.3"/>
         <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="10.2.3"/>
         <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="10.2.3"/>
@@ -66,8 +68,17 @@
         <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\dist\js\bootstrap.min.js"/>
         <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\dist\js\bootstrap.min.js.map"/>
         <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\LICENSE"/>
-        <_ContentIncludedByDefault Remove="wwwroot\js\auth\auth.js" />
-        <_ContentIncludedByDefault Remove="wwwroot\js\auth\auth.js.map" />
+        <_ContentIncludedByDefault Remove="wwwroot\js\auth\auth.js"/>
+        <_ContentIncludedByDefault Remove="wwwroot\js\auth\auth.js.map"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Backend\Module\Identity\Identity.csproj" />
+        <ProjectReference Include="..\Backend\Shared\Shared.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Views\Profile\" />
     </ItemGroup>
 
     <Target Name="TailwindBuild" BeforeTargets="Build">

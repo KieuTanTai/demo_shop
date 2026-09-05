@@ -1,5 +1,6 @@
 using Identity.Models.Account;
 using Identity.Models.Permission;
+using Identity.Models.Profile;
 using Identity.Models.Role;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -96,6 +97,11 @@ namespace Identity.Infrastructure.Persistence.Configurations
                         .HasDefaultValueSql("CURRENT_TIMESTAMP")
                         .ValueGeneratedOnAdd();
                 });
+
+            entity.HasOne(account => account.UserProfile)
+                .WithOne()
+                .HasForeignKey<UserProfileModel>(profile => profile.UserProfileAccountId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

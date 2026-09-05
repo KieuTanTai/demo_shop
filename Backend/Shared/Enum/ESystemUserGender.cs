@@ -1,6 +1,6 @@
-namespace Identity.Utils.Enum
+namespace Shared.Enum
 {
-    public enum ESystemUserProfileGender
+    public enum ESystemUserGender
     {
         Unspecified = 0,
 

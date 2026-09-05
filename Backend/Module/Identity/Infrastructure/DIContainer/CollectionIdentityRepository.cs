@@ -3,6 +3,7 @@ using Identity.Infrastructure.Repository;
 using Identity.Infrastructure.Repository.AccountRepository;
 using Identity.Infrastructure.Repository.Permission;
 using Identity.Infrastructure.Repository.Role;
+using Identity.Infrastructure.Repository.UserProfileRepository;
 using Identity.Interfaces.IRepository;
 using Identity.Models.Account;
 using Identity.Models.Permission;
@@ -49,6 +50,7 @@ namespace Identity.Infrastructure.DIContainer
             services.AddScoped<IBaseAssociativeRepository<AccountAdditionalPermissionModel, Guid>, AccountAdditionalPermissionRepository>();
             services.AddScoped<IBaseAssociativeRepository<AccountRoleModel, Guid>, AccountRoleRepository>();
             services.AddScoped<IBaseAssociativeRepository<RolePermissionModel, Guid>, RolePermissionRepository>();
+            services.AddScoped<IUserProfileRepository, UserProfileRepository>();
 
             #endregion
 

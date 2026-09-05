@@ -1,7 +1,8 @@
-import { bindOverlayCloseEvents, closeOverlay, openOverlay } from "../shared/overlay.js";
-import { visibleSteps, ForgotPasswordStage } from "./ForgotPasswordStepsRecord.js";
-import type { AuthFormName } from "./AuthFormType.js";
-import type { AuthOverlayElements } from "./AuthOverlayElementsInterface.js";
+import {bindOverlayCloseEvents, closeOverlay, openOverlay} from "../shared/overlay.js";
+import {loginRequest} from "../requests/auths/loginRequest.js";
+import {ForgotPasswordStage, visibleSteps} from "./ForgotPasswordStepsRecord.js";
+import type {AuthFormName} from "./AuthFormType.js";
+import type {AuthOverlayElements} from "./AuthOverlayElementsInterface.js";
 
 
 function getAuthOverlayElements(): AuthOverlayElements | null {
@@ -44,7 +45,7 @@ function clearAuthMessages(elements: AuthOverlayElements): void {
 }
 
 function setForgotStage(elements: AuthOverlayElements, stage: ForgotPasswordStage): void {
-    const { forgotForm, forgotNextButtons, forgotSubmitButton } = elements;
+    const {forgotForm, forgotNextButtons, forgotSubmitButton} = elements;
 
     if (!forgotForm) {
         return;
@@ -99,11 +100,11 @@ function openAuthPopup(
     return undefined;
 }
 
-function handleAuthSubmit(
+async function handleAuthSubmit(
     form: HTMLFormElement,
     closePopup: () => void,
     event: SubmitEvent
-): void {
+): Promise<void> {
     event.preventDefault();
 
     if (form.dataset.authForm === "forgot") {
@@ -130,11 +131,29 @@ function handleAuthSubmit(
         return;
     }
 
+    if (form.dataset.authForm === "login") {
+        const email = getFormInput(form, "email")?.value.trim() ?? "";
+        const password = getFormInput(form, "password")?.value ?? "";
+
+        try {
+            await loginRequest(email, password);
+            window.dispatchEvent(new CustomEvent("auth-state-changed", {
+                detail: {isAuthenticated: true}
+            }));
+            form.reset();
+            closePopup();
+        } catch (error) {
+            const message = error instanceof Error ? error.message : "Login failed.";
+            setAuthMessage(form, message);
+        }
+        return;
+    }
+
     setAuthMessage(form, "");
 }
 
 function handleForgotNext(elements: AuthOverlayElements, button: HTMLButtonElement): void {
-    const { forgotForm } = elements;
+    const {forgotForm} = elements;
 
     if (!forgotForm) {
         return;
@@ -192,7 +211,7 @@ function bindAuthSwitchButtons(elements: AuthOverlayElements): void {
 function bindAuthForms(elements: AuthOverlayElements, closePopup: () => void): void {
     elements.authForms.forEach((form) => {
         form.addEventListener("submit", (event: SubmitEvent) => {
-            handleAuthSubmit(form, closePopup, event);
+            void handleAuthSubmit(form, closePopup, event);
         });
     });
 }

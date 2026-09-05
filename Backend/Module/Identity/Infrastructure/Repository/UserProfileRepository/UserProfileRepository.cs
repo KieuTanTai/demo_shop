@@ -3,6 +3,7 @@ using Identity.Interfaces.IRepository;
 using Identity.Models.Profile;
 using Microsoft.EntityFrameworkCore;
 using Shared.Persistence;
+using Shared.Persistence.Record;
 
 namespace Identity.Infrastructure.Repository.UserProfileRepository
 {
@@ -79,7 +80,7 @@ namespace Identity.Infrastructure.Repository.UserProfileRepository
             {
                 query = query.Where(profile => profile.UserProfileAccountId < cursor.Value);
             }
-            query = query.Where(profile => profile.UserProfileBirthday == birthday);
+            query = query.Where(profile => profile.UserProfileDateOfBirth == birthday);
             query = query.OrderByDescending(profile => profile.UserProfileId);
             var profiles = query.ToAsyncEnumerable();
             return await SharedGetApplyPagingRepository.ApplyPaging(profiles, pageSize, profile => profile.UserProfileAccountId,

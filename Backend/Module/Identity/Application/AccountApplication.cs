@@ -2,14 +2,16 @@ using Identity.Interfaces;
 using Identity.Interfaces.IApplication;
 using Identity.Interfaces.IRepository;
 using Identity.Models.Account;
+using Identity.Models.Profile;
 using Shared.Interfaces;
-using Shared.Persistence;
+using Shared.Persistence.Record;
 
 namespace Identity.Application
 {
     public class AccountApplication(
         IUnitOfWork unitOfWork,
         IAccountRepository accountRepository,
+        IUserProfileRepository userProfileRepository,
         IBaseAssociativeRepository<AccountRoleModel, Guid> accountRoleRepository,
         IRoleApplication roleApplication,
         IAccountHelper accountHelper)
@@ -22,10 +24,11 @@ namespace Identity.Application
 
         private readonly IBaseAssociativeRepository<AccountRoleModel, Guid> _accountRoleRepository = accountRoleRepository;
 
-
         private readonly IRoleApplication _roleApplication = roleApplication;
 
         private readonly IUnitOfWork _unitOfWork = unitOfWork;
+
+        private readonly IUserProfileRepository _userProfileRepository = userProfileRepository;
 
         #region USER
 
@@ -36,30 +39,28 @@ namespace Identity.Application
             var accountModel = new AccountModel(Guid.CreateVersion7(), email, password, true);
             var hashedPassword = _accountHelper.GetPasswordHash(accountModel, password);
             accountModel.SetHashedPassword(hashedPassword);
-            try
+            
+            var baseRole = await _roleApplication.GetBaseRolesForUserAsync(cancellationToken);
+            var accountRole = new AccountRoleModel(accountModel.AccountId, baseRole.RoleId);
+            var userProfile = new UserProfileModel(accountModel.AccountId);
+            await _accountRepository.AddAsync(accountModel, cancellationToken);
+            await _accountRoleRepository.AddAsync(accountRole, cancellationToken);
+            await _userProfileRepository.AddAsync(userProfile, cancellationToken);
+            var affectRows = await _unitOfWork.SaveChangesAsync(cancellationToken);
+            if (affectRows == 0)
             {
-                var baseRole = await _roleApplication.GetBaseRolesForUserAsync(cancellationToken);
-                var accountRole = new AccountRoleModel(accountModel.AccountId, baseRole.RoleId);
-                await _accountRepository.AddAsync(accountModel, cancellationToken);
-                await _accountRoleRepository.AddAsync(accountRole, cancellationToken);
-                var affectRows = await _unitOfWork.SaveChangesAsync(cancellationToken);
-                return affectRows == 0 ? throw new InvalidOperationException("Failed to add account.") : accountModel;
+                throw new InvalidOperationException("Failed to add account.");
             }
-            catch (OperationCanceledException canceledException)
-            {
-                throw new OperationCanceledException("Operation was canceled.", canceledException);
-            }
-            catch (Exception e)
-            {
-                throw new InvalidOperationException($"Failed to add account: {e.Message}", e);
-            }
+            accountModel.SetRoles([baseRole]);
+            accountModel.SetUserProfile(userProfile);
+            return accountModel;
         }
 
 
         public async Task<AccountModel> LoginAsync(string email, string password, CancellationToken cancellationToken = default)
         {
             CheckValidEmailAndPassword(email, password); // throw exception if email or password is invalid
-            var accountModel = await GetAccountByEmailAsync(email, false, cancellationToken);
+            var accountModel = await GetAccountByEmailAsync(email, true, true, cancellationToken);
             if (!accountModel.AccountIsActive)
             {
                 throw new InvalidOperationException("Account is not active.");
@@ -189,6 +190,12 @@ namespace Identity.Application
             {
                 //valid for register
             }
+        }
+
+        private async Task<AccountModel> GetAccountByEmailAsync(string email, bool isGetRole = true, bool isGetProfile = false, CancellationToken cancellationToken = default)
+        {
+            var existedAccount = await _accountRepository.GetAccountAndNavigationByEmailAsync(email, isGetRole, isGetProfile, cancellationToken);
+            return existedAccount ?? throw new InvalidOperationException("AccountModel not found!");
         }
 
         private async Task<AccountModel> GetAccountByEmailAsync(string email, bool isTracked = false, CancellationToken cancellationToken = default)

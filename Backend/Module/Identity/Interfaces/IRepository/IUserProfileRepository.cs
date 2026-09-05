@@ -1,6 +1,6 @@
 using Identity.Models.Profile;
 using Shared.Interfaces;
-using Shared.Persistence;
+using Shared.Persistence.Record;
 
 namespace Identity.Interfaces.IRepository
 {

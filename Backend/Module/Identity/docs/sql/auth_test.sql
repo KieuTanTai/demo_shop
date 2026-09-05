@@ -167,3 +167,5 @@ from role_permission;
 
 select *
 from account_additional_permission;
+
+show columns from user_profile;

@@ -1,4 +1,6 @@
-import { AccountMenuElements } from "./AccountMenuElementsInterface.js";
+import {AccountMenuElements} from "./AccountMenuElementsInterface.js";
+
+const authStateStorageKey = "frontend.authenticated";
 
 function getAccountMenuElements(): AccountMenuElements | null {
     const menu = document.querySelector<HTMLElement>(".account-menu");
@@ -11,8 +13,33 @@ function getAccountMenuElements(): AccountMenuElements | null {
     return {
         menu,
         button: menu.querySelector<HTMLButtonElement>(".account-button"),
-        dropdown
+        dropdown,
+        guestActions: menu.querySelectorAll<HTMLButtonElement>("[data-auth-guest]"),
+        authenticatedAction: menu.querySelector<HTMLButtonElement>("[data-authenticated-action]")
     };
+}
+
+function setAuthenticatedState(elements: AccountMenuElements, isAuthenticated: boolean): void {
+    elements.guestActions.forEach((action) => {
+        action.hidden = isAuthenticated;
+    });
+
+    if (elements.authenticatedAction) {
+        elements.authenticatedAction.hidden = !isAuthenticated;
+    }
+}
+
+function getStoredAuthState(): boolean {
+    return sessionStorage.getItem(authStateStorageKey) === "true";
+}
+
+function setStoredAuthState(isAuthenticated: boolean): void {
+    if (isAuthenticated) {
+        sessionStorage.setItem(authStateStorageKey, "true");
+        return;
+    }
+
+    sessionStorage.removeItem(authStateStorageKey);
 }
 
 function setAccountMenuState(elements: AccountMenuElements, isOpen: boolean): void {
@@ -48,6 +75,24 @@ function bindEscapeKey(elements: AccountMenuElements): void {
     });
 }
 
+function bindAuthStateEvents(elements: AccountMenuElements): void {
+    setAuthenticatedState(elements, getStoredAuthState());
+
+    window.addEventListener("auth-state-changed", (event: Event) => {
+        const customEvent = event as CustomEvent<{isAuthenticated: boolean}>;
+        const isAuthenticated = customEvent.detail?.isAuthenticated;
+        setStoredAuthState(isAuthenticated);
+        setAuthenticatedState(elements, isAuthenticated);
+        closeAccountMenu(elements);
+    });
+
+    elements.authenticatedAction?.addEventListener("click", () => {
+        setStoredAuthState(false);
+        setAuthenticatedState(elements, false);
+        closeAccountMenu(elements);
+    });
+}
+
 export function initializeAccountMenu(): void {
     const elements = getAccountMenuElements();
 
@@ -57,4 +102,5 @@ export function initializeAccountMenu(): void {
 
     bindPointerAndFocusEvents(elements);
     bindEscapeKey(elements);
+    bindAuthStateEvents(elements);
 }

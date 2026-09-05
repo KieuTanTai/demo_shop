@@ -1,4 +1,4 @@
-import type { SidebarElements } from "./SidebarElementsInterface.js";
+import type {SidebarElements} from "./SidebarElementsInterface.js";
 
 function getSidebarElements(): SidebarElements | null {
     const appShell = document.querySelector<HTMLElement>("[data-app-shell]");
@@ -8,7 +8,7 @@ function getSidebarElements(): SidebarElements | null {
         return null;
     }
 
-    return { appShell, sidebarToggle };
+    return {appShell, sidebarToggle};
 }
 
 function setSidebarState(elements: SidebarElements, isCollapsed: boolean): void {

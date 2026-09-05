@@ -1,6 +1,6 @@
 using Identity.Models.Account;
 using Shared.Interfaces;
-using Shared.Persistence;
+using Shared.Persistence.Record;
 
 namespace Identity.Interfaces.IRepository
 {
@@ -14,6 +14,9 @@ namespace Identity.Interfaces.IRepository
         Task<AccountModel> GetTrackedAccountByEmailAsync(string email, CancellationToken cancellationToken = default);
 
         Task<RecordBaseCursorPage<AccountModel>> GetApplyPagingByStatusAsync(Guid? cursor, int pageSize, bool isActive,
+            CancellationToken cancellationToken = default);
+
+        Task<AccountModel?> GetAccountAndNavigationByEmailAsync(string email, bool isGetRole = true, bool isGetProfile = false,
             CancellationToken cancellationToken = default);
     }
 }

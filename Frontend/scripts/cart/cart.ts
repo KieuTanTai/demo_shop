@@ -6,7 +6,7 @@ export function addCartItems(quantity = 1): void {
     }
 
     document.dispatchEvent(new CustomEvent(cartUpdatedEvent, {
-        detail: { quantity }
+        detail: {quantity}
     }));
 }
 

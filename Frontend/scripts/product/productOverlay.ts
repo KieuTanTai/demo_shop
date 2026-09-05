@@ -1,6 +1,6 @@
-import { bindOverlayCloseEvents, closeOverlay, openOverlay } from "../shared/overlay.js";
-import { addCartItems } from "../cart/cart.js";
-import type { ProductOverlayElements } from "./ProductOverlayElementsInterface.js";
+import {bindOverlayCloseEvents, closeOverlay, openOverlay} from "../shared/overlay.js";
+import {addCartItems} from "../cart/cart.js";
+import type {ProductOverlayElements} from "./ProductOverlayElementsInterface.js";
 import {formOverlayTimeout} from "../SystemSettings.js";
 
 function getProductOverlayElements(): ProductOverlayElements | null {
@@ -38,7 +38,7 @@ function getProductOverlayElements(): ProductOverlayElements | null {
 }
 
 function updateProductDetails(elements: ProductOverlayElements, card: HTMLElement): void {
-    const { detailImage, detailName, detailPrice, detailSalePrice, detailDiscount, detailDescription } = elements;
+    const {detailImage, detailName, detailPrice, detailSalePrice, detailDiscount, detailDescription} = elements;
 
     detailImage.src = card.dataset.productImage ?? "";
     detailImage.alt = card.dataset.productName ?? "";

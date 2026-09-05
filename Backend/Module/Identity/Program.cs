@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using Identity.Infrastructure.DIContainer;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -6,7 +7,8 @@ builder.Services.AddIdentityRepositoryCollection(builder.Configuration, builder.
 builder.Services.AddIdentityApplicationCollection(builder.Configuration, builder.Environment);
 builder.Services.AddAuthentication();
 builder.Services.AddAuthorization();
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
+
 
 if (builder.Environment.IsDevelopment())
 {
